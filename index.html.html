@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="light only">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contentores 2026</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+:root{
+  --bg:#f4f4f4;
+  --s1:#ffffff;
+  --s2:#f8f8f8;
+  --bd:#e0e0e0;
+  --tx:#333333;
+  --mu:#888888;
+  --acc:#f15a29;
+  --acc2:#ff6b2b;
+  --acc-bg:rgba(241,90,41,.08);
+  --acc-bd:rgba(241,90,41,.25);
+  --hdr:#f15a29;
+  --ye:#d97706;--or:#f15a29;--gr:#16a34a;--bl:#2563eb;--pu:#7c3aed;
+  --yb:rgba(217,119,6,.1);--ob:rgba(241,90,41,.1);--gb:rgba(22,163,74,.1);--bb:rgba(37,99,235,.1);
+  --ybd:rgba(217,119,6,.3);--obd:rgba(241,90,41,.3);--gbd:rgba(22,163,74,.3);--bbd:rgba(37,99,235,.3);
+}
+*{margin:0;padding:0;box-sizing:border-box;color-scheme:light}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:#f4f4f4 !important;
+    --s1:#ffffff !important;
+    --s2:#f8f8f8 !important;
+    --bd:#e0e0e0 !important;
+    --tx:#333333 !important;
+    --mu:#888888 !important;
+  }
+  body { background:#f4f4f4 !important; color:#333333 !important; }
+}
+body{background:var(--bg);color:var(--tx);font-family:Inter,sans-serif;font-size:13px;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+a{color:var(--acc)}
+
+/* HEADER */
+#hdr{background:var(--tx);border-bottom:none;padding:0 28px;height:62px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px;color:#fff;letter-spacing:-0.3px}
+.logo-ic{width:30px;height:30px;background:var(--acc);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff;letter-spacing:-1px}
+.hbtns{display:flex;gap:8px;align-items:center}
+.hbtn{font-size:11px;padding:5px 14px;border-radius:20px;border:1.5px solid rgba(255,255,255,.4);background:rgba(255,255,255,.15);color:#fff;cursor:pointer;font-family:Inter,sans-serif;font-weight:600;transition:.15s}
+.hbtn:hover{background:rgba(255,255,255,.28);border-color:#fff}
+.hbtn.acc{background:#fff;border-color:#fff;color:var(--acc);font-weight:700}
+
+/* TABS */
+#tabs{background:var(--s1);border-bottom:2px solid var(--bd);padding:0 24px;display:flex;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.tab{font-size:12px;font-weight:600;padding:12px 18px;cursor:pointer;color:var(--mu);border-bottom:3px solid transparent;margin-bottom:-2px;display:flex;align-items:center;gap:7px;user-select:none;transition:.15s}
+.tab:hover{color:var(--tx)}
+.tab.act{color:var(--acc);border-bottom-color:var(--acc);font-weight:700}
+
+/* STATS */
+#stats{display:flex;border-bottom:2px solid var(--bd);flex-shrink:0;background:#fff}
+.stt{flex:1;padding:10px 20px;border-right:1px solid var(--bd);display:flex;align-items:center;gap:10px}
+.stt:last-child{border-right:none}
+.sdot{width:10px;height:10px;border-radius:50%}
+.snum{font-size:20px;font-weight:700;font-family:'JetBrains Mono',monospace}
+.slbl{font-size:11px;color:var(--mu);margin-top:1px}
+
+/* LAYOUT */
+#main{display:flex;flex:1;overflow:hidden}
+
+/* SIDEBAR */
+#sb,#psb{width:270px;background:var(--s1);border-right:1px solid var(--bd);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden}
+#sbtop,#psbtop{padding:12px;border-bottom:1px solid var(--bd);display:flex;flex-direction:column;gap:8px;background:var(--s2)}
+.srch{background:#fff;border:1.5px solid var(--bd);border-radius:8px;padding:7px 10px;color:var(--tx);font-size:12px;width:100%;outline:none;font-family:Inter,sans-serif;transition:.15s}
+.srch:focus{border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-bg)}
+.srch::placeholder{color:var(--mu)}
+#flt{display:flex;gap:4px;flex-wrap:wrap}
+.fb{font-size:11px;padding:4px 10px;border-radius:20px;border:1.5px solid var(--bd);background:#fff;color:var(--mu);cursor:pointer;font-family:Inter,sans-serif;font-weight:500;transition:.15s}
+.fb:hover{border-color:var(--acc);color:var(--acc)}
+.fb.ay{background:var(--yb);border-color:var(--ybd);color:var(--ye)}
+.fb.ao{background:var(--ob);border-color:var(--obd);color:var(--or)}
+.fb.ag{background:var(--gb);border-color:var(--gbd);color:var(--gr)}
+.fb.ab{background:var(--acc-bg);border-color:var(--acc-bd);color:var(--acc)}
+#cl,#plist{flex:1;overflow-y:auto;padding:8px;background:var(--s2)}
+#cl::-webkit-scrollbar,#plist::-webkit-scrollbar{width:4px}
+#cl::-webkit-scrollbar-thumb,#plist::-webkit-scrollbar-thumb{background:var(--bd);border-radius:2px}
+.ci,.pi{padding:10px 12px;border-radius:8px;cursor:pointer;margin-bottom:4px;border:1.5px solid transparent;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.06);transition:.12s}
+.ci:hover,.pi:hover{border-color:var(--acc-bd);box-shadow:0 2px 8px rgba(232,83,10,.1)}
+.ci.sel,.pi.sel{border-color:var(--acc);background:#fff;box-shadow:0 2px 8px rgba(232,83,10,.15)}
+.citop{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
+.cid{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.3px}
+.cid.y{color:var(--ye)}.cid.o{color:var(--or)}.cid.g{color:var(--gr)}
+.bdg{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600;border:1px solid transparent}
+.by{background:var(--yb);color:var(--ye);border-color:var(--ybd)}
+.bo{background:var(--ob);color:var(--or);border-color:var(--obd)}
+.bg{background:var(--gb);color:var(--gr);border-color:var(--gbd)}
+.cdst{font-size:12px;font-weight:600;color:var(--tx);margin-bottom:2px}
+.csub{font-size:11px;color:var(--mu)}
+.piref{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--acc)}
+.piname{font-size:12px;color:var(--tx);font-weight:500;margin-top:2px}
+.picnt{font-size:11px;color:var(--mu);margin-top:2px}
+
+/* DETAIL */
+#det{flex:1;overflow-y:auto;padding:20px;background:var(--bg)}
+#det::-webkit-scrollbar{width:4px}
+#det::-webkit-scrollbar-thumb{background:var(--bd);border-radius:2px}
+.wel{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--mu);text-align:center;gap:12px}
+.wel-ic{font-size:56px;opacity:.15}
+.wel h2{color:var(--tx);font-size:18px;font-weight:700}
+.wel p{font-size:12px;max-width:300px;line-height:1.7;color:var(--mu)}
+.lgnd{display:flex;gap:16px;margin-top:8px}
+.li{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--mu)}
+.ld{width:10px;height:10px;border-radius:50%}
+
+/* Detail cards */
+.did{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;letter-spacing:.5px}
+.did.y{color:var(--ye)}.did.o{color:var(--or)}.did.g{color:var(--gr)}
+.dsub{font-size:12px;color:var(--mu);margin-top:3px}
+.dc{background:#fff;border:1.5px solid var(--bd);border-radius:8px;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.dcl{font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;font-weight:600}
+.dcv{font-size:13px;font-weight:600;color:var(--tx)}
+.dcv.mn{font-family:'JetBrains Mono',monospace;font-size:12px}
+.obs{font-size:11px;background:var(--ob);color:var(--or);padding:2px 8px;border-radius:20px;font-weight:600}
+
+/* ETA panel */
+.ep{background:linear-gradient(135deg,rgba(22,163,74,.08),rgba(22,163,74,.04));border:1.5px solid var(--gbd);border-radius:10px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.ei{display:flex;align-items:center;gap:12px}
+.el{font-size:11px;color:var(--mu);font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+.ev{font-size:15px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--tx)}
+.eu{font-size:11px;color:var(--gr);font-weight:500}
+.btr{background:var(--gr);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;flex-shrink:0;transition:.15s}
+.btr:hover{opacity:.85}
+.btr:disabled{opacity:.5;cursor:default}
+
+/* Timeline */
+.tlb{background:#fff;border:1.5px solid var(--bd);border-radius:8px;padding:14px 20px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.tlt{font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;font-weight:600;margin-bottom:12px}
+.tltr{display:flex;align-items:flex-start}
+.tls{display:flex;flex-direction:column;align-items:center;flex:1}
+.tld{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;border:2px solid var(--bd);background:#fff;flex-shrink:0}
+.tld.dn{background:var(--gr);border-color:var(--gr);color:#fff;font-weight:700}
+.tld.ac{background:var(--or);border-color:var(--or);color:#fff}
+.tld.ag{background:var(--gr);border-color:var(--gr);color:#fff}
+.tld.pd{color:var(--mu);background:var(--s2)}
+.tll{flex:1;height:2px;background:var(--bd);margin-top:13px}
+.tll.dn{background:var(--gr)}
+.tlbl{font-size:10px;color:var(--mu);margin-top:6px;text-align:center;max-width:80px;line-height:1.4}
+.tldt{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--tx);margin-top:2px;text-align:center;font-weight:600}
+.tldt.up{color:var(--gr)}
+
+/* Articles table */
+.stit{font-size:13px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px;color:var(--tx);flex-wrap:wrap}
+.sbdg{font-size:10px;background:var(--s2);padding:2px 8px;border-radius:20px;color:var(--mu);font-weight:500;border:1px solid var(--bd)}
+.drvbdg{font-size:10px;background:var(--acc-bg);color:var(--acc);padding:2px 8px;border-radius:20px;font-weight:600}
+.mb20{margin-bottom:16px}
+table{width:100%;border-collapse:collapse;background:#fff;border:1.5px solid var(--bd);border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+th{background:var(--acc);padding:10px 14px;text-align:left;font-size:10px;color:rgba(255,255,255,.9);text-transform:uppercase;letter-spacing:.5px;font-weight:700;border-bottom:none}
+td{padding:10px 14px;border-bottom:1px solid var(--bd);font-size:12px;color:var(--tx)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fef8f5}
+.rf{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--acc);font-weight:700}
+.nv{font-size:10px;background:rgba(124,58,237,.1);color:var(--pu);padding:2px 6px;border-radius:20px;font-weight:700;margin-left:4px;border:1px solid rgba(124,58,237,.2)}
+.qtd{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--tx)}
+.tot-box{background:#fff;border:1.5px solid var(--bd);border-radius:10px;overflow:hidden;margin-top:8px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.trow{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;border-bottom:1px solid var(--bd)}
+.trow:last-child{border-bottom:none;background:linear-gradient(135deg,var(--acc),var(--acc2))}
+.trow:last-child .trv{color:#fff !important}
+.trl{font-size:11px;color:var(--mu);font-weight:600;text-transform:uppercase;letter-spacing:.4px;display:flex;align-items:center;gap:6px}
+.trv{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;color:var(--tx)}
+
+/* Calc */
+.calc-box{background:#fff;border:1.5px solid var(--bd);border-radius:10px;padding:18px 20px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.calc-title{font-size:11px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.5px;color:var(--mu)}
+.calc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.calc-field{display:flex;flex-direction:column;gap:5px}
+.calc-lbl{font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.calc-inp{background:#fff;border:1.5px solid var(--bd);border-radius:8px;padding:8px 10px;color:var(--tx);font-size:12px;outline:none;font-family:Inter,sans-serif;width:100%;transition:.15s}
+.calc-inp:focus{border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-bg)}
+.calc-sel{background:#fff;border:1.5px solid var(--bd);border-radius:8px;padding:8px 10px;color:var(--tx);font-size:12px;outline:none;font-family:Inter,sans-serif;width:100%;cursor:pointer}
+.calc-sel:focus{border-color:var(--acc)}
+.calc-btn{background:var(--acc);color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;width:100%;margin-top:4px;transition:.15s;letter-spacing:.2px}
+.calc-btn:hover{background:var(--acc2)}
+.calc-result{background:var(--s2);border:1.5px solid var(--bd);border-radius:8px;padding:14px 16px;margin-top:12px}
+.cr-title{font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:10px}
+.cr-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bd);font-size:12px}
+.cr-row:last-child{border-bottom:none;font-weight:700;font-size:13px;margin-top:4px;padding-top:10px}
+.cr-lbl{color:var(--mu)}
+.cr-val{font-family:'JetBrains Mono',monospace;font-weight:600}
+.cr-val.warn{color:var(--ye)}
+.cr-val.danger{color:var(--or)}
+.cr-val.ok{color:var(--gr)}
+.cr-val.total{color:var(--tx);font-size:15px}
+.tariff-info{font-size:10px;color:var(--mu);margin-top:8px;line-height:1.6;padding:8px 10px;background:#fff;border-radius:6px;border:1px solid var(--bd)}
+
+/* Product search */
+.prod-hdr{background:#fff;border:1.5px solid var(--bd);border-radius:10px;padding:16px 20px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.prod-ref{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--acc);margin-bottom:4px}
+.prod-nome{font-size:14px;color:var(--tx);font-weight:600}
+.prod-total{font-size:12px;color:var(--mu);margin-top:4px}
+.cont-card{background:#fff;border:1.5px solid var(--bd);border-radius:10px;padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;transition:.12s;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.cont-card:hover{border-color:var(--acc);box-shadow:0 2px 8px rgba(232,83,10,.12)}
+.cc-left{display:flex;flex-direction:column;gap:4px;flex:1}
+.cc-id{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700}
+.cc-id.y{color:var(--ye)}.cc-id.o{color:var(--or)}.cc-id.g{color:var(--gr)}
+.cc-info{font-size:12px;color:var(--mu)}
+.cc-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
+.eta-chip{background:var(--gb);border:1.5px solid var(--gbd);border-radius:8px;padding:6px 14px;text-align:center}
+.eta-chip.y{background:var(--yb);border-color:var(--ybd)}
+.eta-chip.o{background:var(--ob);border-color:var(--obd)}
+.eta-chip-lbl{font-size:9px;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;font-weight:700}
+.eta-chip-val{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--tx)}
+.cc-qtd{font-size:12px;color:var(--mu)}
+.cc-qtd span{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--tx)}
+
+/* Modal */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
+.ov.op{display:flex}
+.md{background:#fff;border:1.5px solid var(--bd);border-radius:12px;padding:24px;width:460px;max-width:90vw;box-shadow:0 8px 32px rgba(0,0,0,.12)}
+.md h3{font-size:16px;font-weight:700;margin-bottom:6px;color:var(--tx)}
+.md p{font-size:12px;color:var(--mu);margin-bottom:16px;line-height:1.6}
+.mds{margin-bottom:14px}
+.mdl{font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:6px}
+.mdi{background:#fff;border:1.5px solid var(--bd);border-radius:8px;padding:8px 10px;color:var(--tx);font-size:12px;width:100%;outline:none;font-family:'JetBrains Mono',monospace}
+.mdi:focus{border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-bg)}
+.mdh{font-size:11px;color:var(--mu);margin-top:4px;line-height:1.5}
+.mdb{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+.bc{background:#fff;border:1.5px solid var(--bd);color:var(--mu);border-radius:8px;padding:8px 16px;font-size:12px;cursor:pointer;font-family:Inter,sans-serif;font-weight:600}
+.bc:hover{border-color:var(--tx);color:var(--tx)}
+.bs{background:var(--acc);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif}
+.bs:hover{background:var(--acc2)}
+
+/* Worten warning */
+#calc-worten-warn{background:rgba(232,83,10,.08);border:1.5px solid var(--obd);border-radius:8px;padding:10px 14px;margin-top:8px;font-size:11px;color:var(--or)}
+
+
+
+
+
+</style>
+</head>
+<body>
+<div id="hdr">
+  <div class="logo" style="gap:14px">
+    <img src="data:image/png;base64,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" alt="FJMPC" style="height:42px;object-fit:contain;border-radius:6px">
+    <div style="display:flex;flex-direction:column;gap:2px">
+      <span style="color:#fff;font-weight:700;font-size:17px;letter-spacing:-0.3px;line-height:1">Gestão Contentores</span>
+      <span style="color:var(--acc);font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;line-height:1">2026</span>
+    </div>
+  </div>
+  <div class="hbtns">
+    <button class="hbtn" id="darkbtn" onclick="toggleDark()" title="Dark / Light mode">&#9790; Dark</button>
+    <button class="hbtn" id="syncbtn" onclick="syncDrive()">&#8635; FJMPC / ALPHA GAMER</button>
+    <button class="hbtn bl" id="apibtn" onclick="openModal()" class="hbtn acc">&#9881; APIs Tracking</button>
+  </div>
+</div>
+<div id="tabs">
+  <div class="tab act" id="tab0" onclick="switchTab(0)"><span>&#128230;</span> Contentores</div>
+  <div class="tab" id="tab1" onclick="switchTab(1)"><span>&#128269;</span> Pesquisa por Produto</div>
+  <div class="tab" id="tab2" onclick="switchTab(2)"><span>&#128197;</span> Demurrage & Storage</div>
+  <div class="tab" id="tab3" onclick="switchTab(3)"><span>&#127381;</span> Novidades <span id="nov-count" style="background:rgba(167,139,250,.2);color:#a78bfa;font-size:10px;padding:1px 7px;border-radius:8px;margin-left:2px;font-weight:700"></span></div>
+</div>
+<div id="stats"></div>
+<div id="main">
+  <div id="sb">
+    <div id="sbtop">
+      <input class="srch" id="srch" type="text" placeholder="&#128269; Pesquisar contentor, destino, P.O...">
+      <div id="flt">
+        <button class="fb ab" id="f0" onclick="setF('all',0)">Todos</button>
+        <button class="fb" id="f1" onclick="setF('recebido',1)">&#11044; Recebidos</button>
+        <button class="fb" id="f2" onclick="setF('alfandega',2)">&#11044; Alfandega</button>
+        <button class="fb" id="f3" onclick="setF('transito',3)">&#11044; Transito</button>
+      </div>
+    </div>
+    <div id="cl"></div>
+  </div>
+  <div id="psb" style="display:none">
+    <div id="psbtop">
+      <input class="srch" id="psrch" type="text" placeholder="&#128269; Referencia ou nome do produto...">
+    </div>
+    <div id="plist"></div>
+  </div>
+  <div id="det">
+    <div class="wel">
+      <div class="wel-ic">&#128230;</div>
+      <h2>Tracking de Contentores</h2>
+      <p>Seleccione um contentor ou pesquise por produto para ver datas de chegada e custos.</p>
+      <div class="lgnd">
+        <div class="li"><div class="ld" style="background:#e3a008"></div>Recebido</div>
+        <div class="li"><div class="ld" style="background:#f97316"></div>Alfandega</div>
+        <div class="li"><div class="ld" style="background:#3fb950"></div>Em Transito</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="ctab" style="display:none;flex:1;overflow-y:auto;padding:24px;background:var(--bg);width:100%">
+    <div>
+      <div style="margin-bottom:20px">
+        <div style="font-size:20px;font-weight:700;margin-bottom:4px">&#128197; Calculadora Demurrage & Storage</div>
+        <div style="font-size:12px;color:var(--mu)">Calcule os custos extra por dias fora do free time — CMA CGM, MSC, Maersk e ONE</div>
+      </div>
+
+      <div class="calc-box">
+        <div class="calc-title">&#9881; Parametros</div>
+        <div class="calc-grid" style="grid-template-columns:repeat(3,1fr)">
+          <div class="calc-field">
+            <label class="calc-lbl">Armador</label>
+            <select class="calc-sel" id="calc-comp">
+              <option value="CMACGM">CMA CGM</option>
+              <option value="MSC">MSC</option>
+              <option value="Maersk">Maersk</option>
+              <option value="ONE">ONE</option>
+            </select>
+          </div>
+          <div class="calc-field">
+            <label class="calc-lbl">Tipo de Contentor</label>
+            <select class="calc-sel" id="calc-tipo">
+              <option value="40HC">40HC</option>
+              <option value="20DV">20DV</option>
+              <option value="45HC">45HC</option>
+            </select>
+          </div>
+          <div class="calc-field">
+            <label class="calc-lbl">Data ETA (chegada ao porto)</label>
+            <input class="calc-inp" type="date" id="calc-eta">
+          </div>
+          <div class="calc-field">
+            <label class="calc-lbl">Data Levantamento do Terminal</label>
+            <input class="calc-inp" type="date" id="calc-pickup">
+          </div>
+          <div class="calc-field">
+            <label class="calc-lbl">Data Devolucao Vazio (opcional)</label>
+            <input class="calc-inp" type="date" id="calc-return">
+          </div>
+          <div class="calc-field" style="display:flex;align-items:flex-end">
+            <button class="calc-btn" onclick="runCalc()">&#128197; Calcular Custos</button>
+          </div>
+        </div>
+        <div id="calc-worten-warn" style="display:none;background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);border-radius:6px;padding:10px 12px;margin-top:8px;font-size:11px;color:#f97316">
+          <strong>&#9888; Destino Worten</strong> — A data de devolucao do vazio requer confirmacao. Preencha manualmente o campo "Data Devolucao Vazio" quando tiver a informacao.
+        </div>
+        <div id="calc-res"></div>
+      </div>
+
+      <div class="calc-box">
+        <div class="calc-title">&#128230; Pesquisar Contentor</div>
+        <div style="font-size:12px;color:var(--mu);margin-bottom:10px">Digite o numero do contentor, destino ou P.O. para pre-preencher automaticamente</div>
+        <div style="position:relative">
+          <input class="calc-inp" type="text" id="calc-csrch" placeholder="&#128269;  ex: DDDU5046665 ou Worten ou PTAG11..." oninput="searchCalcContainer(this.value)" autocomplete="off">
+          <div id="calc-cresults" style="display:none;position:absolute;top:100%;left:0;right:0;background:#fff;border:1.5px solid var(--bd);border-radius:10px;margin-top:4px;max-height:220px;overflow-y:auto;z-index:50;box-shadow:0 4px 20px rgba(0,0,0,.12)"></div>
+        </div>
+        <div id="calc-cselected" style="display:none;margin-top:10px;background:var(--bg);border:1px solid var(--gbd);border-radius:6px;padding:10px 14px;display:none">
+          <div style="font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Contentor seleccionado</div>
+          <div id="calc-csel-info" style="font-size:13px;font-weight:600;font-family:JetBrains Mono,monospace;color:var(--gr)"></div>
+        </div>
+      </div>
+
+      <div class="calc-box">
+        <div class="calc-title">&#128220; Tarifas em Vigor (2026)</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+          <div style="background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:12px">
+            <div style="font-weight:700;margin-bottom:6px;color:var(--bl)">CMA CGM — Merged D&D</div>
+            <div style="font-size:11px;color:var(--mu);line-height:1.8">
+              Free time: 7 dias<br>
+              Dia 8-10: 60€/dia (40')<br>
+              Dia 11-21: 85€/dia (40')<br>
+              Dia 22+: 152€/dia (40')<br>
+              Storage: 27€/dia (dias 8-15)
+            </div>
+          </div>
+          <div style="background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:12px">
+            <div style="font-weight:700;margin-bottom:6px;color:var(--or)">MSC — Demurrage + Storage</div>
+            <div style="font-size:11px;color:var(--mu);line-height:1.8">
+              Free time: 6 dias<br>
+              Demurrage P1 (3d): 50€/dia (40')<br>
+              Demurrage P2: 90€/dia (40')<br>
+              Storage P1 (3d): 15€/dia (40')<br>
+              Storage P2: 33€/dia (40')
+            </div>
+          </div>
+          <div style="background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:12px">
+            <div style="font-weight:700;margin-bottom:6px;color:var(--ye)">Maersk — Lisboa/Liscont</div>
+            <div style="font-size:11px;color:var(--mu);line-height:1.8">
+              Free time: 7 dias<br>
+              Demurrage P1 (dias 8-10): 60€/dia<br>
+              Demurrage P2: 85€/dia<br>
+              Storage: 11€/dia (40')
+            </div>
+          </div>
+          <div style="background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:12px">
+            <div style="font-weight:700;margin-bottom:6px;color:var(--gr)">ONE — Demurrage + Detention</div>
+            <div style="font-size:11px;color:var(--mu);line-height:1.8">
+              Demurrage free: 6 dias<br>
+              Detention free: 4 dias<br>
+              Demurrage P1 (5d): 62€/dia (40')<br>
+              Detention P1 (5d): 50€/dia (40')<br>
+              Storage: 11€/dia (40', dias 8-15)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="ntab" style="display:none;flex:1;overflow-y:auto;padding:24px;background:var(--bg);width:100%">
+    <div>
+      <div style="margin-bottom:20px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+        <div>
+          <div style="font-size:20px;font-weight:700;margin-bottom:4px">&#127381; Produtos Novidade</div>
+          <div style="font-size:12px;color:var(--mu)">Novos produtos a chegar — para consulta da equipa de marketing</div>
+        </div>
+        <input class="srch" id="nov-srch" type="text" placeholder="&#128269; Filtrar por referencia ou nome..." style="width:280px" oninput="renderNovidades()">
+      </div>
+      <div id="nov-list"></div>
+    </div>
+  </div>
+</div>
+<div class="ov" id="ov">
+  <div class="md">
+    <h3>&#9881; APIs de Tracking</h3>
+    <p>Chaves para tracking automatico dos contentores em transito (verdes).</p>
+    <div class="mds">
+      <div class="mdl">CMA CGM API Key</div>
+      <input class="mdi" type="password" id="kc" placeholder="Bearer token...">
+      <div class="mdh">Registar em <a href="https://apis.cma-cgm.com" target="_blank">apis.cma-cgm.com</a></div>
+    </div>
+    <div class="mds">
+      <div class="mdl">ONE Line API Key</div>
+      <input class="mdi" type="password" id="ko" placeholder="Basic token...">
+      <div class="mdh">Registar em <a href="https://ecomm.one-line.com" target="_blank">ecomm.one-line.com</a></div>
+    </div>
+    <div class="mdb">
+      <button class="bc" onclick="closeModal()">Cancelar</button>
+      <button class="bs" onclick="saveKeys()">Guardar</button>
+    </div>
+  </div>
+</div>
+<script>
+// Force light theme always
+try{document.body.className=document.body.className.replace(/\bdark\b/,"").trim();}catch(e){}
+
+var CONTAINERS=[{"id":"CAAU5904294","companhia":"MSC","fornecedor":"HUZHOU JIERU HOME","tipo":"40HC","etd":"09/11/2025","eta":"21/12/2025","entrega":"08/01/2026","pod":"Riachos","destino":"PC Diga","po":"JR1055-60","obs":"","mercadoria":"Cadeiras Mesh","frete":3823.3,"estado":"recebido"},
+{"id":"TCNU2374129","companhia":"MSC","fornecedor":"HUZHOU JIERU HOME","tipo":"40HC","etd":"05/11/2025","eta":"27/12/2025","entrega":"07/01/2026","pod":"Riachos","destino":"PC Diga","po":"JR1055-59","obs":"","mercadoria":"Cadeiras Mesh","frete":3823.3,"estado":"recebido"},
+{"id":"MSMU4227658","companhia":"MSC","fornecedor":"ANJI DINCHEN","tipo":"40HC","etd":"09/11/2025","eta":"21/12/2025","entrega":"06/01/2026","pod":"Bobadela","destino":"WORTEN","po":"PTAG11-602","obs":"","mercadoria":"Cadeiras","frete":3485.05,"estado":"recebido"},
+{"id":"MSMU5852428","companhia":"MSC","fornecedor":"HUZHOU JIERU HOME","tipo":"40HC","etd":"18/11/2025","eta":"26/12/2025","entrega":"14/01/2026","pod":"Riachos","destino":"PC Diga","po":"JR1055-61","obs":"","mercadoria":"Cadeiras Mesh","frete":3910.3,"estado":"recebido"},
+{"id":"CAAU7083644","companhia":"Maersk","fornecedor":"HUZHOU JIERU HOME","tipo":"40HC","etd":"17/11/2025","eta":"01/01/2026","entrega":"15/01/2026","pod":"Riachos","destino":"FJMPC","po":"JR1055-62","obs":"","mercadoria":"Cadeiras Mesh","frete":8616.0,"estado":"recebido"},
+{"id":"MRKU4170138","companhia":"Maersk","fornecedor":"HUZHOU JIERU HOME","tipo":"40HC","etd":"17/11/2025","eta":"01/01/2026","entrega":"16/01/2026","pod":"Riachos","destino":"FJMPC","po":"JR1055-62","obs":"","mercadoria":"Cadeiras Mesh","frete":0,"estado":"recebido"},
+{"id":"MRKU4976524","companhia":"Maersk","fornecedor":"HUZHOU JIERU HOME","tipo":"40HC","etd":"17/11/2025","eta":"01/01/2026","entrega":"19/01/2026","pod":"Riachos","destino":"FJMPC","po":"JR1055-62","obs":"","mercadoria":"Cadeiras Mesh","frete":0,"estado":"recebido"},
+{"id":"MRKU3244447","companhia":"Maersk","fornecedor":"ANJI DINCHEN","tipo":"40 HC","etd":"17/11/2025","eta":"01/01/2026","entrega":"15/01/2026","pod":"RIACHOS","destino":"PC DIGA","po":"PTAG11-619","obs":"","mercadoria":"Cadeiras","frete":3206.0,"estado":"recebido"},
+{"id":"TCNU1554912","companhia":"MSC","fornecedor":"HUZHOU JIERU HOME","tipo":"40HC","etd":"05/11/2025","eta":"31/12/2025","entrega":"16/01/2026","pod":"Riachos","destino":"PC Diga","po":"JR1055-58","obs":"","mercadoria":"Cadeiras Mesh","frete":3823.3,"estado":"recebido"},
+{"id":"MSKU0654460","companhia":"Maersk","fornecedor":"HUZHOU JIERU HOME","tipo":"40HC","etd":"17/11/2025","eta":"01/01/2026","entrega":"22/01/2026","pod":"Bobadela","destino":"Worten","po":"JR1055-50","obs":"","mercadoria":"Cadeiras Mesh","frete":2954.0,"estado":"recebido"},
+{"id":"FSCU8840228","companhia":"MSC","fornecedor":"UE FURNITURE CO., LTD","tipo":"40HC","etd":"05/11/2025","eta":"31/12/2025","entrega":"20/01/2026","pod":"RIACHOS","destino":"PC DIGA","po":"FJMPC-2504","obs":"CADEIRAS MESH NOVAS","mercadoria":"Cadeiras Mesh","frete":2866.75,"estado":"recebido"},
+{"id":"MRKU3567877","companhia":"Maersk","fornecedor":"GUANGZHOU AOJIE","tipo":"40HC","etd":"01/12/2025","eta":"09/01/2025","entrega":"23/01/2026","pod":"LISBOA","destino":"FJMPC","po":"25SM10062","obs":"Tapetes Pc Diga","mercadoria":"Caixas","frete":3727.25,"estado":"recebido"},
+{"id":"MRKU4372041","companhia":"Maersk","fornecedor":"ANJI HAIWEI SMART FURNITURE","tipo":"40HC","etd":"08/12/2025","eta":"19/01/2026","entrega":"28/01/2026","pod":"LISBOA","destino":"FJMPC","po":"HW137-2406-1","obs":"","mercadoria":"Mesas","frete":3727.25,"estado":"recebido"},
+{"id":"MSKU9770693","companhia":"Maersk","fornecedor":"ANJI DINCHEN","tipo":"40HC","etd":"01/12/2025","eta":"19/01/2026","entrega":"29/01/2026","pod":"LISBOA","destino":"Worten","po":"PTAG11-636","obs":"","mercadoria":"Cadeiras","frete":3389.0,"estado":"recebido"},
+{"id":"CAIU8294053","companhia":"Maersk","fornecedor":"ANJI DINCHEN","tipo":"40HC","etd":"01/12/2025","eta":"19/01/2026","entrega":"29/01/2026","pod":"LISBOA","destino":"Worten","po":"PTAG11-296","obs":"","mercadoria":"Cadeiras","frete":3389.0,"estado":"recebido"},
+{"id":"TCNU5152906","companhia":"CMACGM","fornecedor":"SUAVE TECHNOLOGY","tipo":"40HC","etd":"03/12/2025","eta":"15/02/2026 ??","entrega":"30/01/2026","pod":"LISBOA","destino":"FJMPC","po":"ST2509017","obs":"Caixas Coolers Zolid","mercadoria":"Caixas","frete":3902.55,"estado":"recebido"},
+{"id":"FANU3359264","companhia":"Hapag Lloyd","fornecedor":"SUAVE TECHNOLOGY / Atlas","tipo":"40HC","etd":"03/12/2025","eta":"04/02/2026","entrega":"11/02/2026","pod":"LISBOA","destino":"FJMPC","po":"25SM10062","obs":"Caixas Atlas","mercadoria":"Caixas","frete":3679.0,"estado":"recebido"},
+{"id":"HASU4497484","companhia":"Maersk","fornecedor":"HUZHOU JIERU HOME","tipo":"40HC","etd":"15/12/2025","eta":"07/02/2026","entrega":"19/02/2026","pod":"LISBOA","destino":"FJMPC","po":"JR1055-63","obs":"","mercadoria":"Cadeiras Mesh","frete":3745.0,"estado":"recebido"},
+{"id":"TRHU4437683","companhia":"Maersk","fornecedor":"HUZHOU JIERU HOME","tipo":"40HC","etd":"15/12/2025","eta":"07/02/2026","entrega":"20/02/2026","pod":"LISBOA","destino":"FJMPC","po":"JR1055-63","obs":"","mercadoria":"Cadeiras Mesh","frete":3645.0,"estado":"recebido"},
+{"id":"MRSU7266658","companhia":"Maersk","fornecedor":"DONGLAI SMART HOME TECH LTD","tipo":"40HC","etd":"15/12/2025","eta":"07/02/2026","entrega":"18/02/2026","pod":"LISBOA","destino":"Worten","po":"PTAG11-604","obs":"","mercadoria":"Cadeiras","frete":3745.0,"estado":"recebido"},
+{"id":"SEKU7815267","companhia":"CMACGM","fornecedor":"HUZHOU JIERU HOME","tipo":"40HC","etd":"02/12/2025","eta":"14/02/2026","entrega":"23/02/2026","pod":"LISBOA","destino":"FJMPC","po":"JR1055-63&64B","obs":"","mercadoria":"Cadeiras Mesh","frete":3517.0,"estado":"recebido"},
+{"id":"SEKU7814189","companhia":"CMACGM","fornecedor":"DONGLAI SMART HOME TECH LTD","tipo":"40HC","etd":"02/12/2025","eta":"14/02/2026","entrega":"23/02/2026","pod":"LISBOA","destino":"RP / FJMPC","po":"PTAG11-638","obs":"RODAS","mercadoria":"Cadeiras","frete":3517.0,"estado":"recebido"},
+{"id":"SEKU7815225","companhia":"CMACGM","fornecedor":"DONGLAI SMART HOME TECH LTD","tipo":"40HC","etd":"02/12/2025","eta":"14/02/2026","entrega":"24/02/2026","pod":"LISBOA","destino":"Worten / Bobadela","po":"PTAG11-641","obs":"","mercadoria":"Cadeiras","frete":3517.0,"estado":"recebido"},
+{"id":"SEKU7815204","companhia":"CMACGM","fornecedor":"HUZHOU JIERU HOME","tipo":"40HC","etd":"02/12/2025","eta":"14/02/2026","entrega":"23/02/2026","pod":"LISBOA","destino":"MEO / FJMPC","po":"JR1055-65","obs":"","mercadoria":"Cadeiras Mesh","frete":3517.0,"estado":"recebido"},
+{"id":"SEKU7815288","companhia":"CMACGM","fornecedor":"HUZHOU JIERU HOME","tipo":"40HC","etd":"02/12/2025","eta":"14/02/2026","entrega":"25/02/2026","pod":"LISBOA","destino":"FJMPC","po":"JR1055-63&64B","obs":"","mercadoria":"Cadeiras Mesh","frete":3517.0,"estado":"recebido"},
+{"id":"CMAU7126778","companhia":"CMACGM","fornecedor":"DONGLAI SMART HOME TECH LTD","tipo":"40HC","etd":"02/12/2025","eta":"14/02/2026","entrega":"25/02/2026","pod":"LISBOA","destino":"Worten / Bobadela","po":"PTAG11-639","obs":"","mercadoria":"Cadeiras","frete":3517.0,"estado":"recebido"},
+{"id":"SEKU7816495","companhia":"CMACGM","fornecedor":"DONGLAI SMART HOME TECH LTD","tipo":"40HC","etd":"18/01/2026","eta":"12/03/2026","entrega":"16/03/2026","pod":"LISBOA","destino":"RP / FJMPC","po":"PTAG11-629","obs":"","mercadoria":"Cadeiras","frete":4465.0,"estado":"recebido"},
+{"id":"MSMU6056997","companhia":"MSC","fornecedor":"HUZHOU JIERU HOME","tipo":"40HC","etd":"01/02/2026","eta":"07/03/2026","entrega":"18/03/2026","pod":"RIACHOS","destino":"FJMPC / Nuno","po":"JR1055-69","obs":"","mercadoria":"","frete":4378.0,"estado":"recebido"},
+{"id":"SEKU7816514","companhia":"CMACGM","fornecedor":"HUZHOU JIERU HOME","tipo":"40HC","etd":"18/01/2026","eta":"12/03/2026","entrega":"18/03/2026","pod":"LISBOA","destino":"WOrten / Bobadela","po":"JR1055-66","obs":"","mercadoria":"Cadeiras Mesh","frete":4465.0,"estado":"recebido"},
+{"id":"SEKU7816577","companhia":"CMACGM","fornecedor":"HUZHOU JIERU HOME","tipo":"40HC","etd":"18/01/2026","eta":"12/03/2026","entrega":"18/03/2026","pod":"LISBOA","destino":"WOrten / Bobadela","po":"JR1055-67","obs":"","mercadoria":"Cadeiras Mesh","frete":4465.0,"estado":"recebido"},
+{"id":"SEKU7816480","companhia":"CMACGM","fornecedor":"HUZHOU JIERU HOME","tipo":"40HC","etd":"18/01/2026","eta":"12/03/2026","entrega":"19/03/2026","pod":"LISBOA","destino":"Radio Popular / FJMPC","po":"JR1055-68","obs":"","mercadoria":"Cadeiras Mesh","frete":4465.0,"estado":"recebido"},
+{"id":"SEKU7816788","companhia":"CMACGM","fornecedor":"DONGLAI SMART HOME TECH LTD","tipo":"40HC","etd":"18/01/2026","eta":"12/03/2026","entrega":"20/03/2026","pod":"LISBOA","destino":"Worten / Bobadela","po":"PTAG11-603","obs":"","mercadoria":"Cadeiras","frete":4465.0,"estado":"recebido"},
+{"id":"SEKU7816767","companhia":"CMACGM","fornecedor":"DONGLAI SMART HOME TECH LTD","tipo":"40HC","etd":"18/01/2026","eta":"12/03/2026","entrega":"17/03/2026","pod":"LISBOA","destino":"meo / FJMPC","po":"PTAG11-637","obs":"","mercadoria":"Cadeiras","frete":4465.0,"estado":"recebido"},
+{"id":"NYKU4794090","companhia":"ONE","fornecedor":"SUAVETECH","tipo":"40HC","etd":"16/01/2026","eta":"29/03/2026","entrega":"07/04/2026","pod":"LISBOA","destino":"FJMPC","po":"ST2511002 +ST2509017","obs":"NOVIDADES","mercadoria":"Caixas Coolers Zolid / Mochilas / Combo Offy","frete":4210.0,"estado":"recebido"},
+{"id":"ONEU1147585","companhia":"ONE","fornecedor":"GUANGZHOU AOJIE","tipo":"40HC","etd":"17/01/2026","eta":"10/04/2026","entrega":"12/04/2026","pod":"LISBOA","destino":"FJMPC","po":"25SM04050 -1","obs":"Caixas / Fontes NOX","mercadoria":"Caixas / Fontes NOX","frete":4210.0,"estado":"recebido"},
+{"id":"MRSU3054645","companhia":"Maersk","fornecedor":"DONGLAI SMART HOME TECH LTD","tipo":"40HC","etd":"04/02/2026","eta":"09/04/2026","entrega":"16/04/2026","pod":"LISBOA","destino":"FJMPC","po":"PTAG11-635","obs":"","mercadoria":"Cadeiras","frete":4000.0,"estado":"recebido"},
+{"id":"CMAU7035404","companhia":"CMACGM","fornecedor":"DONGLAI SMART HOME TECH LTD","tipo":"40HC","etd":"30/01/2026","eta":"03/04/2026","entrega":"20/04/2026","pod":"LISBOA","destino":"FJMPC / FNAC","po":"PTAG11-632","obs":"","mercadoria":"Cadeiras","frete":4232.0,"estado":"recebido"},
+{"id":"MRSU7112185","companhia":"Maersk","fornecedor":"DONGLAI SMART HOME TECH LTD","tipo":"40 HC","etd":"04/02/2026","eta":"09/04/2026","entrega":"17/04/2026","pod":"LISBOA","destino":"FJMPC","po":"PTAG11-625","obs":"","mercadoria":"Cadeiras","frete":4000.0,"estado":"recebido"},
+{"id":"CMAU6742059","companhia":"CMACGM","fornecedor":"DONGLAI SMART HOME TECH LTD","tipo":"40HC","etd":"26/01/2026","eta":"10/04/2026","entrega":"21/04/2026","pod":"LISBOA","destino":"Worten / Bobadela","po":"PTAG11-640","obs":"","mercadoria":"Cadeiras","frete":4322.0,"estado":"recebido"},
+{"id":"TCNU7813630","companhia":"MSC","fornecedor":"ANJI HAIWEI SMART FURNITURE","tipo":"40HC","etd":"08/02/2026","eta":"07/04/2026","entrega":"22/04/2026","pod":"RIACHOS","destino":"FJMPC","po":"HW137-2406-2","obs":"","mercadoria":"Mesas","frete":3910.0,"estado":"recebido"},
+{"id":"MSMU8426391","companhia":"MSC","fornecedor":"DONGLAI SMART HOME TECH LTD","tipo":"40HC","etd":"20/04/2026","eta":"28/05/2026","entrega":"03/06/2026","pod":"Sines","destino":"FJMPC","po":"PTAG11-642","obs":"Cadeiras Selecção","mercadoria":"Cadeiras","frete":4785.45,"estado":"recebido"},
+{"id":"CMAU6149465","companhia":"CMACGM","fornecedor":"GUANGZHOU AOJIE","tipo":"40HC","etd":"19/04/2026","eta":"04/06/2026","entrega":"09/06/2026","pod":"LISBOA","destino":"FJMPC","po":"26SM03003","obs":"CAIXAS ATLAS","mercadoria":"Caixas / Combo 1life","frete":3743.66,"estado":"recebido"},
+{"id":"CAIU9472020","companhia":"CMACGM","fornecedor":"HUZHOU JIERU HOME","tipo":"40HC","etd":"16/04/2026","eta":"04/06/2026","entrega":"11/06/2026","pod":"LISBOA","destino":"FJMPC","po":"JR1055-70","obs":"","mercadoria":"Cadeiras Mesh","frete":3743.66,"estado":"recebido"},
+{"id":"UETU5559061","companhia":"CMACGM","fornecedor":"HUZHOU JIERU HOME","tipo":"40HC","etd":"16/04/2026","eta":"04/06/2026","entrega":"09/06/2026","pod":"LISBOA","destino":"FJMPC","po":"JR1055-70","obs":"","mercadoria":"Cadeiras Mesh","frete":3743.66,"estado":"recebido"},
+{"id":"TCLU6374264","companhia":"CMACGM","fornecedor":"HUZHOU JIERU HOME","tipo":"40HC","etd":"01/05/2026","eta":"19/06/2026","entrega":"23/06/2026","pod":"LISBOA","destino":"Worten 4","po":"JR1055-71","obs":"","mercadoria":"Cadeiras Mesh","frete":3743.66,"estado":"recebido"},
+{"id":"TCNU3632887","companhia":"CMACGM","fornecedor":"DONGLAI SMART HOME TECH LTD","tipo":"40HC","etd":"13/05/2026","eta":"21/06/2026","entrega":"","pod":"LISBOA","destino":"Worten 5","po":"PTAG11-654","obs":"","mercadoria":"Cadeiras","frete":0,"estado":"alfandega"},
+{"id":"CMAU7447870","companhia":"CMACGM","fornecedor":"DONGLAI SMART HOME TECH LTD","tipo":"40HC","etd":"13/05/2026","eta":"21/06/2026","entrega":"","pod":"LISBOA","destino":"Worten 2025","po":"PTAG11-605","obs":"","mercadoria":"Cadeiras","frete":0,"estado":"alfandega"},
+{"id":"TCLU8910094","companhia":"CMACGM","fornecedor":"UE FURNITURE CO., LTD","tipo":"40HC","etd":"13/05/2026","eta":"21/06/2026","entrega":"","pod":"LISBOA","destino":"FJMPC","po":"UE10120923 FJMPC-2601","obs":"","mercadoria":"Cadeiras Mesh","frete":0,"estado":"alfandega"},
+{"id":"DDDU5046665","companhia":"CMACGM","fornecedor":"DONGLAI SMART HOME TECH LTD","tipo":"40HC","etd":"27/04/2026","eta":"26/06/2026","entrega":"","pod":"LISBOA","destino":"Worten 1","po":"PTAG11-651","obs":"","mercadoria":"Cadeiras","frete":0,"estado":"transito"},
+{"id":"TCNU3717752","companhia":"CMACGM","fornecedor":"DONGLAI SMART HOME TECH LTD","tipo":"40HC","etd":"07/05/2026","eta":"26/06/2026","entrega":"","pod":"LISBOA","destino":"Worten 2","po":"PTAG11-652","obs":"","mercadoria":"Cadeiras","frete":0,"estado":"transito"},
+{"id":"TLLU4428396","companhia":"CMACGM","fornecedor":"DONGLAI SMART HOME TECH LTD","tipo":"40HC","etd":"07/05/2026","eta":"26/06/2026","entrega":"","pod":"LISBOA","destino":"Worten 3","po":"PTAG11-653","obs":"","mercadoria":"Cadeiras","frete":0,"estado":"transito"},
+{"id":"FCIU3873512","companhia":"CMACGM","fornecedor":"SHENZHEN KEYCEO TECH CO.,LIMITED","tipo":"20DV","etd":"15/06/2026","eta":"31/07/2026","entrega":"","pod":"LISBOA","destino":"FJMPC","po":"KY26KE027","obs":"NOVIDADES","mercadoria":"Ratos Teclos OFFY","frete":0,"estado":"transito"},
+{"id":"KKFU7935971","companhia":"ONE","fornecedor":"DONGLAI SMART HOME TECH LTD","tipo":"40HC","etd":"13/06/2026","eta":"06/08/2026","entrega":"","pod":"LISBOA","destino":"Worten 6","po":"PTAG11-655","obs":"","mercadoria":"Cadeiras","frete":0,"estado":"transito"},
+{"id":"SEGU5176476","companhia":"ONE","fornecedor":"DONGLAI SMART HOME TECH LTD","tipo":"40HC","etd":"13/06/2026","eta":"06/08/2026","entrega":"","pod":"LISBOA","destino":"Worten 7","po":"PTAG11-656","obs":"","mercadoria":"Cadeiras","frete":0,"estado":"transito"},
+{"id":"NYKU0846132","companhia":"ONE","fornecedor":"ANJI HAIWEI SMART FURNITURE TECHNOLOGY CO., LTD","tipo":"40HC","etd":"14/06/2026","eta":"06/08/2026","entrega":"","pod":"LISBOA","destino":"FJMPC","po":"HW137-2408-1","obs":"NOVIDADES","mercadoria":"MESAS","frete":0,"estado":"transito"},
+{"id":"TRHU4608301","companhia":"ONE","fornecedor":"HUZHOU JIERU HOME","tipo":"40HC","etd":"24/06/2026","eta":"13/08/2026","entrega":"","pod":"LISBOA","destino":"PC Diga Agosto","po":"JR1055-77","obs":"","mercadoria":"Cadeiras Mesh","frete":0,"estado":"transito"},
+{"id":"ONEU1030860","companhia":"ONE","fornecedor":"HUZHOU JIERU HOME","tipo":"40HC","etd":"24/06/2026","eta":"13/08/2026","entrega":"","pod":"LISBOA","destino":"FJMPC","po":"JR1055-76A","obs":"NOVIDADES","mercadoria":"Cadeiras Mesh / Suportes monitor Alpha Gamer","frete":0,"estado":"transito"}];
+var ARTIGOS={"ONEU1030860":{"items":[{"ref":"OFFYLYCABK","ean":"5600413206386","nome":"Offy Lyca Black - Cadeira de escritório em malha","qtd":16,"custo":58.0,"total":928.0,"novo":false},{"ref":"OFFYPRISMABK","ean":"5600413208540","nome":"Offy Prisma Ergonomic Office Chair Black","qtd":120,"custo":28.5,"total":3420.0,"novo":true},{"ref":"OFFYPRISMAWTPK","ean":"5600413208557","nome":"Offy Prisma Ergonomic Office Chair White / Pink","qtd":30,"custo":31.5,"total":945.0,"novo":true},{"ref":"OFFYPRISMAWTTQ","ean":"5600413208564","nome":"Offy Prisma Ergonomic Office Chair White / Turquoise","qtd":50,"custo":31.5,"total":1575.0,"novo":true},{"ref":"OFFYPRISMAWTGRY","ean":"5600413208571","nome":"Offy Prisma Ergonomic Office Chair White / Grey","qtd":100,"custo":31.5,"total":3150.0,"novo":true},{"ref":"OFFYPRISMAWTBG","ean":"5600413208588","nome":"Offy Prisma Ergonomic Office Chair White / Beige","qtd":60,"custo":31.5,"total":1890.0,"novo":true},{"ref":"OFFYLYMA","ean":"5600413206324","nome":"Offy Lyma - Cadeira de escritório em malha","qtd":50,"custo":34.5,"total":1725.0,"novo":true},{"ref":"OFFYLYCABKBK","ean":"","nome":"PCDIGA","qtd":20,"custo":58.0,"total":1160.0,"novo":false},{"ref":"AGTIDEBK","ean":"5600413207826","nome":"Alpha Gamer Tide Black PCDIGA EDITION","qtd":50,"custo":155.0,"total":7750.0,"novo":false},{"ref":"AGNAVIDRGB","ean":"5600413206225","nome":"Alpha Gamer Navi Heavy-Duty Dual Monitor RGB","qtd":200,"custo":57.5,"total":11500.0,"novo":false}],"frete":0,"total_merc":34043.0,"total_geral":34043.0},
+"TRHU4608301":{"items":[{"ref":"OFFYLYCAWT","ean":"5600413206409","nome":"Offy Lyca White - Cadeira de escritório em malha","qtd":50,"custo":63.0,"total":3150.0,"novo":false},{"ref":"OFFYLYMA","ean":"5600413206324","nome":"Offy Lyma - Cadeira de escritório em malha","qtd":148,"custo":34.5,"total":5106.0,"novo":false},{"ref":"OFFYLYMAGREY","ean":"5600413207741","nome":"Offy Lyma Grey","qtd":100,"custo":37.5,"total":3750.0,"novo":false},{"ref":"AGAURORA","ean":"5600413206355","nome":"Alpha Gamer Aurora - Cadeira em malha","qtd":140,"custo":98.0,"total":13720.0,"novo":false}],"frete":0,"total_merc":25726.0,"total_geral":25726.0},
+"NYKU0846132":{"items":[{"ref":"AGGEMINABK","ean":"5600413207338","nome":"Alpha Gamer Gemina Black - Secretária Gaming","qtd":180,"custo":27.0,"total":4860.0,"novo":false},{"ref":"AGGEMINARGBBK","ean":"5600413207321","nome":"Alpha Gamer Gemina RGB Black - Secretária Gaming","qtd":50,"custo":38.0,"total":1900.0,"novo":false},{"ref":"AGZORYARGBBK","ean":"5600413207307","nome":"Alpha Gamer Zorya RGB Black - Secretaria Gaming Altura Regulável","qtd":150,"custo":107.0,"total":16050.0,"novo":false},{"ref":"AGZORYAPRORGBBK","ean":"5600413208151","nome":"Alpha Gamer Zorya Pro RGB Black - Secretaria Gaming Altura Regulável","qtd":161,"custo":124.6,"total":20060.6,"novo":false},{"ref":"AGZORYAPRORGBWT","ean":"5600413208168","nome":"Alpha Gamer Zorya Pro RGB White - Secretaria Gaming Altura Regulável","qtd":100,"custo":126.6,"total":12660.0,"novo":false}],"frete":0,"total_merc":55530.6,"total_geral":55530.6},
+"FCIU3873512":{"items":[{"ref":"OFFYPIXIEMINIPT","ean":"5600413207499","nome":"Offy Pixie Mini Wireless / Bluetooth Keyboard PT","qtd":1000,"custo":9.4,"total":9400.0,"novo":false},{"ref":"OFFYPIXIEPT","ean":"5600413207482","nome":"Offy Pixie Wireless / Bluetooth Keyboard PT","qtd":1000,"custo":11.9,"total":11900.0,"novo":false},{"ref":"OFFYFLEXIMINIPT","ean":"5600413207475","nome":"Offy Flexi Mini Wireless / Bluetooth Keyboard PT","qtd":1000,"custo":10.4,"total":10400.0,"novo":false},{"ref":"OFFYFLEXIPT","ean":"5600413207468","nome":"Offy Flexi Wireless / Bluetooth Keyboard PT","qtd":1000,"custo":12.6,"total":12600.0,"novo":false},{"ref":"OFFYFLEXIMIDPT","ean":"5600413208182","nome":"Offy Flexi Mid Wireless / Bluetooth Keyboard PT","qtd":1000,"custo":11.9,"total":11900.0,"novo":true},{"ref":"OFFYPIXIETABPT","ean":"5600413208175","nome":"Offy Pixie Tab Wireless / Bluetooth Keyboard PT","qtd":1000,"custo":12.8,"total":12800.0,"novo":true},{"ref":"OFFYNEXO","ean":"5600413207413","nome":"Offy Nexo Wireless / Bluetooth Ergonomic Mouse 4800 DPI","qtd":1500,"custo":12.4,"total":18600.0,"novo":false},{"ref":"OFFYVEXI","ean":"5600413207420","nome":"Offy Vexi Wireless / Bluetooth Ergonomic Vertical Mouse 4800 DPI","qtd":1000,"custo":12.7,"total":12700.0,"novo":false},{"ref":"OFFYLEXI","ean":"5600413208281","nome":"Offy Lexi Wireless / Bluetooth Mouse 4800 DPI","qtd":1000,"custo":8.2,"total":8200.0,"novo":true},{"ref":"OFFYAXIO","ean":"5600413208274","nome":"Offy Axio Wireless / Bluetooth Ergonomic Mouse 4800 DPI","qtd":1000,"custo":8.6,"total":8600.0,"novo":true},{"ref":"OFFYNEXOWT","ean":"5600413208472","nome":"Offy Nexo Wireless / Bluetooth Ergonomic Mouse 4800 DPI - White","qtd":1000,"custo":12.7,"total":12700.0,"novo":true},{"ref":"OFFYOPTIXPRO","ean":"5600413208496","nome":"Offy Optix Pro 4K UHD 2160P Webcam","qtd":500,"custo":12.5,"total":6250.0,"novo":true},{"ref":"OFFYOPTIX","ean":"5600413208489","nome":"Offy Optix FHD 1080P Webcam","qtd":1000,"custo":8.3,"total":8300.0,"novo":true},{"ref":"NXCBAYMX2","ean":"8436532165603","nome":"Nox Coolbay MX2","qtd":120,"custo":12.46,"total":1495.2,"novo":false}],"frete":0,"total_merc":145845.2,"total_geral":145845.2},
+"SEGU5176476":{"items":[{"ref":"AGGAIA-DK-GREY-WT-V2","ean":"5600413207727","nome":"Alpha Gamer Gaia - Dark Grey / White V2","qtd":260,"custo":69.01,"total":17942.6,"novo":false},{"ref":"AGTERION-FB-GRY","ean":"5600413204504","nome":"Alpha Gamer Terion - Fabric Grey","qtd":60,"custo":92.26,"total":5535.6,"novo":false}],"frete":0,"total_merc":23478.2,"total_geral":23478.2},
+"KKFU7935971":{"items":[{"ref":"AGNEBULAOE-PU-BWN","ean":"5600413206379","nome":"Alpha Gamer Nebula Office Edition - PU Brown","qtd":70,"custo":84.42,"total":5909.4,"novo":false},{"ref":"AGCYGNUS","ean":"5600413204191","nome":"Alpha Gamer Cygnus RGB","qtd":310,"custo":71.64,"total":22208.4,"novo":false}],"frete":0,"total_merc":28117.8,"total_geral":28117.8},
+"CMAU7447870":{"items":[{"ref":"AGGAIA-DK-GREY-WT-V2","ean":"5600413207727","nome":"Alpha Gamer Gaia - Dark Grey / White V2","qtd":80,"custo":69.01,"total":5520.8,"novo":false},{"ref":"AGGAIA-LT-GREY-V2","ean":"5600413207109","nome":"Alpha Gamer Gaia - Light Grey V2","qtd":90,"custo":69.01,"total":6210.9,"novo":false},{"ref":"AGTERION-FB-GRY","ean":"5600413204504","nome":"Alpha Gamer Terion - Fabric Grey","qtd":100,"custo":92.26,"total":9226.0,"novo":false}],"frete":0,"total_merc":20957.7,"total_geral":20957.7},
+"TCNU3632887":{"items":[{"ref":"AGNEBULAOE-PU-BWN","ean":"5600413206379","nome":"Alpha Gamer Nebula Office Edition - PU Brown","qtd":308,"custo":84.42,"total":26001.36,"novo":false},{"ref":"AGNEBULA-GRY-BL","ean":"5600413205006","nome":"Alpha Gamer Nebula master Grey/Blue","qtd":24,"custo":84.42,"total":2026.08,"novo":false},{"ref":"AGNEBULA-GRY-PK","ean":"5600413205013","nome":"Alpha Gamer Nebula master Grey/Pink","qtd":10,"custo":84.42,"total":844.2,"novo":false},{"ref":"AGNEBULA-GRY-O","ean":"5600413205020","nome":"Alpha Gamer Nebula master Grey/Orange","qtd":15,"custo":84.42,"total":1266.3,"novo":false}],"frete":0,"total_merc":30137.94,"total_geral":30137.94},
+"TLLU4428396":{"items":[{"ref":"AGGAIA-LT-GREY-V2","ean":"5600413207109","nome":"Alpha Gamer Gaia - Light Grey V2","qtd":295,"custo":69.01,"total":20357.95,"novo":false},{"ref":"AGNYSA-BK","ean":"5600413205488","nome":"Alpha Gamer Nysa - Black","qtd":95,"custo":67.39,"total":6402.05,"novo":false}],"frete":0,"total_merc":26760.0,"total_geral":26760.0},
+"TCNU3717752":{"items":[{"ref":"AGCYRA-F-GREY","ean":"5600413205747","nome":"Alpha Gamer Cyra - Fabric Grey / Black","qtd":415,"custo":43.12,"total":17894.8,"novo":false}],"frete":0,"total_merc":17894.8,"total_geral":17894.8},
+"DDDU5046665":{"items":[{"ref":"AGNEBULA","ean":"5600413204054","nome":"Alpha Gamer Nebula master Grey/Black","qtd":357,"custo":84.42,"total":30137.94,"novo":false}],"frete":0,"total_merc":30137.94,"total_geral":30137.94},
+"TCLU8910094":{"items":[{"ref":"AGSWELLBK","ean":"5600413207963","nome":"Alpha Gamer Swell Black","qtd":50,"custo":143.0,"total":7150.0,"novo":false},{"ref":"AGSWELLGRY","ean":"5600413207970","nome":"Alpha Gamer Swell Grey","qtd":50,"custo":150.0,"total":7500.0,"novo":false},{"ref":"AGSWELLWTGRY","ean":"5600413207987","nome":"Alpha Gamer Swell White / Grey","qtd":50,"custo":150.0,"total":7500.0,"novo":false},{"ref":"AGTIDEBK","ean":"5600413207826","nome":"Alpha Gamer Tide Black","qtd":50,"custo":162.0,"total":8100.0,"novo":false},{"ref":"AGTIDEGRY","ean":"5600413207833","nome":"Alpha Gamer Tide Grey","qtd":50,"custo":169.0,"total":8450.0,"novo":false}],"frete":0,"total_merc":38700.0,"total_geral":38700.0},
+"MSMU8426391":{"items":[{"ref":"AGGALAXA-F-GRY-BK","ean":"5600413207154","nome":"Alpha Gamer Galaxa - Fabric Grey / Black","qtd":103,"custo":86.0,"total":8858.0,"novo":false},{"ref":"AGGALAXA-PUL-BK","ean":"5600413207161","nome":"Alpha Gamer Galaxa - PU Black","qtd":110,"custo":86.0,"total":9460.0,"novo":false},{"ref":"AGPTGC26","ean":"5600413208298","nome":"Alpha Gamer Portugal 26","qtd":150,"custo":98.5,"total":14775.0,"novo":false}],"frete":4785.45,"total_merc":33093.0,"total_geral":37878.45},
+"TCLU6374264":{"items":[{"ref":"AGLUNAV2","ean":"5600413207390","nome":"Alpha Gamer Luna V2 - Cadeira em Malha","qtd":75,"custo":71.0,"total":5325.0,"novo":false},{"ref":"AGAURORA","ean":"5600413206355","nome":"Alpha Gamer Aurora - Cadeira em Malha","qtd":130,"custo":98.0,"total":12740.0,"novo":false},{"ref":"AGSTELLA-GRY","ean":"5600413206430","nome":"Alpha Gamer Stella Grey - Cadeira em Malha","qtd":80,"custo":65.5,"total":5240.0,"novo":false},{"ref":"AGSTELLA-WT-GRY","ean":"5600413206447","nome":"Alpha Gamer Stella White / Grey - Cadeira em Malha","qtd":115,"custo":65.5,"total":7532.5,"novo":false}],"frete":3743.66,"total_merc":30837.5,"total_geral":34581.16},
+"UETU5559061":{"items":[{"ref":"AGAURORA","ean":"5600413206355","nome":"Alpha Gamer Aurora - Cadeira em malha","qtd":200,"custo":98.0,"total":19600.0,"novo":false},{"ref":"AGIRIS","ean":"5600413206362","nome":"Alpha Gamer Iris - Cadeira em malha","qtd":80,"custo":88.0,"total":7040.0,"novo":false},{"ref":"OFFYLYCAWT","ean":"5600413206409","nome":"Offy Lyca White - Cadeira de escritório em malha","qtd":29,"custo":63.0,"total":1827.0,"novo":false},{"ref":"OFFYLYMAGREY","ean":"5600413207741","nome":"Offy Lyma Grey","qtd":60,"custo":37.5,"total":2250.0,"novo":false}],"frete":3743.66,"total_merc":30717.0,"total_geral":34460.66},
+"CAIU9472020":{"items":[{"ref":"AGSTELLA-BK","ean":"5600413206423","nome":"Alpha Gamer Stella Black - Cadeira em malha","qtd":185,"custo":60.5,"total":11192.5,"novo":false},{"ref":"AGSTELLA-GRY","ean":"5600413206430","nome":"Alpha Gamer Stella Grey - Cadeira em malha","qtd":100,"custo":65.5,"total":6550.0,"novo":false},{"ref":"AGSTELLA-WT-GRY","ean":"5600413206447","nome":"Alpha Gamer Stella White / Grey - Cadeira em malha","qtd":120,"custo":65.5,"total":7860.0,"novo":false},{"ref":"OFFYLYCAWT","ean":"5600413206409","nome":"Offy Lyca White - Cadeira de escritório em malha","qtd":38,"custo":63.0,"total":2394.0,"novo":false}],"frete":3743.66,"total_merc":27996.5,"total_geral":31740.16},
+"CMAU6149465":{"items":[{"ref":"NXINFTYBETA","ean":"8436587974892","nome":"Nox Infinity Beta Airflow ATX Chassis","qtd":150,"custo":12.83,"total":1924.5,"novo":false},{"ref":"NXHUMMERVSNBK","ean":"8436587974625","nome":"Nox Hummer Vision Black Mid Tower USB 3.0","qtd":100,"custo":15.81,"total":1581.0,"novo":false},{"ref":"NXHUMMERGLOCKWH","ean":"8436587974854","nome":"Nox Hummer Glock Frameless Glass Mid Tower White","qtd":80,"custo":51.9,"total":4152.0,"novo":false},{"ref":"NXHUMMERGLOCKBK","ean":"8436587974847","nome":"Nox Hummer Glock Frameless Glass Mid Tower Black","qtd":100,"custo":48.76,"total":4876.0,"novo":false},{"ref":"NXINFTYEPSILON","ean":"8436587974205","nome":"Nox Infinity Epsilon RGB M-ATX Chassis","qtd":100,"custo":18.24,"total":1824.0,"novo":false},{"ref":"NXHUMMERVOID","ean":"8436587970399","nome":"Nox Hummer Void ATX Silent Case","qtd":233,"custo":23.62,"total":5503.46,"novo":false},{"ref":"NXCBAYMX2","ean":"8436532165603","nome":"Nox Coolbay MX2","qtd":200,"custo":12.46,"total":2492.0,"novo":false},{"ref":"1IFEKBBASEKITPT","ean":"5600413203736","nome":"1Life kb:base kit","qtd":2000,"custo":2.65,"total":5300.0,"novo":false},{"ref":"1IFETECUFBTPTBK","ean":"5600413206768","nome":"1Life teclado ultrafino Bluetooth PT BK","qtd":1000,"custo":3.28,"total":3280.0,"novo":false}],"frete":3743.66,"total_merc":30932.96,"total_geral":34676.62},
+"TCNU7813630":{"items":[{"ref":"AGGEMINARGBBK","ean":"5600413207321","nome":"Alpha Gamer Gemina RGB Black - Secretária Gaming","qtd":225,"custo":38.0,"total":8550.0,"novo":false},{"ref":"AGGEMINABK","ean":"5600413207338","nome":"Alpha Gamer Gemina Black - Secretária Gaming","qtd":225,"custo":27.0,"total":6075.0,"novo":false},{"ref":"AGSTARLARGBBK","ean":"5600413207345","nome":"Alpha Gamer Starla RGB Black - Secretária gaming","qtd":284,"custo":71.5,"total":20306.0,"novo":false},{"ref":"AGZORYARGBBK","ean":"5600413207307","nome":"Alpha Gamer Zorya RGB Black - Secretaria Gaming Altura Regulável","qtd":124,"custo":107.0,"total":13268.0,"novo":false}],"frete":3910.0,"total_merc":48199.0,"total_geral":52109.0},
+"MSMU6056997":{"items":[{"ref":"AGSTELLA-GRY","ean":"5600413206430","nome":"Alpha Gamer Stella Grey - Cadeira em malha","qtd":50,"custo":65.5,"total":3275.0,"novo":false},{"ref":"AGSTELLA-WT-GRY","ean":"5600413206447","nome":"Alpha Gamer Stella White / Grey - Cadeira em malha","qtd":50,"custo":65.5,"total":3275.0,"novo":false},{"ref":"AGAURORA","ean":"5600413206355","nome":"Alpha Gamer Aurora - Cadeira em malha","qtd":200,"custo":98.0,"total":19600.0,"novo":false},{"ref":"AGSTELLA-BK","ean":"5600413206423","nome":"Alpha Gamer Stella Black - Cadeira em malha","qtd":80,"custo":60.5,"total":4840.0,"novo":false}],"frete":4378.0,"total_merc":30990.0,"total_geral":35368.0},
+"MRSU3054645":{"items":[{"ref":"AGGAIA-DK-GREY-BLUE-V2","ean":"5600413207130","nome":"Alpha Gamer Gaia - Dark Grey / Blue V2","qtd":30,"custo":69.01,"total":2070.3,"novo":false},{"ref":"AGGAIA-DK-GREY-V2","ean":"5600413207093","nome":"Alpha Gamer Gaia-Dark Grey V2","qtd":30,"custo":69.01,"total":2070.3,"novo":false},{"ref":"AGATENA-BK","ean":"5600413205303","nome":"Alpha Gamer Atena- Black","qtd":40,"custo":66.51,"total":2660.4,"novo":false},{"ref":"AGATENA-BK-RED","ean":"5600413205310","nome":"Alpha Gamer Atena-Black/Red","qtd":45,"custo":66.51,"total":2992.95,"novo":false},{"ref":"AGGALAXA-F-GRY-BK","ean":"5600413207154","nome":"Alpha Gamer Galaxa-Fabric Grey/Black","qtd":40,"custo":88.0,"total":3520.0,"novo":false},{"ref":"AGGALAXA-PUL-BK","ean":"5600413207161","nome":"Alpha Gamer Galaxa -pu Black","qtd":30,"custo":88.0,"total":2640.0,"novo":false},{"ref":"AGNYSA-BK","ean":"5600413205488","nome":"Alpha Gamer Nysa - Black","qtd":20,"custo":67.39,"total":1347.8,"novo":false},{"ref":"AGZETA-BK","ean":"5600413203804","nome":"Alpha Gamer Zeta Black","qtd":40,"custo":58.9,"total":2356.0,"novo":false},{"ref":"AGZETA-WHT-BK","ean":"5600413205761","nome":"Alpha Gamer Zeta -white/ Black","qtd":20,"custo":58.9,"total":1178.0,"novo":false},{"ref":"AGGAIA-DK-GREY-OR-V2","ean":"5600413207116","nome":"Alpha Gamer Gaia -Dark Grey/Orange V2","qtd":10,"custo":69.01,"total":690.1,"novo":false},{"ref":"AGGAIA-DK-GREY-WT-V2","ean":"5600413207727","nome":"Alpha Gamer Gaia -Dark Grey/ white V2","qtd":50,"custo":69.01,"total":3450.5,"novo":false},{"ref":"AGGAIA-LT-GREY-WT-V2","ean":"5600413207734","nome":"Alpha Gamer Gaia -Light Grey/ white V2","qtd":50,"custo":69.01,"total":3450.5,"novo":false}],"frete":4000.0,"total_merc":28426.85,"total_geral":32426.85},
+"CMAU6742059":{"items":[{"ref":"AGCYRA-F-GREY","ean":"5600413205747","nome":"Alpha Gamer Cyra - Fabric Grey / Black","qtd":239,"custo":43.12,"total":10305.68,"novo":false},{"ref":"AGGAIA-LT-GREY-V2","ean":"5600413207109","nome":"Alpha Gamer Gaia - Light Grey V2","qtd":99,"custo":69.01,"total":6831.99,"novo":false},{"ref":"AGGAIA-DK-GREY-WT-V2","ean":"5600413207727","nome":"Alpha Gamer Gaia - Dark Grey / White V2","qtd":50,"custo":69.01,"total":3450.5,"novo":false}],"frete":4322.0,"total_merc":20588.17,"total_geral":24910.17},
+"SEKU7815204":{"items":[{"ref":"AGSTELLA-BK","ean":"5600413206423","nome":"Alpha Gamer Stella Black-Cadeira em malha","qtd":230,"custo":60.5,"total":13915.0,"novo":false},{"ref":"AGSTELLA-GRY","ean":"5600413206430","nome":"Alpha Gamer Stella Grey-Cadeira em malha","qtd":100,"custo":65.5,"total":6550.0,"novo":false},{"ref":"AGSTELLA-WT-GRY","ean":"5600413206447","nome":"Alpha Gamer Stella white /Grey-Cadeira em malha","qtd":80,"custo":65.5,"total":5240.0,"novo":false},{"ref":"AGIRIS","ean":"5600413206362","nome":"Alpha Gamer lris-Cadeira em malha","qtd":10,"custo":88.0,"total":880.0,"novo":false},{"ref":"AGASTRID","ean":"5600413206416","nome":"Alpha Gamer Astrid-cadeira em malha","qtd":10,"custo":145.0,"total":1450.0,"novo":false}],"frete":3517.0,"total_merc":28035.0,"total_geral":31552.0},
+"SEKU7816495":{"items":[{"ref":"AGGAIA-LT-GREY-WT-V2","ean":"5600413207734","nome":"Alpha Gamer Gaia - Light Grey / White V2","qtd":70,"custo":69.01,"total":4830.7,"novo":false},{"ref":"AGMAYA-BK","ean":"5600413205372","nome":"Alpha Gamer Maya Black","qtd":190,"custo":45.3,"total":8607.0,"novo":false},{"ref":"AGZETA-BK","ean":"5600413203804","nome":"Alpha Gamer Zeta Black","qtd":50,"custo":58.9,"total":2945.0,"novo":false},{"ref":"AGALEGRA-F-GRY","ean":"5600413204955","nome":"Alpha Gamer Alegra Fabric Grey","qtd":30,"custo":119.2,"total":3576.0,"novo":false},{"ref":"AGZETA-BK-R","ean":"5600413203811","nome":"Alpha Gamer Zeta Black/Red","qtd":30,"custo":58.9,"total":1767.0,"novo":false}],"frete":4465.0,"total_merc":21725.7,"total_geral":26190.7},
+"SEKU7816767":{"items":[{"ref":"AGALEGRA-F-GRY-V2","ean":"5600413207055","nome":"Alpha Gamer Alegra - Fabric Grey / Black V2","qtd":20,"custo":119.2,"total":2384.0,"novo":false},{"ref":"AGALEGRA-PUL-BK-V2","ean":"5600413207062","nome":"Alpha Gamer Alegra - PU Leather Black V2","qtd":20,"custo":124.2,"total":2484.0,"novo":false},{"ref":"AGMAYA-BK","ean":"5600413205372","nome":"Alpha Gamer Maya Black","qtd":240,"custo":45.3,"total":10872.0,"novo":false},{"ref":"AGMAYA-BK-RED","ean":"5600413205389","nome":"Alpha Gamer Maya Black /red","qtd":50,"custo":45.3,"total":2265.0,"novo":false},{"ref":"AGMAYA-BK-BLUE","ean":"5600413205396","nome":"Alpha Gamer Maya Black / blue","qtd":40,"custo":45.3,"total":1812.0,"novo":false}],"frete":4465.0,"total_merc":19817.0,"total_geral":24282.0},
+"SEKU7816788":{"items":[{"ref":"AGNEBULA","ean":"5600413204054","nome":"Alpha Gamer Nebula master Grey/Black","qtd":357,"custo":84.42,"total":30137.94,"novo":false}],"frete":4465.0,"total_merc":30137.94,"total_geral":34602.94},
+"ONEU1147585":{"items":[{"ref":"NXCBAYRX","ean":"8436532163036","nome":"Nox Coolbay RX","qtd":100,"custo":10.9,"total":1090.0,"novo":false},{"ref":"NXCBAYMX2","ean":"8436532165603","nome":"Nox Coolbay MX2","qtd":100,"custo":11.7,"total":1170.0,"novo":false},{"ref":"ZLDRADION","ean":"5600413206843","nome":"Zolyd Radion - ARGB ATX PC Case","qtd":100,"custo":22.1,"total":2210.0,"novo":false},{"ref":"NXHUMMERFROST","ean":"8436587972638","nome":"Nox Hummer Frost ARGB Lighting Mid Tower","qtd":240,"custo":12.67,"total":3040.8,"novo":false},{"ref":"NXURVX750BZ","ean":"8436532166969","nome":"Nox Urano VX 750W 80+ Bronze","qtd":1000,"custo":37.3,"total":37300.0,"novo":false},{"ref":"NXURVX650BZ","ean":"8436532166952","nome":"Nox Urano VX 650W 80+ Bronze","qtd":1000,"custo":30.4,"total":30400.0,"novo":false},{"ref":"NXURTX850BZ","ean":"8436532166976","nome":"Nox Urano TX 850W 80+ Bronze","qtd":500,"custo":41.7,"total":20850.0,"novo":false},{"ref":"AGOCTANCORE","ean":"5600413207451","nome":"Alpha Gamer Octan Core Gaming Chair Mat","qtd":500,"custo":9.8,"total":4900.0,"novo":false},{"ref":"AGKADRANCORE","ean":"5600413207444","nome":"Alpha Gamer Kadran Core Gaming Chair Mat","qtd":500,"custo":9.8,"total":4900.0,"novo":false}],"frete":4210.0,"total_merc":105860.8,"total_geral":110070.8},
+"NYKU4794090":{"items":[{"ref":"1IFEHDRAPID","ean":"5600413204146","nome":"1Life hd:rapid 2.5 C to C SATA","qtd":500,"custo":4.5,"total":2250.0,"novo":false},{"ref":"1IFEUSBC5IN1","ean":"5600413203682","nome":"1Life usb-c:5in1 HDMI / DEX / RJ45","qtd":200,"custo":8.5,"total":1700.0,"novo":false},{"ref":"1IFECRCITIZEN","ean":"5600413202777","nome":"1Life cr:citizen","qtd":1000,"custo":2.8,"total":2800.0,"novo":false},{"ref":"1IFECBUSBCLGTNG27W15M","ean":"5600413205952","nome":"1Life cabo USB-C > Lightning 27W 1.5m","qtd":1000,"custo":1.35,"total":1350.0,"novo":false},{"ref":"1IFECXEXT25USB3TRP","ean":"5600413205914","nome":"1Life caixa externa HDD/SSD 2.5\" USB 3.0 transp.","qtd":1000,"custo":2.25,"total":2250.0,"novo":false},{"ref":"1IFEHDFLUX3","ean":"5600413203880","nome":"1Life hd:flux 3","qtd":500,"custo":2.6,"total":1300.0,"novo":false},{"ref":"1IFENBCXENOGR","ean":"5600413205679","nome":"1Life nbc: xeno laptop holder grey","qtd":500,"custo":4.35,"total":2175.0,"novo":false},{"ref":"1IFENBCXENOBK","ean":"5600413205662","nome":"1Life nbc: xeno laptop holder black","qtd":500,"custo":4.35,"total":2175.0,"novo":false},{"ref":"1IFETCTA3ADAPT","ean":"5600413205587","nome":"1Life usb: Type-C / Type-A 3.0 adapter 2pcs","qtd":500,"custo":0.9,"total":450.0,"novo":false},{"ref":"1IFETATC3ADAPT","ean":"5600413205570","nome":"1Life usb: Type-A / Type-C 3.0 adapter 2pcs","qtd":500,"custo":0.55,"total":275.0,"novo":false},{"ref":"AGBPBK","ean":"5600413208069","nome":"Alpha Gamer Backpack Black","qtd":500,"custo":12.28,"total":6140.0,"novo":false},{"ref":"AGBPGRY","ean":"5600413208076","nome":"Alpha Gamer Backpack Grey","qtd":500,"custo":12.28,"total":6140.0,"novo":false},{"ref":"OFFYSYNCROPT","ean":"5600413207505","nome":"Offy Syncro Wireless / Bluetooth Keyboard + Mouse PT","qtd":1000,"custo":8.5,"total":8500.0,"novo":false},{"ref":"ZLDNOVAARGB120PWMBK","ean":"5600413207529","nome":"Zolyd Nova ARGB 120 mm PWM Fan Black","qtd":250,"custo":2.5,"total":625.0,"novo":false},{"ref":"ZLDNOVAARGB120PWMWT","ean":"5600413207536","nome":"Zolyd Nova ARGB 120 mm PWM Fan White","qtd":250,"custo":2.65,"total":662.5,"novo":false},{"ref":"ZLDNOVAARGB120PWMNGBK","ean":"5600413208083","nome":"Zolyd Nova ARGB 120 mm PWM Negative Fan Black","qtd":250,"custo":2.5,"total":625.0,"novo":false},{"ref":"ZLDNOVAARGB120PWMNGWT","ean":"5600413208090","nome":"Zolyd Nova ARGB 120 mm PWM Negative Fan White","qtd":250,"custo":2.65,"total":662.5,"novo":false},{"ref":"ZLDFLUXARGBML120PWMKITBK","ean":"5600413207567","nome":"Zolyd Flux ARGB MagLink 120 mm PWM Fan Kit Black","qtd":250,"custo":13.0,"total":3250.0,"novo":false},{"ref":"ZLDFLUXARGBML120PWMKITWT","ean":"5600413207574","nome":"Zolyd Flux ARGB MagLink 120 mm PWM Fan Kit White","qtd":250,"custo":13.5,"total":3375.0,"novo":false},{"ref":"ZLDVERTAARGBEF120PWMKITBK","ean":"5600413207604","nome":"Zolyd Verta ARGB EasyFit 120 mm PWM Fan Kit Black","qtd":250,"custo":11.0,"total":2750.0,"novo":false},{"ref":"ZLDVERTAARGBEF120PWMKITWT","ean":"5600413207611","nome":"Zolyd Verta ARGB EasyFit 120 mm PWM Fan Kit White","qtd":250,"custo":11.5,"total":2875.0,"novo":false},{"ref":"ZLDB750","ean":"5600413206928","nome":"Zolyd B750 - 750W 80 Plus Bronze ATX PSU","qtd":500,"custo":37.0,"total":18500.0,"novo":false},{"ref":"ZLDNSKARIONBK","ean":"5600413208120","nome":"Zolyd Neo Series Karion Black Micro-ATX Computer Case","qtd":210,"custo":23.5,"total":4935.0,"novo":false},{"ref":"ZLDNSKARIONWDBK","ean":"5600413208106","nome":"Zolyd Neo Series Karion WD Black Micro-ATX Computer Case","qtd":200,"custo":27.7,"total":5540.0,"novo":false},{"ref":"ZLDNSKARIONWDWTBK","ean":"5600413208113","nome":"Zolyd Neo Series Karion WD White / Black Micro-ATX Computer Case","qtd":200,"custo":29.2,"total":5840.0,"novo":false},{"ref":"ZLDPULSAR","ean":"5600413208045","nome":"Zolyd Pulsar - Caixa PC Micro-ATX","qtd":26,"custo":26.9,"total":699.4,"novo":false}],"frete":4210.0,"total_merc":87844.4,"total_geral":92054.4},
+"SEKU7816480":{"items":[{"ref":"AGAURORA","ean":"5600413206355","nome":"Alpha Gamer Aurora - Cadeira em malha","qtd":340,"custo":98.0,"total":33320.0,"novo":false}],"frete":4465.0,"total_merc":33320.0,"total_geral":37785.0},
+"SEKU7816577":{"items":[{"ref":"AGSTELLA-GRY","ean":"5600413206430","nome":"Alpha Gamer Stella Grey - Cadeira em malha","qtd":55,"custo":65.5,"total":3602.5,"novo":false},{"ref":"AGSTELLA-WT-GRY","ean":"5600413206447","nome":"Alpha Gamer Stella White / Grey - Cadeira em malha","qtd":165,"custo":65.5,"total":10807.5,"novo":false},{"ref":"AGAURORA","ean":"5600413206355","nome":"Alpha Gamer Aurora - Cadeira em malha","qtd":120,"custo":98.0,"total":11760.0,"novo":false},{"ref":"AGSTELLA-BK","ean":"5600413206423","nome":"Alpha Gamer Stella Black - Cadeira em malha","qtd":60,"custo":60.5,"total":3630.0,"novo":false}],"frete":4465.0,"total_merc":29800.0,"total_geral":34265.0},
+"SEKU7816514":{"items":[{"ref":"AGAURORA","ean":"5600413206355","nome":"Alpha Gamer Aurora - Cadeira em malha","qtd":340,"custo":98.0,"total":33320.0,"novo":false}],"frete":4465.0,"total_merc":33320.0,"total_geral":37785.0},
+"SEKU7814189":{"items":[{"ref":"AGGAIA-LT-GREY-WT-V2","ean":"5600413207734","nome":"Alpha Gamer Gaia - Light Grey / White V2","qtd":390,"custo":69.01,"total":26913.9,"novo":false}],"frete":3517.0,"total_merc":26913.9,"total_geral":30430.9},
+"SEKU7815225":{"items":[{"ref":"AGNEBULA-GRY-PK","ean":"5600413205013","nome":"Alpha Gamer Nebula master Grey/Pink","qtd":6,"custo":84.42,"total":506.52,"novo":false},{"ref":"AGNEBULA-GRY-O","ean":"5600413205020","nome":"Alpha Gamer Nebula master Grey/Orange","qtd":13,"custo":84.42,"total":1097.46,"novo":false},{"ref":"AGNYSA-BK","ean":"5600413205488","nome":"Alpha Gamer Nysa - Black","qtd":324,"custo":67.39,"total":21834.36,"novo":false},{"ref":"AGNEBULA","ean":"5600413204054","nome":"Alpha Gamer Nebula master Grey/Black","qtd":50,"custo":84.42,"total":4221.0,"novo":false}],"frete":3517.0,"total_merc":27659.34,"total_geral":31176.34},
+"SEKU7815288":{"items":[{"ref":"OFFYLYMA","ean":"5600413206324","nome":"Offy Lyma - Cadeira de Escritório em Malha","qtd":85,"custo":34.5,"total":2932.5,"novo":false},{"ref":"OFFYLYMAGREY","ean":"5600413207741","nome":"Offy Lyma Grey - Cadeira de Escritório em Malha","qtd":45,"custo":37.5,"total":1687.5,"novo":false},{"ref":"AGLUNAGRY","ean":"5600413207758","nome":"Alpha Gamer Luna Grey - Cadeira em Malha","qtd":55,"custo":80.5,"total":4427.5,"novo":false},{"ref":"AGAURORA","ean":"5600413206355","nome":"Alpha Gamer Aurora - Cadeira em Malha","qtd":105,"custo":98.0,"total":10290.0,"novo":false},{"ref":"AGIRIS","ean":"5600413206362","nome":"Alpha Gamer Iris - Cadeira em Malha","qtd":45,"custo":88.0,"total":3960.0,"novo":false},{"ref":"AGASTRID","ean":"5600413206416","nome":"Alpha Gamer Astrid - Cadeira em Malha","qtd":55,"custo":145.0,"total":7975.0,"novo":false},{"ref":"AGSTELLA-BK","ean":"5600413206423","nome":"Alpha Gamer Stella Black - Cadeira em Malha","qtd":21,"custo":60.5,"total":1270.5,"novo":false}],"frete":3517.0,"total_merc":32543.0,"total_geral":36060.0},
+"SEKU7815267":{"items":[{"ref":"AGSTELLA-BK","ean":"5600413206423","nome":"Alpha Gamer Stella Black - Cadeira em malha","qtd":175,"custo":60.5,"total":10587.5,"novo":false},{"ref":"AGSTELLA-GRY","ean":"5600413206430","nome":"Alpha Gamer Stella Grey - Cadeira em malha","qtd":120,"custo":65.5,"total":7860.0,"novo":false},{"ref":"AGSTELLA-WT-GRY","ean":"5600413206447","nome":"Alpha Gamer Stella White / Grey - Cadeira em malha","qtd":150,"custo":65.5,"total":9825.0,"novo":false}],"frete":3517.0,"total_merc":28272.5,"total_geral":31789.5},
+"CMAU7126778":{"items":[{"ref":"AGNEBULAOE-PU-BWN","ean":"5600413206379","nome":"Alpha Gamer Nebula Office Edition - PU Brown","qtd":357,"custo":84.42,"total":30137.94,"novo":false}],"frete":3517.0,"total_merc":30137.94,"total_geral":33654.94},
+"MSMU5852428":{"items":[{"ref":"OFFYLYMA","ean":"5600413206324","nome":"Offy Lyma - Cadeira de Escritório em Malha","qtd":274,"custo":34.5,"total":9453.0,"novo":false},{"ref":"OFFYCYLA","ean":"5600413206317","nome":"Offy Cyla - Cadeira de Escritório em Malha","qtd":116,"custo":40.0,"total":4640.0,"novo":false},{"ref":"OFFYLYCAWT","ean":"5600413206409","nome":"Offy Lyca White - Cadeira de Escritório em Malha","qtd":56,"custo":63.0,"total":3528.0,"novo":false},{"ref":"OFFYLYCABK","ean":"5600413206386","nome":"Offy Lyca Black - Cadeira de Escritório em Malha","qtd":76,"custo":58.0,"total":4408.0,"novo":false}],"frete":3910.3,"total_merc":22029.0,"total_geral":25939.3},
+"FSCU8840228":{"items":[{"ref":"AGWAVEBK","ean":"5600413207789","nome":"Alpha Gamer Wave Black","qtd":50,"custo":109.0,"total":5450.0,"novo":false},{"ref":"AGWAVEBKGRY","ean":"5600413207796","nome":"Alpha Gamer Wave Black / Grey","qtd":20,"custo":109.0,"total":2180.0,"novo":false},{"ref":"AGMISTBK","ean":"5600413207802","nome":"Alpha Gamer Mist Black","qtd":50,"custo":136.0,"total":6800.0,"novo":false},{"ref":"AGMISTBKGRY","ean":"5600413207819","nome":"Alpha Gamer Mist Black / Grey","qtd":20,"custo":136.0,"total":2720.0,"novo":false},{"ref":"AGTIDEBK","ean":"5600413207826","nome":"Alpha Gamer Tide Black","qtd":35,"custo":162.0,"total":5670.0,"novo":false},{"ref":"AGTIDEGRY","ean":"5600413207833","nome":"Alpha Gamer Tide Grey","qtd":15,"custo":169.0,"total":2535.0,"novo":false},{"ref":"AGSWELLBK","ean":"5600413207963","nome":"Alpha Gamer Swell Black","qtd":35,"custo":136.0,"total":4760.0,"novo":false},{"ref":"AGSWELLGRY","ean":"5600413207970","nome":"Alpha Gamer Swell Grey","qtd":14,"custo":142.0,"total":1988.0,"novo":false},{"ref":"AGSWELLWTGRY","ean":"5600413207987","nome":"Alpha Gamer Swell White / Grey","qtd":14,"custo":142.0,"total":1988.0,"novo":false}],"frete":2866.75,"total_merc":34091.0,"total_geral":36957.75},
+"TCNU2374129":{"items":[{"ref":"OFFYLYMA","ean":"5600413206324","nome":"Offy Lyma - Cadeira de Escritório em Malha","qtd":274,"custo":34.5,"total":9453.0,"novo":false},{"ref":"OFFYCYLA","ean":"5600413206317","nome":"Offy Cyla - Cadeira de Escritório em Malha","qtd":116,"custo":40.0,"total":4640.0,"novo":false},{"ref":"OFFYLYCAWT","ean":"5600413206409","nome":"Offy Lyca White - Cadeira de Escritório em Malha","qtd":56,"custo":63.0,"total":3528.0,"novo":false},{"ref":"OFFYLYCABK","ean":"5600413206386","nome":"Offy Lyca Black - Cadeira de Escritório em Malha","qtd":76,"custo":58.0,"total":4408.0,"novo":false}],"frete":3823.3,"total_merc":22029.0,"total_geral":25852.3},
+"TCNU1554912":{"items":[{"ref":"AGSTELLA-WT-GRY","ean":"5600413206447","nome":"Alpha Gamer Stella White / Grey - Cadeira em Malha","qtd":74,"custo":65.5,"total":4847.0,"novo":false},{"ref":"AGSTELLA-GRY","ean":"5600413206430","nome":"Alpha Gamer Stella Grey - Cadeira em Malha","qtd":53,"custo":65.5,"total":3471.5,"novo":false},{"ref":"AGSTELLA-BK","ean":"5600413206423","nome":"Alpha Gamer Stella Black - Cadeira em Malha","qtd":93,"custo":60.5,"total":5626.5,"novo":false},{"ref":"AGIRIS","ean":"5600413206362","nome":"Alpha Gamer Iris - Cadeira em Malha","qtd":64,"custo":88.0,"total":5632.0,"novo":false},{"ref":"AGAURORA","ean":"5600413206355","nome":"Alpha Gamer Aurora - Cadeira em Malha","qtd":54,"custo":98.0,"total":5292.0,"novo":false},{"ref":"AGASTRID","ean":"5600413206416","nome":"Alpha Gamer Astrid - Cadeira em Malha","qtd":44,"custo":145.0,"total":6380.0,"novo":false}],"frete":3823.3,"total_merc":31249.0,"total_geral":35072.3},
+"CAAU5904294":{"items":[{"ref":"AGSTELLA-WT-GRY","ean":"5600413206447","nome":"Alpha Gamer Stella White / Grey - Cadeira em Malha","qtd":74,"custo":65.5,"total":4847.0,"novo":false},{"ref":"AGSTELLA-GRY","ean":"5600413206430","nome":"Alpha Gamer Stella Grey - Cadeira em Malha","qtd":53,"custo":65.5,"total":3471.5,"novo":false},{"ref":"AGSTELLA-BK","ean":"5600413206423","nome":"Alpha Gamer Stella Black - Cadeira em Malha","qtd":93,"custo":60.5,"total":5626.5,"novo":false},{"ref":"AGIRIS","ean":"5600413206362","nome":"Alpha Gamer Iris - Cadeira em Malha","qtd":64,"custo":88.0,"total":5632.0,"novo":false},{"ref":"AGAURORA","ean":"5600413206355","nome":"Alpha Gamer Aurora - Cadeira em Malha","qtd":54,"custo":98.0,"total":5292.0,"novo":false},{"ref":"AGASTRID","ean":"5600413206416","nome":"Alpha Gamer Astrid - Cadeira em Malha","qtd":44,"custo":145.0,"total":6380.0,"novo":false}],"frete":3823.3,"total_merc":31249.0,"total_geral":35072.3},
+"MSMU4227658":{"items":[{"ref":"AGNEBULA","ean":"5600413204054","nome":"Alpha Gamer Nebula","qtd":357,"custo":84.42,"total":30137.94,"novo":false}],"frete":3485.05,"total_merc":30137.94,"total_geral":33622.99},
+"MRSU7266658":{"items":[{"ref":"AGCYGNUS","ean":"5600413204191","nome":"Alpha Gamer Cygnus RGB","qtd":392,"custo":71.64,"total":28082.88,"novo":false}],"frete":3745.0,"total_merc":28082.88,"total_geral":31827.88},
+"MRKU4372041":{"items":[{"ref":"AGGEMINARGBBK","ean":"5600413207321","nome":"Alpha Gamer Gemina RGB Black - Secretária Gaming","qtd":225,"custo":38.0,"total":8550.0,"novo":false},{"ref":"AGGEMINABK","ean":"5600413207338","nome":"Alpha Gamer Gemina Black - Secretária Gaming","qtd":225,"custo":27.0,"total":6075.0,"novo":false},{"ref":"AGSTARLARGBBK","ean":"5600413207345","nome":"Alpha Gamer Starla RGB Black - Secretária gaming","qtd":284,"custo":71.5,"total":20306.0,"novo":false},{"ref":"AGZORYARGBBK","ean":"5600413207307","nome":"Alpha Gamer Zorya RGB Black - Secretaria Gaming Altura Regulável","qtd":124,"custo":107.0,"total":13268.0,"novo":false}],"frete":3727.25,"total_merc":48199.0,"total_geral":51926.25},
+"TRHU4437683":{"items":[{"ref":"AGIRIS","ean":"5600413206362","nome":"Alpha Gamer Iris - Cadeira em Malha","qtd":50,"custo":88.0,"total":4400.0,"novo":false},{"ref":"AGASTRID","ean":"5600413206416","nome":"Alpha Gamer Astrid - Cadeira em Malha","qtd":100,"custo":145.0,"total":14500.0,"novo":false},{"ref":"AGSTELLA-BK","ean":"5600413206423","nome":"Alpha Gamer Stella Black - Cadeira em Malha","qtd":85,"custo":60.5,"total":5142.5,"novo":false},{"ref":"AGSTELLA-GRY","ean":"5600413206430","nome":"Alpha Gamer Stella Grey - Cadeira em Malha","qtd":70,"custo":65.5,"total":4585.0,"novo":false},{"ref":"AGSTELLA-WT-GRY","ean":"5600413206447","nome":"Alpha Gamer Stella White / Grey - Cadeira em Malha","qtd":85,"custo":65.5,"total":5567.5,"novo":false}],"frete":3645.0,"total_merc":34195.0,"total_geral":37840.0},
+"TCNU5152906":{"items":[{"ref":"ZLDCORE120PWMBK","ean":"5600413207628","nome":"Zolyd Core 120 mm PWM Fan Black","qtd":500,"custo":1.9,"total":950.0,"novo":false},{"ref":"ZLDHFLOWARGB240","ean":"5600413208014","nome":"Zolyd Hyperflow ARGB 240 mm Liquid Cooling System","qtd":250,"custo":26.0,"total":6500.0,"novo":false},{"ref":"ZLDHFLOWARGB360","ean":"5600413208021","nome":"Zolyd Hyperflow ARGB 360 mm Liquid Cooling System","qtd":250,"custo":32.0,"total":8000.0,"novo":false},{"ref":"ZLDNOCT","ean":"5600413208038","nome":"Zolyd Noct - Caixa PC ATX","qtd":300,"custo":22.3,"total":6690.0,"novo":false},{"ref":"ZLDNODE","ean":"5600413208052","nome":"Zolyd Node - Caixa PC Micro-ATX + 500W 80 Plus Bronze PSU","qtd":500,"custo":30.1,"total":15050.0,"novo":false},{"ref":"ZLDPULSAR","ean":"5600413208045","nome":"Zolyd Pulsar - Caixa PC Micro-ATX","qtd":274,"custo":26.9,"total":7370.6,"novo":false}],"frete":3902.55,"total_merc":44560.6,"total_geral":48463.15},
+"HASU4497484":{"items":[{"ref":"OFFYLYMAGREY","ean":"5600413207741","nome":"Offy Lyma Grey - Cadeira de Escritório em Malha","qtd":20,"custo":37.5,"total":750.0,"novo":false},{"ref":"AGLUNAV2","ean":"5600413207390","nome":"Alpha Gamer Luna V2 - Cadeira em Malha","qtd":125,"custo":71.0,"total":8875.0,"novo":false},{"ref":"AGLUNAGRY","ean":"5600413207758","nome":"Alpha Gamer Luna Grey - Cadeira em Malha","qtd":60,"custo":80.5,"total":4830.0,"novo":false},{"ref":"AGAURORA","ean":"5600413206355","nome":"Alpha Gamer Aurora - Cadeira em Malha","qtd":150,"custo":98.0,"total":14700.0,"novo":false},{"ref":"AGIRIS","ean":"5600413206362","nome":"Alpha Gamer Iris - Cadeira em Malha","qtd":30,"custo":88.0,"total":2640.0,"novo":false}],"frete":3745.0,"total_merc":31795.0,"total_geral":35540.0},
+"FANU3359264":{"items":[{"ref":"NXHUMMERAEROWH","ean":"8436587975981","nome":"Nox Hummer Aero - ARGB Hyperflow Mid Tower - White","qtd":150,"custo":35.81,"total":5371.5,"novo":false},{"ref":"NXHUMMERAEROBK","ean":"8436587975974","nome":"Nox Hummer Aero - ARGB Hyperflow Mid Tower - Black","qtd":170,"custo":33.0,"total":5610.0,"novo":false},{"ref":"NXINFTYIOTAWH","ean":"8436587976018","nome":"Nox Infinity IOTA - ARGB Mesh Mid Tower - White","qtd":150,"custo":27.5,"total":4125.0,"novo":false},{"ref":"NXINFTYIOTABK","ean":"8436587976001","nome":"Nox Infinity IOTA - ARGB Mesh Mid Tower - Black","qtd":170,"custo":31.4,"total":5338.0,"novo":false},{"ref":"NXHUMMERSIGNALWH","ean":"8436587975967","nome":"Nox Hummer Signal - ARGB Frameless Mid Tower - White","qtd":150,"custo":36.75,"total":5512.5,"novo":false},{"ref":"NXHUMMERSIGNALBK","ean":"8436587975950","nome":"Nox Hummer Signal - ARGB Frameless Mid Tower - Black","qtd":170,"custo":34.13,"total":5802.1,"novo":false}],"frete":3679.0,"total_merc":31759.1,"total_geral":35438.1},
+"MRKU3567877":{"items":[{"ref":"ZLDVYNTRIX","ean":"5600413206799","nome":"Zolyd Vyntrix - Tempered Glass ARGB M-ATX","qtd":131,"custo":18.5,"total":2423.5,"novo":false},{"ref":"ZLDRIVEXAWT","ean":"5600413206874","nome":"Zolyd Rivexa White - ARGB Infinity Mirror ATX","qtd":300,"custo":34.6,"total":10380.0,"novo":false},{"ref":"ZLDRIVEXABK","ean":"5600413206867","nome":"Zolyd Rivexa Black - ARGB Infinity Mirror ATX","qtd":213,"custo":32.0,"total":6816.0,"novo":false},{"ref":"PCDIGABCM","ean":"5600413206119","nome":"PCDIGA Basic Chair Mat","qtd":500,"custo":7.2,"total":3600.0,"novo":false},{"ref":"PCDIGAMPBEBK","ean":"5600413204856","nome":"PCDIGA Mousepad Basic Extended - Black","qtd":5000,"custo":1.95,"total":9750.0,"novo":false}],"frete":3727.25,"total_merc":32969.5,"total_geral":36696.75},
+"MSKU9770693":{"items":[{"ref":"AGNEBULA","ean":"5600413204054","nome":"Alpha Gamer Nebula","qtd":357,"custo":84.42,"total":30137.94,"novo":false}],"frete":3389.0,"total_merc":30137.94,"total_geral":33526.94},
+"MRSU7112185":{"items":[{"ref":"AGALEGRA-PUL-BK-V2","ean":"5600413207062","nome":"Alpha Gamer Alegra - PU Leather Black V2","qtd":80,"custo":124.2,"total":9936.0,"novo":false},{"ref":"AGALEGRA-PUL-GRY-V2","ean":"5600413207079","nome":"Alpha Gamer Alegra - PU Leather Grey / Black V2","qtd":80,"custo":124.2,"total":9936.0,"novo":false},{"ref":"AGALEGRA-PUL-WHT-V2","ean":"5600413207086","nome":"Alpha Gamer Alegra - PU Leather White / Black V2","qtd":20,"custo":124.2,"total":2484.0,"novo":false},{"ref":"AGMAYA-BK","ean":"5600413205372","nome":"Alpha Gamer Maya - Black","qtd":156,"custo":45.3,"total":7066.8,"novo":false}],"frete":4000.0,"total_merc":29422.8,"total_geral":33422.8},
+"MRKU3244447":{"items":[{"ref":"AGGAIA-DK-GREY-V2","ean":"5600413207093","nome":"Alpha Gamer Gaia - Dark Grey / Black V2","qtd":110,"custo":69.01,"total":7591.1,"novo":false},{"ref":"AGGAIA-LT-GREY-V2","ean":"5600413207109","nome":"Alpha Gamer Gaia - Light Grey V2","qtd":50,"custo":69.01,"total":3450.5,"novo":false},{"ref":"AGNIMBUSOE-BWN","ean":"5600413205792","nome":"Alpha Gamer Nimbus - Office Edition Brown","qtd":15,"custo":67.25,"total":1008.75,"novo":false},{"ref":"AGNIMBUSPNKFB","ean":"5600413205990","nome":"Alpha Gamer Nimbus - Pink Fabric Edition","qtd":20,"custo":67.25,"total":1345.0,"novo":false},{"ref":"AGNIMBUSWHT","ean":"5600413204283","nome":"Alpha Gamer Nimbus White","qtd":50,"custo":67.25,"total":3362.5,"novo":false},{"ref":"AGNIMBUSBK","ean":"5600413204276","nome":"Alpha Gamer Nimbus Black","qtd":50,"custo":67.25,"total":3362.5,"novo":false},{"ref":"AGZETA-BK","ean":"5600413203804","nome":"Alpha Gamer Zeta Black","qtd":45,"custo":58.9,"total":2650.5,"novo":false},{"ref":"AGZETA-WHT-BK","ean":"5600413205761","nome":"Alpha Gamer Zeta - White / Black","qtd":45,"custo":58.9,"total":2650.5,"novo":false}],"frete":3206.0,"total_merc":25421.35,"total_geral":28627.35},
+"MSKU0654460":{"items":[{"ref":"AGSTELLA-GRY","ean":"5600413206430","nome":"Alpha Gamer Stella Grey - Cadeira em Malha","qtd":110,"custo":65.5,"total":7205.0,"novo":false},{"ref":"AGSTELLA-WT-GRY","ean":"5600413206447","nome":"Alpha Gamer Stella White / Grey - Cadeira em Malha","qtd":110,"custo":65.5,"total":7205.0,"novo":false},{"ref":"AGLUNAV2","ean":"5600413207390","nome":"Alpha Gamer Luna V2 - Cadeira em Malha","qtd":220,"custo":71.0,"total":15620.0,"novo":false}],"frete":2954.0,"total_merc":30030.0,"total_geral":32984.0},
+"CMAU7035404":{"items":[{"ref":"AGGAIA-DK-GREY-BLUE-V2","ean":"5600413207130","nome":"Alpha Gamer Gaia - Dark Grey / Blue V2","qtd":50,"custo":69.01,"total":3450.5,"novo":false},{"ref":"AGCYGNUS","ean":"5600413204191","nome":"Alpha Gamer Cygnus RGB","qtd":80,"custo":71.64,"total":5731.2,"novo":false},{"ref":"AGGALAXA-PUL-BK","ean":"5600413207161","nome":"Alpha Gamer Galaxa - PU Black","qtd":50,"custo":88.0,"total":4400.0,"novo":false},{"ref":"AGGALAXA-F-GRY-BK","ean":"5600413207154","nome":"Alpha Gamer Galaxa - Fabric Grey / Black","qtd":200,"custo":88.0,"total":17600.0,"novo":false}],"frete":4232.0,"total_merc":31181.7,"total_geral":35413.7},
+"MRKU4170138":{"items":[{"ref":"AGSTELLA-GRY","ean":"5600413206430","nome":"Alpha Gamer Stella Grey - Cadeira em Malha","qtd":47,"custo":65.5,"total":3078.5,"novo":false},{"ref":"AGSTELLA-WT-GRY","ean":"5600413206447","nome":"Alpha Gamer Stella White / Grey - Cadeira em Malha","qtd":400,"custo":65.5,"total":26200.0,"novo":false}],"frete":0,"total_merc":29278.5,"total_geral":29278.5},
+"CAAU7083644":{"items":[{"ref":"AGSTELLA-BK","ean":"5600413206423","nome":"Alpha Gamer Stella Black - Cadeira em Malha","qtd":294,"custo":60.5,"total":17787.0,"novo":false},{"ref":"AGSTELLA-GRY","ean":"5600413206430","nome":"Alpha Gamer Stella Grey - Cadeira em Malha","qtd":153,"custo":65.5,"total":10021.5,"novo":false}],"frete":8616.0,"total_merc":27808.5,"total_geral":36424.5},
+"MRKU4976524":{"items":[{"ref":"AGSTELLA-BK","ean":"5600413206423","nome":"Alpha Gamer Stella Black - Cadeira em Malha","qtd":6,"custo":60.5,"total":363.0,"novo":false},{"ref":"AGIRIS","ean":"5600413206362","nome":"Alpha Gamer Iris - Cadeira em Malha","qtd":150,"custo":88.0,"total":13200.0,"novo":false},{"ref":"AGASTRID","ean":"5600413206416","nome":"Alpha Gamer Astrid - Cadeira em Malha","qtd":120,"custo":145.0,"total":17400.0,"novo":false},{"ref":"OFFYLYMA","ean":"5600413206324","nome":"Offy Lyma - Cadeira de Escritório em Malha","qtd":60,"custo":34.5,"total":2070.0,"novo":false},{"ref":"OFFYLYCABK","ean":"5600413206386","nome":"Offy Lyca Black - Cadeira de Escritório em Malha","qtd":33,"custo":58.0,"total":1914.0,"novo":false}],"frete":0,"total_merc":34947.0,"total_geral":34947.0},
+"CAIU8294053":{"items":[{"ref":"AGGAIA-DK-GREY-WT-V2","ean":"5600413207727","nome":"Alpha Gamer Gaia - Dark Grey / White V2","qtd":200,"custo":69.01,"total":13802.0,"novo":false},{"ref":"AGCYRA-F-GREY","ean":"5600413205747","nome":"Alpha Gamer Cyra - Fabric Grey / Black","qtd":200,"custo":43.12,"total":8624.0,"novo":false}],"frete":3389.0,"total_merc":22426.0,"total_geral":25815.0}};
+var PRODS={"OFFYLYCABK":{"ref":"OFFYLYCABK","nome":"Offy Lyca Black - Cadeira de escritório em malha","entries":[{"cid":"ONEU1030860","qtd":16,"eta":"13/08/2026","estado":"transito","destino":"FJMPC","companhia":"ONE"},{"cid":"MSMU5852428","qtd":76,"eta":"26/12/2025","estado":"recebido","destino":"PC Diga","companhia":"MSC"},{"cid":"TCNU2374129","qtd":76,"eta":"27/12/2025","estado":"recebido","destino":"PC Diga","companhia":"MSC"},{"cid":"MRKU4976524","qtd":33,"eta":"01/01/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"}]},
+"OFFYPRISMABK":{"ref":"OFFYPRISMABK","nome":"Offy Prisma Ergonomic Office Chair Black","entries":[{"cid":"ONEU1030860","qtd":120,"eta":"13/08/2026","estado":"transito","destino":"FJMPC","companhia":"ONE"}]},
+"OFFYPRISMAWTPK":{"ref":"OFFYPRISMAWTPK","nome":"Offy Prisma Ergonomic Office Chair White / Pink","entries":[{"cid":"ONEU1030860","qtd":30,"eta":"13/08/2026","estado":"transito","destino":"FJMPC","companhia":"ONE"}]},
+"OFFYPRISMAWTTQ":{"ref":"OFFYPRISMAWTTQ","nome":"Offy Prisma Ergonomic Office Chair White / Turquoise","entries":[{"cid":"ONEU1030860","qtd":50,"eta":"13/08/2026","estado":"transito","destino":"FJMPC","companhia":"ONE"}]},
+"OFFYPRISMAWTGRY":{"ref":"OFFYPRISMAWTGRY","nome":"Offy Prisma Ergonomic Office Chair White / Grey","entries":[{"cid":"ONEU1030860","qtd":100,"eta":"13/08/2026","estado":"transito","destino":"FJMPC","companhia":"ONE"}]},
+"OFFYPRISMAWTBG":{"ref":"OFFYPRISMAWTBG","nome":"Offy Prisma Ergonomic Office Chair White / Beige","entries":[{"cid":"ONEU1030860","qtd":60,"eta":"13/08/2026","estado":"transito","destino":"FJMPC","companhia":"ONE"}]},
+"OFFYLYMA":{"ref":"OFFYLYMA","nome":"Offy Lyma - Cadeira de escritório em malha","entries":[{"cid":"ONEU1030860","qtd":50,"eta":"13/08/2026","estado":"transito","destino":"FJMPC","companhia":"ONE"},{"cid":"TRHU4608301","qtd":148,"eta":"13/08/2026","estado":"transito","destino":"PC Diga Agosto","companhia":"ONE"},{"cid":"SEKU7815288","qtd":85,"eta":"14/02/2026","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"},{"cid":"MSMU5852428","qtd":274,"eta":"26/12/2025","estado":"recebido","destino":"PC Diga","companhia":"MSC"},{"cid":"TCNU2374129","qtd":274,"eta":"27/12/2025","estado":"recebido","destino":"PC Diga","companhia":"MSC"},{"cid":"MRKU4976524","qtd":60,"eta":"01/01/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"}]},
+"OFFYLYCABKBK":{"ref":"OFFYLYCABKBK","nome":"PCDIGA","entries":[{"cid":"ONEU1030860","qtd":20,"eta":"13/08/2026","estado":"transito","destino":"FJMPC","companhia":"ONE"}]},
+"AGTIDEBK":{"ref":"AGTIDEBK","nome":"Alpha Gamer Tide Black PCDIGA EDITION","entries":[{"cid":"ONEU1030860","qtd":50,"eta":"13/08/2026","estado":"transito","destino":"FJMPC","companhia":"ONE"},{"cid":"TCLU8910094","qtd":50,"eta":"21/06/2026","estado":"alfandega","destino":"FJMPC","companhia":"CMACGM"},{"cid":"FSCU8840228","qtd":35,"eta":"31/12/2025","estado":"recebido","destino":"PC DIGA","companhia":"MSC"}]},
+"AGNAVIDRGB":{"ref":"AGNAVIDRGB","nome":"Alpha Gamer Navi Heavy-Duty Dual Monitor RGB","entries":[{"cid":"ONEU1030860","qtd":200,"eta":"13/08/2026","estado":"transito","destino":"FJMPC","companhia":"ONE"}]},
+"OFFYLYCAWT":{"ref":"OFFYLYCAWT","nome":"Offy Lyca White - Cadeira de escritório em malha","entries":[{"cid":"TRHU4608301","qtd":50,"eta":"13/08/2026","estado":"transito","destino":"PC Diga Agosto","companhia":"ONE"},{"cid":"UETU5559061","qtd":29,"eta":"04/06/2026","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"},{"cid":"CAIU9472020","qtd":38,"eta":"04/06/2026","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"},{"cid":"MSMU5852428","qtd":56,"eta":"26/12/2025","estado":"recebido","destino":"PC Diga","companhia":"MSC"},{"cid":"TCNU2374129","qtd":56,"eta":"27/12/2025","estado":"recebido","destino":"PC Diga","companhia":"MSC"}]},
+"OFFYLYMAGREY":{"ref":"OFFYLYMAGREY","nome":"Offy Lyma Grey","entries":[{"cid":"TRHU4608301","qtd":100,"eta":"13/08/2026","estado":"transito","destino":"PC Diga Agosto","companhia":"ONE"},{"cid":"UETU5559061","qtd":60,"eta":"04/06/2026","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"},{"cid":"SEKU7815288","qtd":45,"eta":"14/02/2026","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"},{"cid":"HASU4497484","qtd":20,"eta":"07/02/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"}]},
+"AGAURORA":{"ref":"AGAURORA","nome":"Alpha Gamer Aurora - Cadeira em malha","entries":[{"cid":"TRHU4608301","qtd":140,"eta":"13/08/2026","estado":"transito","destino":"PC Diga Agosto","companhia":"ONE"},{"cid":"TCLU6374264","qtd":130,"eta":"19/06/2026","estado":"recebido","destino":"Worten 4","companhia":"CMACGM"},{"cid":"UETU5559061","qtd":200,"eta":"04/06/2026","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"},{"cid":"MSMU6056997","qtd":200,"eta":"07/03/2026","estado":"recebido","destino":"FJMPC / Nuno","companhia":"MSC"},{"cid":"SEKU7816480","qtd":340,"eta":"12/03/2026","estado":"recebido","destino":"Radio Popular / FJMPC","companhia":"CMACGM"},{"cid":"SEKU7816577","qtd":120,"eta":"12/03/2026","estado":"recebido","destino":"WOrten / Bobadela","companhia":"CMACGM"},{"cid":"SEKU7816514","qtd":340,"eta":"12/03/2026","estado":"recebido","destino":"WOrten / Bobadela","companhia":"CMACGM"},{"cid":"SEKU7815288","qtd":105,"eta":"14/02/2026","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"},{"cid":"TCNU1554912","qtd":54,"eta":"31/12/2025","estado":"recebido","destino":"PC Diga","companhia":"MSC"},{"cid":"CAAU5904294","qtd":54,"eta":"21/12/2025","estado":"recebido","destino":"PC Diga","companhia":"MSC"},{"cid":"HASU4497484","qtd":150,"eta":"07/02/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"}]},
+"AGGEMINABK":{"ref":"AGGEMINABK","nome":"Alpha Gamer Gemina Black - Secretária Gaming","entries":[{"cid":"NYKU0846132","qtd":180,"eta":"06/08/2026","estado":"transito","destino":"FJMPC","companhia":"ONE"},{"cid":"TCNU7813630","qtd":225,"eta":"07/04/2026","estado":"recebido","destino":"FJMPC","companhia":"MSC"},{"cid":"MRKU4372041","qtd":225,"eta":"19/01/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"}]},
+"AGGEMINARGBBK":{"ref":"AGGEMINARGBBK","nome":"Alpha Gamer Gemina RGB Black - Secretária Gaming","entries":[{"cid":"NYKU0846132","qtd":50,"eta":"06/08/2026","estado":"transito","destino":"FJMPC","companhia":"ONE"},{"cid":"TCNU7813630","qtd":225,"eta":"07/04/2026","estado":"recebido","destino":"FJMPC","companhia":"MSC"},{"cid":"MRKU4372041","qtd":225,"eta":"19/01/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"}]},
+"AGZORYARGBBK":{"ref":"AGZORYARGBBK","nome":"Alpha Gamer Zorya RGB Black - Secretaria Gaming Altura Regulável","entries":[{"cid":"NYKU0846132","qtd":150,"eta":"06/08/2026","estado":"transito","destino":"FJMPC","companhia":"ONE"},{"cid":"TCNU7813630","qtd":124,"eta":"07/04/2026","estado":"recebido","destino":"FJMPC","companhia":"MSC"},{"cid":"MRKU4372041","qtd":124,"eta":"19/01/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"}]},
+"AGZORYAPRORGBBK":{"ref":"AGZORYAPRORGBBK","nome":"Alpha Gamer Zorya Pro RGB Black - Secretaria Gaming Altura Regulável","entries":[{"cid":"NYKU0846132","qtd":161,"eta":"06/08/2026","estado":"transito","destino":"FJMPC","companhia":"ONE"}]},
+"AGZORYAPRORGBWT":{"ref":"AGZORYAPRORGBWT","nome":"Alpha Gamer Zorya Pro RGB White - Secretaria Gaming Altura Regulável","entries":[{"cid":"NYKU0846132","qtd":100,"eta":"06/08/2026","estado":"transito","destino":"FJMPC","companhia":"ONE"}]},
+"OFFYPIXIEMINIPT":{"ref":"OFFYPIXIEMINIPT","nome":"Offy Pixie Mini Wireless / Bluetooth Keyboard PT","entries":[{"cid":"FCIU3873512","qtd":1000,"eta":"31/07/2026","estado":"transito","destino":"FJMPC","companhia":"CMACGM"}]},
+"OFFYPIXIEPT":{"ref":"OFFYPIXIEPT","nome":"Offy Pixie Wireless / Bluetooth Keyboard PT","entries":[{"cid":"FCIU3873512","qtd":1000,"eta":"31/07/2026","estado":"transito","destino":"FJMPC","companhia":"CMACGM"}]},
+"OFFYFLEXIMINIPT":{"ref":"OFFYFLEXIMINIPT","nome":"Offy Flexi Mini Wireless / Bluetooth Keyboard PT","entries":[{"cid":"FCIU3873512","qtd":1000,"eta":"31/07/2026","estado":"transito","destino":"FJMPC","companhia":"CMACGM"}]},
+"OFFYFLEXIPT":{"ref":"OFFYFLEXIPT","nome":"Offy Flexi Wireless / Bluetooth Keyboard PT","entries":[{"cid":"FCIU3873512","qtd":1000,"eta":"31/07/2026","estado":"transito","destino":"FJMPC","companhia":"CMACGM"}]},
+"OFFYFLEXIMIDPT":{"ref":"OFFYFLEXIMIDPT","nome":"Offy Flexi Mid Wireless / Bluetooth Keyboard PT","entries":[{"cid":"FCIU3873512","qtd":1000,"eta":"31/07/2026","estado":"transito","destino":"FJMPC","companhia":"CMACGM"}]},
+"OFFYPIXIETABPT":{"ref":"OFFYPIXIETABPT","nome":"Offy Pixie Tab Wireless / Bluetooth Keyboard PT","entries":[{"cid":"FCIU3873512","qtd":1000,"eta":"31/07/2026","estado":"transito","destino":"FJMPC","companhia":"CMACGM"}]},
+"OFFYNEXO":{"ref":"OFFYNEXO","nome":"Offy Nexo Wireless / Bluetooth Ergonomic Mouse 4800 DPI","entries":[{"cid":"FCIU3873512","qtd":1500,"eta":"31/07/2026","estado":"transito","destino":"FJMPC","companhia":"CMACGM"}]},
+"OFFYVEXI":{"ref":"OFFYVEXI","nome":"Offy Vexi Wireless / Bluetooth Ergonomic Vertical Mouse 4800 DPI","entries":[{"cid":"FCIU3873512","qtd":1000,"eta":"31/07/2026","estado":"transito","destino":"FJMPC","companhia":"CMACGM"}]},
+"OFFYLEXI":{"ref":"OFFYLEXI","nome":"Offy Lexi Wireless / Bluetooth Mouse 4800 DPI","entries":[{"cid":"FCIU3873512","qtd":1000,"eta":"31/07/2026","estado":"transito","destino":"FJMPC","companhia":"CMACGM"}]},
+"OFFYAXIO":{"ref":"OFFYAXIO","nome":"Offy Axio Wireless / Bluetooth Ergonomic Mouse 4800 DPI","entries":[{"cid":"FCIU3873512","qtd":1000,"eta":"31/07/2026","estado":"transito","destino":"FJMPC","companhia":"CMACGM"}]},
+"OFFYNEXOWT":{"ref":"OFFYNEXOWT","nome":"Offy Nexo Wireless / Bluetooth Ergonomic Mouse 4800 DPI - White","entries":[{"cid":"FCIU3873512","qtd":1000,"eta":"31/07/2026","estado":"transito","destino":"FJMPC","companhia":"CMACGM"}]},
+"OFFYOPTIXPRO":{"ref":"OFFYOPTIXPRO","nome":"Offy Optix Pro 4K UHD 2160P Webcam","entries":[{"cid":"FCIU3873512","qtd":500,"eta":"31/07/2026","estado":"transito","destino":"FJMPC","companhia":"CMACGM"}]},
+"OFFYOPTIX":{"ref":"OFFYOPTIX","nome":"Offy Optix FHD 1080P Webcam","entries":[{"cid":"FCIU3873512","qtd":1000,"eta":"31/07/2026","estado":"transito","destino":"FJMPC","companhia":"CMACGM"}]},
+"NXCBAYMX2":{"ref":"NXCBAYMX2","nome":"Nox Coolbay MX2","entries":[{"cid":"FCIU3873512","qtd":120,"eta":"31/07/2026","estado":"transito","destino":"FJMPC","companhia":"CMACGM"},{"cid":"CMAU6149465","qtd":200,"eta":"04/06/2026","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"},{"cid":"ONEU1147585","qtd":100,"eta":"10/04/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"AGGAIA-DK-GREY-WT-V2":{"ref":"AGGAIA-DK-GREY-WT-V2","nome":"Alpha Gamer Gaia - Dark Grey / White V2","entries":[{"cid":"SEGU5176476","qtd":260,"eta":"06/08/2026","estado":"transito","destino":"Worten 7","companhia":"ONE"},{"cid":"CMAU7447870","qtd":80,"eta":"21/06/2026","estado":"alfandega","destino":"Worten 2025","companhia":"CMACGM"},{"cid":"MRSU3054645","qtd":50,"eta":"09/04/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"},{"cid":"CMAU6742059","qtd":50,"eta":"10/04/2026","estado":"recebido","destino":"Worten / Bobadela","companhia":"CMACGM"},{"cid":"CAIU8294053","qtd":200,"eta":"19/01/2026","estado":"recebido","destino":"Worten","companhia":"Maersk"}]},
+"AGTERION-FB-GRY":{"ref":"AGTERION-FB-GRY","nome":"Alpha Gamer Terion - Fabric Grey","entries":[{"cid":"SEGU5176476","qtd":60,"eta":"06/08/2026","estado":"transito","destino":"Worten 7","companhia":"ONE"},{"cid":"CMAU7447870","qtd":100,"eta":"21/06/2026","estado":"alfandega","destino":"Worten 2025","companhia":"CMACGM"}]},
+"AGNEBULAOE-PU-BWN":{"ref":"AGNEBULAOE-PU-BWN","nome":"Alpha Gamer Nebula Office Edition - PU Brown","entries":[{"cid":"KKFU7935971","qtd":70,"eta":"06/08/2026","estado":"transito","destino":"Worten 6","companhia":"ONE"},{"cid":"TCNU3632887","qtd":308,"eta":"21/06/2026","estado":"alfandega","destino":"Worten 5","companhia":"CMACGM"},{"cid":"CMAU7126778","qtd":357,"eta":"14/02/2026","estado":"recebido","destino":"Worten / Bobadela","companhia":"CMACGM"}]},
+"AGCYGNUS":{"ref":"AGCYGNUS","nome":"Alpha Gamer Cygnus RGB","entries":[{"cid":"KKFU7935971","qtd":310,"eta":"06/08/2026","estado":"transito","destino":"Worten 6","companhia":"ONE"},{"cid":"MRSU7266658","qtd":392,"eta":"07/02/2026","estado":"recebido","destino":"Worten","companhia":"Maersk"},{"cid":"CMAU7035404","qtd":80,"eta":"03/04/2026","estado":"recebido","destino":"FJMPC / FNAC","companhia":"CMACGM"}]},
+"AGGAIA-LT-GREY-V2":{"ref":"AGGAIA-LT-GREY-V2","nome":"Alpha Gamer Gaia - Light Grey V2","entries":[{"cid":"CMAU7447870","qtd":90,"eta":"21/06/2026","estado":"alfandega","destino":"Worten 2025","companhia":"CMACGM"},{"cid":"TLLU4428396","qtd":295,"eta":"26/06/2026","estado":"transito","destino":"Worten 3","companhia":"CMACGM"},{"cid":"CMAU6742059","qtd":99,"eta":"10/04/2026","estado":"recebido","destino":"Worten / Bobadela","companhia":"CMACGM"},{"cid":"MRKU3244447","qtd":50,"eta":"01/01/2026","estado":"recebido","destino":"PC DIGA","companhia":"Maersk"}]},
+"AGNEBULA-GRY-BL":{"ref":"AGNEBULA-GRY-BL","nome":"Alpha Gamer Nebula master Grey/Blue","entries":[{"cid":"TCNU3632887","qtd":24,"eta":"21/06/2026","estado":"alfandega","destino":"Worten 5","companhia":"CMACGM"}]},
+"AGNEBULA-GRY-PK":{"ref":"AGNEBULA-GRY-PK","nome":"Alpha Gamer Nebula master Grey/Pink","entries":[{"cid":"TCNU3632887","qtd":10,"eta":"21/06/2026","estado":"alfandega","destino":"Worten 5","companhia":"CMACGM"},{"cid":"SEKU7815225","qtd":6,"eta":"14/02/2026","estado":"recebido","destino":"Worten / Bobadela","companhia":"CMACGM"}]},
+"AGNEBULA-GRY-O":{"ref":"AGNEBULA-GRY-O","nome":"Alpha Gamer Nebula master Grey/Orange","entries":[{"cid":"TCNU3632887","qtd":15,"eta":"21/06/2026","estado":"alfandega","destino":"Worten 5","companhia":"CMACGM"},{"cid":"SEKU7815225","qtd":13,"eta":"14/02/2026","estado":"recebido","destino":"Worten / Bobadela","companhia":"CMACGM"}]},
+"AGNYSA-BK":{"ref":"AGNYSA-BK","nome":"Alpha Gamer Nysa - Black","entries":[{"cid":"TLLU4428396","qtd":95,"eta":"26/06/2026","estado":"transito","destino":"Worten 3","companhia":"CMACGM"},{"cid":"MRSU3054645","qtd":20,"eta":"09/04/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"},{"cid":"SEKU7815225","qtd":324,"eta":"14/02/2026","estado":"recebido","destino":"Worten / Bobadela","companhia":"CMACGM"}]},
+"AGCYRA-F-GREY":{"ref":"AGCYRA-F-GREY","nome":"Alpha Gamer Cyra - Fabric Grey / Black","entries":[{"cid":"TCNU3717752","qtd":415,"eta":"26/06/2026","estado":"transito","destino":"Worten 2","companhia":"CMACGM"},{"cid":"CMAU6742059","qtd":239,"eta":"10/04/2026","estado":"recebido","destino":"Worten / Bobadela","companhia":"CMACGM"},{"cid":"CAIU8294053","qtd":200,"eta":"19/01/2026","estado":"recebido","destino":"Worten","companhia":"Maersk"}]},
+"AGNEBULA":{"ref":"AGNEBULA","nome":"Alpha Gamer Nebula master Grey/Black","entries":[{"cid":"DDDU5046665","qtd":357,"eta":"26/06/2026","estado":"transito","destino":"Worten 1","companhia":"CMACGM"},{"cid":"SEKU7816788","qtd":357,"eta":"12/03/2026","estado":"recebido","destino":"Worten / Bobadela","companhia":"CMACGM"},{"cid":"SEKU7815225","qtd":50,"eta":"14/02/2026","estado":"recebido","destino":"Worten / Bobadela","companhia":"CMACGM"},{"cid":"MSMU4227658","qtd":357,"eta":"21/12/2025","estado":"recebido","destino":"WORTEN","companhia":"MSC"},{"cid":"MSKU9770693","qtd":357,"eta":"19/01/2026","estado":"recebido","destino":"Worten","companhia":"Maersk"}]},
+"AGSWELLBK":{"ref":"AGSWELLBK","nome":"Alpha Gamer Swell Black","entries":[{"cid":"TCLU8910094","qtd":50,"eta":"21/06/2026","estado":"alfandega","destino":"FJMPC","companhia":"CMACGM"},{"cid":"FSCU8840228","qtd":35,"eta":"31/12/2025","estado":"recebido","destino":"PC DIGA","companhia":"MSC"}]},
+"AGSWELLGRY":{"ref":"AGSWELLGRY","nome":"Alpha Gamer Swell Grey","entries":[{"cid":"TCLU8910094","qtd":50,"eta":"21/06/2026","estado":"alfandega","destino":"FJMPC","companhia":"CMACGM"},{"cid":"FSCU8840228","qtd":14,"eta":"31/12/2025","estado":"recebido","destino":"PC DIGA","companhia":"MSC"}]},
+"AGSWELLWTGRY":{"ref":"AGSWELLWTGRY","nome":"Alpha Gamer Swell White / Grey","entries":[{"cid":"TCLU8910094","qtd":50,"eta":"21/06/2026","estado":"alfandega","destino":"FJMPC","companhia":"CMACGM"},{"cid":"FSCU8840228","qtd":14,"eta":"31/12/2025","estado":"recebido","destino":"PC DIGA","companhia":"MSC"}]},
+"AGTIDEGRY":{"ref":"AGTIDEGRY","nome":"Alpha Gamer Tide Grey","entries":[{"cid":"TCLU8910094","qtd":50,"eta":"21/06/2026","estado":"alfandega","destino":"FJMPC","companhia":"CMACGM"},{"cid":"FSCU8840228","qtd":15,"eta":"31/12/2025","estado":"recebido","destino":"PC DIGA","companhia":"MSC"}]},
+"AGGALAXA-F-GRY-BK":{"ref":"AGGALAXA-F-GRY-BK","nome":"Alpha Gamer Galaxa - Fabric Grey / Black","entries":[{"cid":"MSMU8426391","qtd":103,"eta":"28/05/2026","estado":"recebido","destino":"FJMPC","companhia":"MSC"},{"cid":"MRSU3054645","qtd":40,"eta":"09/04/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"},{"cid":"CMAU7035404","qtd":200,"eta":"03/04/2026","estado":"recebido","destino":"FJMPC / FNAC","companhia":"CMACGM"}]},
+"AGGALAXA-PUL-BK":{"ref":"AGGALAXA-PUL-BK","nome":"Alpha Gamer Galaxa - PU Black","entries":[{"cid":"MSMU8426391","qtd":110,"eta":"28/05/2026","estado":"recebido","destino":"FJMPC","companhia":"MSC"},{"cid":"MRSU3054645","qtd":30,"eta":"09/04/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"},{"cid":"CMAU7035404","qtd":50,"eta":"03/04/2026","estado":"recebido","destino":"FJMPC / FNAC","companhia":"CMACGM"}]},
+"AGPTGC26":{"ref":"AGPTGC26","nome":"Alpha Gamer Portugal 26","entries":[{"cid":"MSMU8426391","qtd":150,"eta":"28/05/2026","estado":"recebido","destino":"FJMPC","companhia":"MSC"}]},
+"AGLUNAV2":{"ref":"AGLUNAV2","nome":"Alpha Gamer Luna V2 - Cadeira em Malha","entries":[{"cid":"TCLU6374264","qtd":75,"eta":"19/06/2026","estado":"recebido","destino":"Worten 4","companhia":"CMACGM"},{"cid":"HASU4497484","qtd":125,"eta":"07/02/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"},{"cid":"MSKU0654460","qtd":220,"eta":"01/01/2026","estado":"recebido","destino":"Worten","companhia":"Maersk"}]},
+"AGSTELLA-GRY":{"ref":"AGSTELLA-GRY","nome":"Alpha Gamer Stella Grey - Cadeira em Malha","entries":[{"cid":"TCLU6374264","qtd":80,"eta":"19/06/2026","estado":"recebido","destino":"Worten 4","companhia":"CMACGM"},{"cid":"CAIU9472020","qtd":100,"eta":"04/06/2026","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"},{"cid":"MSMU6056997","qtd":50,"eta":"07/03/2026","estado":"recebido","destino":"FJMPC / Nuno","companhia":"MSC"},{"cid":"SEKU7815204","qtd":100,"eta":"14/02/2026","estado":"recebido","destino":"MEO / FJMPC","companhia":"CMACGM"},{"cid":"SEKU7816577","qtd":55,"eta":"12/03/2026","estado":"recebido","destino":"WOrten / Bobadela","companhia":"CMACGM"},{"cid":"SEKU7815267","qtd":120,"eta":"14/02/2026","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"},{"cid":"TCNU1554912","qtd":53,"eta":"31/12/2025","estado":"recebido","destino":"PC Diga","companhia":"MSC"},{"cid":"CAAU5904294","qtd":53,"eta":"21/12/2025","estado":"recebido","destino":"PC Diga","companhia":"MSC"},{"cid":"TRHU4437683","qtd":70,"eta":"07/02/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"},{"cid":"MSKU0654460","qtd":110,"eta":"01/01/2026","estado":"recebido","destino":"Worten","companhia":"Maersk"},{"cid":"MRKU4170138","qtd":47,"eta":"01/01/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"},{"cid":"CAAU7083644","qtd":153,"eta":"01/01/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"}]},
+"AGSTELLA-WT-GRY":{"ref":"AGSTELLA-WT-GRY","nome":"Alpha Gamer Stella White / Grey - Cadeira em Malha","entries":[{"cid":"TCLU6374264","qtd":115,"eta":"19/06/2026","estado":"recebido","destino":"Worten 4","companhia":"CMACGM"},{"cid":"CAIU9472020","qtd":120,"eta":"04/06/2026","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"},{"cid":"MSMU6056997","qtd":50,"eta":"07/03/2026","estado":"recebido","destino":"FJMPC / Nuno","companhia":"MSC"},{"cid":"SEKU7815204","qtd":80,"eta":"14/02/2026","estado":"recebido","destino":"MEO / FJMPC","companhia":"CMACGM"},{"cid":"SEKU7816577","qtd":165,"eta":"12/03/2026","estado":"recebido","destino":"WOrten / Bobadela","companhia":"CMACGM"},{"cid":"SEKU7815267","qtd":150,"eta":"14/02/2026","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"},{"cid":"TCNU1554912","qtd":74,"eta":"31/12/2025","estado":"recebido","destino":"PC Diga","companhia":"MSC"},{"cid":"CAAU5904294","qtd":74,"eta":"21/12/2025","estado":"recebido","destino":"PC Diga","companhia":"MSC"},{"cid":"TRHU4437683","qtd":85,"eta":"07/02/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"},{"cid":"MSKU0654460","qtd":110,"eta":"01/01/2026","estado":"recebido","destino":"Worten","companhia":"Maersk"},{"cid":"MRKU4170138","qtd":400,"eta":"01/01/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"}]},
+"AGIRIS":{"ref":"AGIRIS","nome":"Alpha Gamer Iris - Cadeira em malha","entries":[{"cid":"UETU5559061","qtd":80,"eta":"04/06/2026","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"},{"cid":"SEKU7815204","qtd":10,"eta":"14/02/2026","estado":"recebido","destino":"MEO / FJMPC","companhia":"CMACGM"},{"cid":"SEKU7815288","qtd":45,"eta":"14/02/2026","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"},{"cid":"TCNU1554912","qtd":64,"eta":"31/12/2025","estado":"recebido","destino":"PC Diga","companhia":"MSC"},{"cid":"CAAU5904294","qtd":64,"eta":"21/12/2025","estado":"recebido","destino":"PC Diga","companhia":"MSC"},{"cid":"TRHU4437683","qtd":50,"eta":"07/02/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"},{"cid":"HASU4497484","qtd":30,"eta":"07/02/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"},{"cid":"MRKU4976524","qtd":150,"eta":"01/01/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"}]},
+"AGSTELLA-BK":{"ref":"AGSTELLA-BK","nome":"Alpha Gamer Stella Black - Cadeira em malha","entries":[{"cid":"CAIU9472020","qtd":185,"eta":"04/06/2026","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"},{"cid":"MSMU6056997","qtd":80,"eta":"07/03/2026","estado":"recebido","destino":"FJMPC / Nuno","companhia":"MSC"},{"cid":"SEKU7815204","qtd":230,"eta":"14/02/2026","estado":"recebido","destino":"MEO / FJMPC","companhia":"CMACGM"},{"cid":"SEKU7816577","qtd":60,"eta":"12/03/2026","estado":"recebido","destino":"WOrten / Bobadela","companhia":"CMACGM"},{"cid":"SEKU7815288","qtd":21,"eta":"14/02/2026","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"},{"cid":"SEKU7815267","qtd":175,"eta":"14/02/2026","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"},{"cid":"TCNU1554912","qtd":93,"eta":"31/12/2025","estado":"recebido","destino":"PC Diga","companhia":"MSC"},{"cid":"CAAU5904294","qtd":93,"eta":"21/12/2025","estado":"recebido","destino":"PC Diga","companhia":"MSC"},{"cid":"TRHU4437683","qtd":85,"eta":"07/02/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"},{"cid":"CAAU7083644","qtd":294,"eta":"01/01/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"},{"cid":"MRKU4976524","qtd":6,"eta":"01/01/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"}]},
+"NXINFTYBETA":{"ref":"NXINFTYBETA","nome":"Nox Infinity Beta Airflow ATX Chassis","entries":[{"cid":"CMAU6149465","qtd":150,"eta":"04/06/2026","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"}]},
+"NXHUMMERVSNBK":{"ref":"NXHUMMERVSNBK","nome":"Nox Hummer Vision Black Mid Tower USB 3.0","entries":[{"cid":"CMAU6149465","qtd":100,"eta":"04/06/2026","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"}]},
+"NXHUMMERGLOCKWH":{"ref":"NXHUMMERGLOCKWH","nome":"Nox Hummer Glock Frameless Glass Mid Tower White","entries":[{"cid":"CMAU6149465","qtd":80,"eta":"04/06/2026","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"}]},
+"NXHUMMERGLOCKBK":{"ref":"NXHUMMERGLOCKBK","nome":"Nox Hummer Glock Frameless Glass Mid Tower Black","entries":[{"cid":"CMAU6149465","qtd":100,"eta":"04/06/2026","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"}]},
+"NXINFTYEPSILON":{"ref":"NXINFTYEPSILON","nome":"Nox Infinity Epsilon RGB M-ATX Chassis","entries":[{"cid":"CMAU6149465","qtd":100,"eta":"04/06/2026","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"}]},
+"NXHUMMERVOID":{"ref":"NXHUMMERVOID","nome":"Nox Hummer Void ATX Silent Case","entries":[{"cid":"CMAU6149465","qtd":233,"eta":"04/06/2026","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"}]},
+"1IFEKBBASEKITPT":{"ref":"1IFEKBBASEKITPT","nome":"1Life kb:base kit","entries":[{"cid":"CMAU6149465","qtd":2000,"eta":"04/06/2026","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"}]},
+"1IFETECUFBTPTBK":{"ref":"1IFETECUFBTPTBK","nome":"1Life teclado ultrafino Bluetooth PT BK","entries":[{"cid":"CMAU6149465","qtd":1000,"eta":"04/06/2026","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"}]},
+"AGSTARLARGBBK":{"ref":"AGSTARLARGBBK","nome":"Alpha Gamer Starla RGB Black - Secretária gaming","entries":[{"cid":"TCNU7813630","qtd":284,"eta":"07/04/2026","estado":"recebido","destino":"FJMPC","companhia":"MSC"},{"cid":"MRKU4372041","qtd":284,"eta":"19/01/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"}]},
+"AGGAIA-DK-GREY-BLUE-V2":{"ref":"AGGAIA-DK-GREY-BLUE-V2","nome":"Alpha Gamer Gaia - Dark Grey / Blue V2","entries":[{"cid":"MRSU3054645","qtd":30,"eta":"09/04/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"},{"cid":"CMAU7035404","qtd":50,"eta":"03/04/2026","estado":"recebido","destino":"FJMPC / FNAC","companhia":"CMACGM"}]},
+"AGGAIA-DK-GREY-V2":{"ref":"AGGAIA-DK-GREY-V2","nome":"Alpha Gamer Gaia-Dark Grey V2","entries":[{"cid":"MRSU3054645","qtd":30,"eta":"09/04/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"},{"cid":"MRKU3244447","qtd":110,"eta":"01/01/2026","estado":"recebido","destino":"PC DIGA","companhia":"Maersk"}]},
+"AGATENA-BK":{"ref":"AGATENA-BK","nome":"Alpha Gamer Atena- Black","entries":[{"cid":"MRSU3054645","qtd":40,"eta":"09/04/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"}]},
+"AGATENA-BK-RED":{"ref":"AGATENA-BK-RED","nome":"Alpha Gamer Atena-Black/Red","entries":[{"cid":"MRSU3054645","qtd":45,"eta":"09/04/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"}]},
+"AGZETA-BK":{"ref":"AGZETA-BK","nome":"Alpha Gamer Zeta Black","entries":[{"cid":"MRSU3054645","qtd":40,"eta":"09/04/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"},{"cid":"SEKU7816495","qtd":50,"eta":"12/03/2026","estado":"recebido","destino":"RP / FJMPC","companhia":"CMACGM"},{"cid":"MRKU3244447","qtd":45,"eta":"01/01/2026","estado":"recebido","destino":"PC DIGA","companhia":"Maersk"}]},
+"AGZETA-WHT-BK":{"ref":"AGZETA-WHT-BK","nome":"Alpha Gamer Zeta -white/ Black","entries":[{"cid":"MRSU3054645","qtd":20,"eta":"09/04/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"},{"cid":"MRKU3244447","qtd":45,"eta":"01/01/2026","estado":"recebido","destino":"PC DIGA","companhia":"Maersk"}]},
+"AGGAIA-DK-GREY-OR-V2":{"ref":"AGGAIA-DK-GREY-OR-V2","nome":"Alpha Gamer Gaia -Dark Grey/Orange V2","entries":[{"cid":"MRSU3054645","qtd":10,"eta":"09/04/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"}]},
+"AGGAIA-LT-GREY-WT-V2":{"ref":"AGGAIA-LT-GREY-WT-V2","nome":"Alpha Gamer Gaia -Light Grey/ white V2","entries":[{"cid":"MRSU3054645","qtd":50,"eta":"09/04/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"},{"cid":"SEKU7816495","qtd":70,"eta":"12/03/2026","estado":"recebido","destino":"RP / FJMPC","companhia":"CMACGM"},{"cid":"SEKU7814189","qtd":390,"eta":"14/02/2026","estado":"recebido","destino":"RP / FJMPC","companhia":"CMACGM"}]},
+"AGASTRID":{"ref":"AGASTRID","nome":"Alpha Gamer Astrid-cadeira em malha","entries":[{"cid":"SEKU7815204","qtd":10,"eta":"14/02/2026","estado":"recebido","destino":"MEO / FJMPC","companhia":"CMACGM"},{"cid":"SEKU7815288","qtd":55,"eta":"14/02/2026","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"},{"cid":"TCNU1554912","qtd":44,"eta":"31/12/2025","estado":"recebido","destino":"PC Diga","companhia":"MSC"},{"cid":"CAAU5904294","qtd":44,"eta":"21/12/2025","estado":"recebido","destino":"PC Diga","companhia":"MSC"},{"cid":"TRHU4437683","qtd":100,"eta":"07/02/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"},{"cid":"MRKU4976524","qtd":120,"eta":"01/01/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"}]},
+"AGMAYA-BK":{"ref":"AGMAYA-BK","nome":"Alpha Gamer Maya Black","entries":[{"cid":"SEKU7816495","qtd":190,"eta":"12/03/2026","estado":"recebido","destino":"RP / FJMPC","companhia":"CMACGM"},{"cid":"SEKU7816767","qtd":240,"eta":"12/03/2026","estado":"recebido","destino":"meo / FJMPC","companhia":"CMACGM"},{"cid":"MRSU7112185","qtd":156,"eta":"09/04/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"}]},
+"AGALEGRA-F-GRY":{"ref":"AGALEGRA-F-GRY","nome":"Alpha Gamer Alegra Fabric Grey","entries":[{"cid":"SEKU7816495","qtd":30,"eta":"12/03/2026","estado":"recebido","destino":"RP / FJMPC","companhia":"CMACGM"}]},
+"AGZETA-BK-R":{"ref":"AGZETA-BK-R","nome":"Alpha Gamer Zeta Black/Red","entries":[{"cid":"SEKU7816495","qtd":30,"eta":"12/03/2026","estado":"recebido","destino":"RP / FJMPC","companhia":"CMACGM"}]},
+"AGALEGRA-F-GRY-V2":{"ref":"AGALEGRA-F-GRY-V2","nome":"Alpha Gamer Alegra - Fabric Grey / Black V2","entries":[{"cid":"SEKU7816767","qtd":20,"eta":"12/03/2026","estado":"recebido","destino":"meo / FJMPC","companhia":"CMACGM"}]},
+"AGALEGRA-PUL-BK-V2":{"ref":"AGALEGRA-PUL-BK-V2","nome":"Alpha Gamer Alegra - PU Leather Black V2","entries":[{"cid":"SEKU7816767","qtd":20,"eta":"12/03/2026","estado":"recebido","destino":"meo / FJMPC","companhia":"CMACGM"},{"cid":"MRSU7112185","qtd":80,"eta":"09/04/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"}]},
+"AGMAYA-BK-RED":{"ref":"AGMAYA-BK-RED","nome":"Alpha Gamer Maya Black /red","entries":[{"cid":"SEKU7816767","qtd":50,"eta":"12/03/2026","estado":"recebido","destino":"meo / FJMPC","companhia":"CMACGM"}]},
+"AGMAYA-BK-BLUE":{"ref":"AGMAYA-BK-BLUE","nome":"Alpha Gamer Maya Black / blue","entries":[{"cid":"SEKU7816767","qtd":40,"eta":"12/03/2026","estado":"recebido","destino":"meo / FJMPC","companhia":"CMACGM"}]},
+"NXCBAYRX":{"ref":"NXCBAYRX","nome":"Nox Coolbay RX","entries":[{"cid":"ONEU1147585","qtd":100,"eta":"10/04/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"ZLDRADION":{"ref":"ZLDRADION","nome":"Zolyd Radion - ARGB ATX PC Case","entries":[{"cid":"ONEU1147585","qtd":100,"eta":"10/04/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"NXHUMMERFROST":{"ref":"NXHUMMERFROST","nome":"Nox Hummer Frost ARGB Lighting Mid Tower","entries":[{"cid":"ONEU1147585","qtd":240,"eta":"10/04/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"NXURVX750BZ":{"ref":"NXURVX750BZ","nome":"Nox Urano VX 750W 80+ Bronze","entries":[{"cid":"ONEU1147585","qtd":1000,"eta":"10/04/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"NXURVX650BZ":{"ref":"NXURVX650BZ","nome":"Nox Urano VX 650W 80+ Bronze","entries":[{"cid":"ONEU1147585","qtd":1000,"eta":"10/04/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"NXURTX850BZ":{"ref":"NXURTX850BZ","nome":"Nox Urano TX 850W 80+ Bronze","entries":[{"cid":"ONEU1147585","qtd":500,"eta":"10/04/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"AGOCTANCORE":{"ref":"AGOCTANCORE","nome":"Alpha Gamer Octan Core Gaming Chair Mat","entries":[{"cid":"ONEU1147585","qtd":500,"eta":"10/04/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"AGKADRANCORE":{"ref":"AGKADRANCORE","nome":"Alpha Gamer Kadran Core Gaming Chair Mat","entries":[{"cid":"ONEU1147585","qtd":500,"eta":"10/04/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"1IFEHDRAPID":{"ref":"1IFEHDRAPID","nome":"1Life hd:rapid 2.5 C to C SATA","entries":[{"cid":"NYKU4794090","qtd":500,"eta":"29/03/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"1IFEUSBC5IN1":{"ref":"1IFEUSBC5IN1","nome":"1Life usb-c:5in1 HDMI / DEX / RJ45","entries":[{"cid":"NYKU4794090","qtd":200,"eta":"29/03/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"1IFECRCITIZEN":{"ref":"1IFECRCITIZEN","nome":"1Life cr:citizen","entries":[{"cid":"NYKU4794090","qtd":1000,"eta":"29/03/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"1IFECBUSBCLGTNG27W15M":{"ref":"1IFECBUSBCLGTNG27W15M","nome":"1Life cabo USB-C > Lightning 27W 1.5m","entries":[{"cid":"NYKU4794090","qtd":1000,"eta":"29/03/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"1IFECXEXT25USB3TRP":{"ref":"1IFECXEXT25USB3TRP","nome":"1Life caixa externa HDD/SSD 2.5\" USB 3.0 transp.","entries":[{"cid":"NYKU4794090","qtd":1000,"eta":"29/03/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"1IFEHDFLUX3":{"ref":"1IFEHDFLUX3","nome":"1Life hd:flux 3","entries":[{"cid":"NYKU4794090","qtd":500,"eta":"29/03/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"1IFENBCXENOGR":{"ref":"1IFENBCXENOGR","nome":"1Life nbc: xeno laptop holder grey","entries":[{"cid":"NYKU4794090","qtd":500,"eta":"29/03/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"1IFENBCXENOBK":{"ref":"1IFENBCXENOBK","nome":"1Life nbc: xeno laptop holder black","entries":[{"cid":"NYKU4794090","qtd":500,"eta":"29/03/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"1IFETCTA3ADAPT":{"ref":"1IFETCTA3ADAPT","nome":"1Life usb: Type-C / Type-A 3.0 adapter 2pcs","entries":[{"cid":"NYKU4794090","qtd":500,"eta":"29/03/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"1IFETATC3ADAPT":{"ref":"1IFETATC3ADAPT","nome":"1Life usb: Type-A / Type-C 3.0 adapter 2pcs","entries":[{"cid":"NYKU4794090","qtd":500,"eta":"29/03/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"AGBPBK":{"ref":"AGBPBK","nome":"Alpha Gamer Backpack Black","entries":[{"cid":"NYKU4794090","qtd":500,"eta":"29/03/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"AGBPGRY":{"ref":"AGBPGRY","nome":"Alpha Gamer Backpack Grey","entries":[{"cid":"NYKU4794090","qtd":500,"eta":"29/03/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"OFFYSYNCROPT":{"ref":"OFFYSYNCROPT","nome":"Offy Syncro Wireless / Bluetooth Keyboard + Mouse PT","entries":[{"cid":"NYKU4794090","qtd":1000,"eta":"29/03/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"ZLDNOVAARGB120PWMBK":{"ref":"ZLDNOVAARGB120PWMBK","nome":"Zolyd Nova ARGB 120 mm PWM Fan Black","entries":[{"cid":"NYKU4794090","qtd":250,"eta":"29/03/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"ZLDNOVAARGB120PWMWT":{"ref":"ZLDNOVAARGB120PWMWT","nome":"Zolyd Nova ARGB 120 mm PWM Fan White","entries":[{"cid":"NYKU4794090","qtd":250,"eta":"29/03/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"ZLDNOVAARGB120PWMNGBK":{"ref":"ZLDNOVAARGB120PWMNGBK","nome":"Zolyd Nova ARGB 120 mm PWM Negative Fan Black","entries":[{"cid":"NYKU4794090","qtd":250,"eta":"29/03/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"ZLDNOVAARGB120PWMNGWT":{"ref":"ZLDNOVAARGB120PWMNGWT","nome":"Zolyd Nova ARGB 120 mm PWM Negative Fan White","entries":[{"cid":"NYKU4794090","qtd":250,"eta":"29/03/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"ZLDFLUXARGBML120PWMKITBK":{"ref":"ZLDFLUXARGBML120PWMKITBK","nome":"Zolyd Flux ARGB MagLink 120 mm PWM Fan Kit Black","entries":[{"cid":"NYKU4794090","qtd":250,"eta":"29/03/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"ZLDFLUXARGBML120PWMKITWT":{"ref":"ZLDFLUXARGBML120PWMKITWT","nome":"Zolyd Flux ARGB MagLink 120 mm PWM Fan Kit White","entries":[{"cid":"NYKU4794090","qtd":250,"eta":"29/03/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"ZLDVERTAARGBEF120PWMKITBK":{"ref":"ZLDVERTAARGBEF120PWMKITBK","nome":"Zolyd Verta ARGB EasyFit 120 mm PWM Fan Kit Black","entries":[{"cid":"NYKU4794090","qtd":250,"eta":"29/03/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"ZLDVERTAARGBEF120PWMKITWT":{"ref":"ZLDVERTAARGBEF120PWMKITWT","nome":"Zolyd Verta ARGB EasyFit 120 mm PWM Fan Kit White","entries":[{"cid":"NYKU4794090","qtd":250,"eta":"29/03/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"ZLDB750":{"ref":"ZLDB750","nome":"Zolyd B750 - 750W 80 Plus Bronze ATX PSU","entries":[{"cid":"NYKU4794090","qtd":500,"eta":"29/03/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"ZLDNSKARIONBK":{"ref":"ZLDNSKARIONBK","nome":"Zolyd Neo Series Karion Black Micro-ATX Computer Case","entries":[{"cid":"NYKU4794090","qtd":210,"eta":"29/03/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"ZLDNSKARIONWDBK":{"ref":"ZLDNSKARIONWDBK","nome":"Zolyd Neo Series Karion WD Black Micro-ATX Computer Case","entries":[{"cid":"NYKU4794090","qtd":200,"eta":"29/03/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"ZLDNSKARIONWDWTBK":{"ref":"ZLDNSKARIONWDWTBK","nome":"Zolyd Neo Series Karion WD White / Black Micro-ATX Computer Case","entries":[{"cid":"NYKU4794090","qtd":200,"eta":"29/03/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"}]},
+"ZLDPULSAR":{"ref":"ZLDPULSAR","nome":"Zolyd Pulsar - Caixa PC Micro-ATX","entries":[{"cid":"NYKU4794090","qtd":26,"eta":"29/03/2026","estado":"recebido","destino":"FJMPC","companhia":"ONE"},{"cid":"TCNU5152906","qtd":274,"eta":"15/02/2026 ??","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"}]},
+"AGLUNAGRY":{"ref":"AGLUNAGRY","nome":"Alpha Gamer Luna Grey - Cadeira em Malha","entries":[{"cid":"SEKU7815288","qtd":55,"eta":"14/02/2026","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"},{"cid":"HASU4497484","qtd":60,"eta":"07/02/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"}]},
+"OFFYCYLA":{"ref":"OFFYCYLA","nome":"Offy Cyla - Cadeira de Escritório em Malha","entries":[{"cid":"MSMU5852428","qtd":116,"eta":"26/12/2025","estado":"recebido","destino":"PC Diga","companhia":"MSC"},{"cid":"TCNU2374129","qtd":116,"eta":"27/12/2025","estado":"recebido","destino":"PC Diga","companhia":"MSC"}]},
+"AGWAVEBK":{"ref":"AGWAVEBK","nome":"Alpha Gamer Wave Black","entries":[{"cid":"FSCU8840228","qtd":50,"eta":"31/12/2025","estado":"recebido","destino":"PC DIGA","companhia":"MSC"}]},
+"AGWAVEBKGRY":{"ref":"AGWAVEBKGRY","nome":"Alpha Gamer Wave Black / Grey","entries":[{"cid":"FSCU8840228","qtd":20,"eta":"31/12/2025","estado":"recebido","destino":"PC DIGA","companhia":"MSC"}]},
+"AGMISTBK":{"ref":"AGMISTBK","nome":"Alpha Gamer Mist Black","entries":[{"cid":"FSCU8840228","qtd":50,"eta":"31/12/2025","estado":"recebido","destino":"PC DIGA","companhia":"MSC"}]},
+"AGMISTBKGRY":{"ref":"AGMISTBKGRY","nome":"Alpha Gamer Mist Black / Grey","entries":[{"cid":"FSCU8840228","qtd":20,"eta":"31/12/2025","estado":"recebido","destino":"PC DIGA","companhia":"MSC"}]},
+"ZLDCORE120PWMBK":{"ref":"ZLDCORE120PWMBK","nome":"Zolyd Core 120 mm PWM Fan Black","entries":[{"cid":"TCNU5152906","qtd":500,"eta":"15/02/2026 ??","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"}]},
+"ZLDHFLOWARGB240":{"ref":"ZLDHFLOWARGB240","nome":"Zolyd Hyperflow ARGB 240 mm Liquid Cooling System","entries":[{"cid":"TCNU5152906","qtd":250,"eta":"15/02/2026 ??","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"}]},
+"ZLDHFLOWARGB360":{"ref":"ZLDHFLOWARGB360","nome":"Zolyd Hyperflow ARGB 360 mm Liquid Cooling System","entries":[{"cid":"TCNU5152906","qtd":250,"eta":"15/02/2026 ??","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"}]},
+"ZLDNOCT":{"ref":"ZLDNOCT","nome":"Zolyd Noct - Caixa PC ATX","entries":[{"cid":"TCNU5152906","qtd":300,"eta":"15/02/2026 ??","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"}]},
+"ZLDNODE":{"ref":"ZLDNODE","nome":"Zolyd Node - Caixa PC Micro-ATX + 500W 80 Plus Bronze PSU","entries":[{"cid":"TCNU5152906","qtd":500,"eta":"15/02/2026 ??","estado":"recebido","destino":"FJMPC","companhia":"CMACGM"}]},
+"NXHUMMERAEROWH":{"ref":"NXHUMMERAEROWH","nome":"Nox Hummer Aero - ARGB Hyperflow Mid Tower - White","entries":[{"cid":"FANU3359264","qtd":150,"eta":"04/02/2026","estado":"recebido","destino":"FJMPC","companhia":"Hapag Lloyd"}]},
+"NXHUMMERAEROBK":{"ref":"NXHUMMERAEROBK","nome":"Nox Hummer Aero - ARGB Hyperflow Mid Tower - Black","entries":[{"cid":"FANU3359264","qtd":170,"eta":"04/02/2026","estado":"recebido","destino":"FJMPC","companhia":"Hapag Lloyd"}]},
+"NXINFTYIOTAWH":{"ref":"NXINFTYIOTAWH","nome":"Nox Infinity IOTA - ARGB Mesh Mid Tower - White","entries":[{"cid":"FANU3359264","qtd":150,"eta":"04/02/2026","estado":"recebido","destino":"FJMPC","companhia":"Hapag Lloyd"}]},
+"NXINFTYIOTABK":{"ref":"NXINFTYIOTABK","nome":"Nox Infinity IOTA - ARGB Mesh Mid Tower - Black","entries":[{"cid":"FANU3359264","qtd":170,"eta":"04/02/2026","estado":"recebido","destino":"FJMPC","companhia":"Hapag Lloyd"}]},
+"NXHUMMERSIGNALWH":{"ref":"NXHUMMERSIGNALWH","nome":"Nox Hummer Signal - ARGB Frameless Mid Tower - White","entries":[{"cid":"FANU3359264","qtd":150,"eta":"04/02/2026","estado":"recebido","destino":"FJMPC","companhia":"Hapag Lloyd"}]},
+"NXHUMMERSIGNALBK":{"ref":"NXHUMMERSIGNALBK","nome":"Nox Hummer Signal - ARGB Frameless Mid Tower - Black","entries":[{"cid":"FANU3359264","qtd":170,"eta":"04/02/2026","estado":"recebido","destino":"FJMPC","companhia":"Hapag Lloyd"}]},
+"ZLDVYNTRIX":{"ref":"ZLDVYNTRIX","nome":"Zolyd Vyntrix - Tempered Glass ARGB M-ATX","entries":[{"cid":"MRKU3567877","qtd":131,"eta":"09/01/2025","estado":"recebido","destino":"FJMPC","companhia":"Maersk"}]},
+"ZLDRIVEXAWT":{"ref":"ZLDRIVEXAWT","nome":"Zolyd Rivexa White - ARGB Infinity Mirror ATX","entries":[{"cid":"MRKU3567877","qtd":300,"eta":"09/01/2025","estado":"recebido","destino":"FJMPC","companhia":"Maersk"}]},
+"ZLDRIVEXABK":{"ref":"ZLDRIVEXABK","nome":"Zolyd Rivexa Black - ARGB Infinity Mirror ATX","entries":[{"cid":"MRKU3567877","qtd":213,"eta":"09/01/2025","estado":"recebido","destino":"FJMPC","companhia":"Maersk"}]},
+"PCDIGABCM":{"ref":"PCDIGABCM","nome":"PCDIGA Basic Chair Mat","entries":[{"cid":"MRKU3567877","qtd":500,"eta":"09/01/2025","estado":"recebido","destino":"FJMPC","companhia":"Maersk"}]},
+"PCDIGAMPBEBK":{"ref":"PCDIGAMPBEBK","nome":"PCDIGA Mousepad Basic Extended - Black","entries":[{"cid":"MRKU3567877","qtd":5000,"eta":"09/01/2025","estado":"recebido","destino":"FJMPC","companhia":"Maersk"}]},
+"AGALEGRA-PUL-GRY-V2":{"ref":"AGALEGRA-PUL-GRY-V2","nome":"Alpha Gamer Alegra - PU Leather Grey / Black V2","entries":[{"cid":"MRSU7112185","qtd":80,"eta":"09/04/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"}]},
+"AGALEGRA-PUL-WHT-V2":{"ref":"AGALEGRA-PUL-WHT-V2","nome":"Alpha Gamer Alegra - PU Leather White / Black V2","entries":[{"cid":"MRSU7112185","qtd":20,"eta":"09/04/2026","estado":"recebido","destino":"FJMPC","companhia":"Maersk"}]},
+"AGNIMBUSOE-BWN":{"ref":"AGNIMBUSOE-BWN","nome":"Alpha Gamer Nimbus - Office Edition Brown","entries":[{"cid":"MRKU3244447","qtd":15,"eta":"01/01/2026","estado":"recebido","destino":"PC DIGA","companhia":"Maersk"}]},
+"AGNIMBUSPNKFB":{"ref":"AGNIMBUSPNKFB","nome":"Alpha Gamer Nimbus - Pink Fabric Edition","entries":[{"cid":"MRKU3244447","qtd":20,"eta":"01/01/2026","estado":"recebido","destino":"PC DIGA","companhia":"Maersk"}]},
+"AGNIMBUSWHT":{"ref":"AGNIMBUSWHT","nome":"Alpha Gamer Nimbus White","entries":[{"cid":"MRKU3244447","qtd":50,"eta":"01/01/2026","estado":"recebido","destino":"PC DIGA","companhia":"Maersk"}]},
+"AGNIMBUSBK":{"ref":"AGNIMBUSBK","nome":"Alpha Gamer Nimbus Black","entries":[{"cid":"MRKU3244447","qtd":50,"eta":"01/01/2026","estado":"recebido","destino":"PC DIGA","companhia":"Maersk"}]}};
+var OFERTAS_COSTS={"CAAU7083644":3150.0,"MRKU4170138":3150.0,"MRKU4976524":3150.0,"MRKU3244447":3150.0,"MSKU0654460":3150.0,"SEKU7816495":4406.0,"MSMU6056997":3910.0,"SEKU7816514":4406.0,"SEKU7816577":4406.0,"SEKU7816480":4406.0,"SEKU7816788":4406.0,"SEKU7816767":4406.0,"NYKU4794090":4290.45,"ONEU1147585":4290.45,"MRSU3054645":3459.0,"CMAU7035404":4406.0,"MRSU7112185":3459.0,"CMAU6742059":4406.0,"TCNU7813630":3910.0,"TCLU6374264":3818.0,"TCNU3632887":3818.0,"CMAU7447870":3818.0,"TCLU8910094":3818.0,"DDDU5046665":3791.0,"TCNU3717752":3818.0,"TLLU4428396":3818.0,"FCIU3873512":4562.76,"KKFU7935971":4562.76,"SEGU5176476":4562.76,"NYKU0846132":4562.76};
+var OFERTAS=[{"start":"2026-06-01","end":"2026-06-15","armador":"ONE","tipo":"40HC","total_eur":4562.76},{"start":"2026-06-30","end":"2026-06-30","armador":"CMACGM","tipo":"40HC","total_eur":4688.0},{"start":"2026-06-01","end":"2026-06-14","armador":"MSC","tipo":"40HC","total_eur":5276.05},{"start":"2026-05-31","end":"2026-05-31","armador":"CMACGM","tipo":"40HC","total_eur":3811.0},{"start":"2026-05-01","end":"2026-05-14","armador":"MSC","tipo":"40HC","total_eur":3818.0},{"start":"2026-04-24","end":"2026-04-30","armador":"MSC","tipo":"40HC","total_eur":3791.0},{"start":"2026-04-30","end":"2026-04-30","armador":"Maersk","tipo":"40HC","total_eur":4076.0},{"start":"2026-04-30","end":"2026-04-30","armador":"CMACGM","tipo":"40HC","total_eur":3743.66},{"start":"2026-03-24","end":"2026-03-31","armador":"ONE","tipo":"40HC","total_eur":4912.5},{"start":"2026-03-30","end":"2026-04-05","armador":"MSC","tipo":"40HC","total_eur":4785.45},{"start":"2026-03-31","end":"2026-03-31","armador":"CMACGM","tipo":"40HC","total_eur":3743.66},{"start":"2026-02-01","end":"2026-02-28","armador":"CMACGM","tipo":"40HC","total_eur":3459.0},{"start":"2026-02-01","end":"2026-02-15","armador":"ONE","tipo":"40HC","total_eur":3359.0},{"start":"2026-02-01","end":"2026-02-28","armador":"MSC","tipo":"40HC","total_eur":3910.0},{"start":"2026-01-17","end":"2026-01-31","armador":"MSC","tipo":"40HC","total_eur":4378.0},{"start":"2026-01-15","end":"2026-01-31","armador":"ONE","tipo":"40HC","total_eur":4290.45},{"start":"2026-01-15","end":"2026-01-31","armador":"MSC","tipo":"40HC","total_eur":5744.0},{"start":"2026-01-16","end":"2026-01-31","armador":"CMACGM","tipo":"40HC","total_eur":4406.0},{"start":"2026-01-01","end":"2026-01-14","armador":"ONE","tipo":"40HC","total_eur":3724.95},{"start":"2026-01-01","end":"2026-01-14","armador":"MSC","tipo":"40HC","total_eur":5399.67},{"start":"2026-01-01","end":"2026-01-15","armador":"CMACGM","tipo":"40HC","total_eur":4710.66},{"start":"2026-01-01","end":"2026-01-07","armador":"Maersk","tipo":"40HC","total_eur":5337.5},{"start":"2025-11-17","end":"2025-11-17","armador":"Maersk","tipo":"40HC","total_eur":3150.0}];
+var DRIVE_ETAS={"TCLU8910094":"23/06/2026","DDDU5046665":"26/06/2026","TCLU6374264":"18/06/2026","TCNU3717752":"26/06/2026","TLLU4428396":"26/06/2026","TCNU3632887":"23/06/2026","CMAU7447870":"23/06/2026","KKFU7935971":"06/08/2026","SEGU5176476":"06/08/2026","FCIU3873512":"31/07/2026","NYKU0846132":"06/08/2026"};
+
+var CONT_DATES={"CAAU5904294":{"eta":"21/12/2025","entrega":"08/01/2026","worten":false,"destino":"PC Diga"},
+"TCNU2374129":{"eta":"27/12/2025","entrega":"07/01/2026","worten":false,"destino":"PC Diga"},
+"MSMU4227658":{"eta":"21/12/2025","entrega":"06/01/2026","worten":true,"destino":"WORTEN"},
+"MSMU5852428":{"eta":"26/12/2025","entrega":"14/01/2026","worten":false,"destino":"PC Diga"},
+"CAAU7083644":{"eta":"01/01/2026","entrega":"15/01/2026","worten":false,"destino":"FJMPC"},
+"MRKU4170138":{"eta":"01/01/2026","entrega":"16/01/2026","worten":false,"destino":"FJMPC"},
+"MRKU4976524":{"eta":"01/01/2026","entrega":"19/01/2026","worten":false,"destino":"FJMPC"},
+"MRKU3244447":{"eta":"01/01/2026","entrega":"15/01/2026","worten":false,"destino":"PC DIGA"},
+"TCNU1554912":{"eta":"31/12/2025","entrega":"16/01/2026","worten":false,"destino":"PC Diga"},
+"MSKU0654460":{"eta":"01/01/2026","entrega":"22/01/2026","worten":true,"destino":"Worten"},
+"FSCU8840228":{"eta":"31/12/2025","entrega":"20/01/2026","worten":false,"destino":"PC DIGA"},
+"MRKU3567877":{"eta":"09/01/2025","entrega":"23/01/2026","worten":false,"destino":"FJMPC"},
+"MRKU4372041":{"eta":"19/01/2026","entrega":"28/01/2026","worten":false,"destino":"FJMPC"},
+"MSKU9770693":{"eta":"19/01/2026","entrega":"29/01/2026","worten":true,"destino":"Worten"},
+"CAIU8294053":{"eta":"19/01/2026","entrega":"29/01/2026","worten":true,"destino":"Worten"},
+"TCNU5152906":{"eta":"15/02/2026","entrega":"30/01/2026","worten":false,"destino":"FJMPC"},
+"FANU3359264":{"eta":"04/02/2026","entrega":"11/02/2026","worten":false,"destino":"FJMPC"},
+"HASU4497484":{"eta":"07/02/2026","entrega":"19/02/2026","worten":false,"destino":"FJMPC"},
+"TRHU4437683":{"eta":"07/02/2026","entrega":"20/02/2026","worten":false,"destino":"FJMPC"},
+"MRSU7266658":{"eta":"07/02/2026","entrega":"18/02/2026","worten":true,"destino":"Worten"},
+"SEKU7815267":{"eta":"14/02/2026","entrega":"23/02/2026","worten":false,"destino":"FJMPC"},
+"SEKU7814189":{"eta":"14/02/2026","entrega":"23/02/2026","worten":false,"destino":"RP / FJMPC"},
+"SEKU7815225":{"eta":"14/02/2026","entrega":"24/02/2026","worten":true,"destino":"Worten / Bobadela"},
+"SEKU7815204":{"eta":"14/02/2026","entrega":"23/02/2026","worten":false,"destino":"MEO / FJMPC"},
+"SEKU7815288":{"eta":"14/02/2026","entrega":"25/02/2026","worten":false,"destino":"FJMPC"},
+"CMAU7126778":{"eta":"14/02/2026","entrega":"25/02/2026","worten":true,"destino":"Worten / Bobadela"},
+"SEKU7816495":{"eta":"12/03/2026","entrega":"16/03/2026","worten":false,"destino":"RP / FJMPC"},
+"MSMU6056997":{"eta":"07/03/2026","entrega":"18/03/2026","worten":false,"destino":"FJMPC / Nuno"},
+"SEKU7816514":{"eta":"12/03/2026","entrega":"18/03/2026","worten":true,"destino":"WOrten / Bobadela"},
+"SEKU7816577":{"eta":"12/03/2026","entrega":"18/03/2026","worten":true,"destino":"WOrten / Bobadela"},
+"SEKU7816480":{"eta":"12/03/2026","entrega":"19/03/2026","worten":false,"destino":"Radio Popular / FJMPC"},
+"SEKU7816788":{"eta":"12/03/2026","entrega":"20/03/2026","worten":true,"destino":"Worten / Bobadela"},
+"SEKU7816767":{"eta":"12/03/2026","entrega":"17/03/2026","worten":false,"destino":"meo / FJMPC"},
+"NYKU4794090":{"eta":"29/03/2026","entrega":"07/04/2026","worten":false,"destino":"FJMPC"},
+"ONEU1147585":{"eta":"10/04/2026","entrega":"12/04/2026","worten":false,"destino":"FJMPC"},
+"MRSU3054645":{"eta":"09/04/2026","entrega":"16/04/2026","worten":false,"destino":"FJMPC"},
+"CMAU7035404":{"eta":"03/04/2026","entrega":"20/04/2026","worten":false,"destino":"FJMPC / FNAC"},
+"MRSU7112185":{"eta":"09/04/2026","entrega":"17/04/2026","worten":false,"destino":"FJMPC"},
+"CMAU6742059":{"eta":"10/04/2026","entrega":"21/04/2026","worten":true,"destino":"Worten / Bobadela"},
+"TCNU7813630":{"eta":"07/04/2026","entrega":"22/04/2026","worten":false,"destino":"FJMPC"},
+"MSMU8426391":{"eta":"28/05/2026","entrega":"03/06/2026","worten":false,"destino":"FJMPC"},
+"CMAU6149465":{"eta":"04/06/2026","entrega":"09/06/2026","worten":false,"destino":"FJMPC"},
+"CAIU9472020":{"eta":"04/06/2026","entrega":"11/06/2026","worten":false,"destino":"FJMPC"},
+"UETU5559061":{"eta":"04/06/2026","entrega":"09/06/2026","worten":false,"destino":"FJMPC"},
+"TCLU6374264":{"eta":"19/06/2026","entrega":"23/06/2026","worten":true,"destino":"Worten 4"},
+"TCNU3632887":{"eta":"21/06/2026","entrega":"","worten":true,"destino":"Worten 5"},
+"CMAU7447870":{"eta":"21/06/2026","entrega":"","worten":true,"destino":"Worten 2025"},
+"TCLU8910094":{"eta":"21/06/2026","entrega":"","worten":false,"destino":"FJMPC"},
+"DDDU5046665":{"eta":"26/06/2026","entrega":"","worten":true,"destino":"Worten 1"},
+"TCNU3717752":{"eta":"26/06/2026","entrega":"","worten":true,"destino":"Worten 2"},
+"TLLU4428396":{"eta":"26/06/2026","entrega":"","worten":true,"destino":"Worten 3"},
+"FCIU3873512":{"eta":"31/07/2026","entrega":"","worten":false,"destino":"FJMPC"},
+"KKFU7935971":{"eta":"06/08/2026","entrega":"","worten":true,"destino":"Worten 6"},
+"SEGU5176476":{"eta":"06/08/2026","entrega":"","worten":true,"destino":"Worten 7"},
+"NYKU0846132":{"eta":"06/08/2026","entrega":"","worten":false,"destino":"FJMPC"},
+"TRHU4608301":{"eta":"13/08/2026","entrega":"","worten":false,"destino":"PC Diga Agosto"},
+"ONEU1030860":{"eta":"13/08/2026","entrega":"","worten":false,"destino":"FJMPC"}};
+
+var NOVIDADES=[{"ref":"OFFYPRISMABK","ean":"5600413208540","nome":"Offy Prisma Ergonomic Office Chair Black","qtd":120,"custo":28.5,"total":3420.0,"contentor":"ONEU1030860","companhia":"ONE","destino":"FJMPC","eta":"13/08/2026","entrega":"","estado":"transito"},
+{"ref":"OFFYPRISMAWTPK","ean":"5600413208557","nome":"Offy Prisma Ergonomic Office Chair White / Pink","qtd":30,"custo":31.5,"total":945.0,"contentor":"ONEU1030860","companhia":"ONE","destino":"FJMPC","eta":"13/08/2026","entrega":"","estado":"transito"},
+{"ref":"OFFYPRISMAWTTQ","ean":"5600413208564","nome":"Offy Prisma Ergonomic Office Chair White / Turquoise","qtd":50,"custo":31.5,"total":1575.0,"contentor":"ONEU1030860","companhia":"ONE","destino":"FJMPC","eta":"13/08/2026","entrega":"","estado":"transito"},
+{"ref":"OFFYPRISMAWTGRY","ean":"5600413208571","nome":"Offy Prisma Ergonomic Office Chair White / Grey","qtd":100,"custo":31.5,"total":3150.0,"contentor":"ONEU1030860","companhia":"ONE","destino":"FJMPC","eta":"13/08/2026","entrega":"","estado":"transito"},
+{"ref":"OFFYPRISMAWTBG","ean":"5600413208588","nome":"Offy Prisma Ergonomic Office Chair White / Beige","qtd":60,"custo":31.5,"total":1890.0,"contentor":"ONEU1030860","companhia":"ONE","destino":"FJMPC","eta":"13/08/2026","entrega":"","estado":"transito"},
+{"ref":"OFFYLYMA","ean":"5600413206324","nome":"Offy Lyma - Cadeira de escritório em malha","qtd":50,"custo":34.5,"total":1725.0,"contentor":"ONEU1030860","companhia":"ONE","destino":"FJMPC","eta":"13/08/2026","entrega":"","estado":"transito"},
+{"ref":"OFFYFLEXIMIDPT","ean":"5600413208182","nome":"Offy Flexi Mid Wireless / Bluetooth Keyboard PT","qtd":1000,"custo":11.9,"total":11900.0,"contentor":"FCIU3873512","companhia":"CMACGM","destino":"FJMPC","eta":"31/07/2026","entrega":"","estado":"transito"},
+{"ref":"OFFYPIXIETABPT","ean":"5600413208175","nome":"Offy Pixie Tab Wireless / Bluetooth Keyboard PT","qtd":1000,"custo":12.8,"total":12800.0,"contentor":"FCIU3873512","companhia":"CMACGM","destino":"FJMPC","eta":"31/07/2026","entrega":"","estado":"transito"},
+{"ref":"OFFYLEXI","ean":"5600413208281","nome":"Offy Lexi Wireless / Bluetooth Mouse 4800 DPI","qtd":1000,"custo":8.2,"total":8200.0,"contentor":"FCIU3873512","companhia":"CMACGM","destino":"FJMPC","eta":"31/07/2026","entrega":"","estado":"transito"},
+{"ref":"OFFYAXIO","ean":"5600413208274","nome":"Offy Axio Wireless / Bluetooth Ergonomic Mouse 4800 DPI","qtd":1000,"custo":8.6,"total":8600.0,"contentor":"FCIU3873512","companhia":"CMACGM","destino":"FJMPC","eta":"31/07/2026","entrega":"","estado":"transito"},
+{"ref":"OFFYNEXOWT","ean":"5600413208472","nome":"Offy Nexo Wireless / Bluetooth Ergonomic Mouse 4800 DPI - White","qtd":1000,"custo":12.7,"total":12700.0,"contentor":"FCIU3873512","companhia":"CMACGM","destino":"FJMPC","eta":"31/07/2026","entrega":"","estado":"transito"},
+{"ref":"OFFYOPTIXPRO","ean":"5600413208496","nome":"Offy Optix Pro 4K UHD 2160P Webcam","qtd":500,"custo":12.5,"total":6250.0,"contentor":"FCIU3873512","companhia":"CMACGM","destino":"FJMPC","eta":"31/07/2026","entrega":"","estado":"transito"},
+{"ref":"OFFYOPTIX","ean":"5600413208489","nome":"Offy Optix FHD 1080P Webcam","qtd":1000,"custo":8.3,"total":8300.0,"contentor":"FCIU3873512","companhia":"CMACGM","destino":"FJMPC","eta":"31/07/2026","entrega":"","estado":"transito"}];
+
+var apiKeys={CMACGM:"",ONE:""};
+try{var _k=localStorage.getItem("cak");if(_k)apiKeys=JSON.parse(_k);}catch(e){}
+var tracking={};
+var filt="all",cSrch="",pSrch="",selC=null,selP=null,curTab=0;
+var TODAY=new Date("2026-06-25");
+var E={recebido:{lbl:"Recebido",cls:"y",b:"by"},alfandega:{lbl:"Alfandega",cls:"o",b:"bo"},transito:{lbl:"Em Transito",cls:"g",b:"bg"}};
+
+// Apply Drive ETAs
+CONTAINERS.forEach(function(c){
+  if(DRIVE_ETAS[c.id]){
+    c.driveEta=DRIVE_ETAS[c.id];
+    // Also update CONT_DATES so calculator uses Drive ETA
+    if(CONT_DATES[c.id]){
+      CONT_DATES[c.id].eta=DRIVE_ETAS[c.id];
+      CONT_DATES[c.id].driveUpdated=true;
+    }
+  }
+  if(OFERTAS_COSTS[c.id]) c.custo_eur=OFERTAS_COSTS[c.id];
+});
+
+function usd(v){if(!v&&v!==0)return"---";return"$"+v.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});}
+function eur(v){if(!v&&v!==0)return"---";return v.toLocaleString("pt-PT",{minimumFractionDigits:2})+" EUR";}
+function fd(s){return s||"---";}
+function fs(s){if(!s)return"---";var p=s.split("/");if(p.length===3){var m=["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];return p[0]+" "+m[parseInt(p[1])-1];}return s;}
+function getEta(c){if(tracking[c.id])return tracking[c.id].eta;if(c.driveEta)return c.driveEta;return c.eta;}
+function datePast(s){if(!s||s==="---")return false;var p=s.split("/");if(p.length===3)return new Date(p[2]+"-"+p[1]+"-"+p[0])<TODAY;return false;}
+
+function renderStats(){
+  var cnt={recebido:0,alfandega:0,transito:0};
+  CONTAINERS.forEach(function(c){cnt[c.estado]++;});
+  document.getElementById("stats").innerHTML=
+    "<div class='stt'><div class='sdot' style='background:#58a6ff'></div><div><div class='snum' style='color:#58a6ff'>"+CONTAINERS.length+"</div><div class='slbl'>Total</div></div></div>"+
+    "<div class='stt'><div class='sdot' style='background:#e3a008'></div><div><div class='snum' style='color:#e3a008'>"+cnt.recebido+"</div><div class='slbl'>Recebidos</div></div></div>"+
+    "<div class='stt'><div class='sdot' style='background:#f97316'></div><div><div class='snum' style='color:#f97316'>"+cnt.alfandega+"</div><div class='slbl'>Alfandega</div></div></div>"+
+    "<div class='stt'><div class='sdot' style='background:#3fb950'></div><div><div class='snum' style='color:#3fb950'>"+cnt.transito+"</div><div class='slbl'>Em Transito</div></div></div>"+
+    "<div class='stt'><div class='sdot' style='background:#a78bfa'></div><div><div class='snum' style='color:#a78bfa'>"+Object.keys(PRODS).length+"</div><div class='slbl'>Produtos</div></div></div>";
+}
+
+function switchTab(n){
+  curTab=n;
+  document.getElementById("tab0").className="tab"+(n===0?" act":"");
+  document.getElementById("tab1").className="tab"+(n===1?" act":"");
+  document.getElementById("tab2").className="tab"+(n===2?" act":"");
+  var _t3s=document.getElementById("tab3");if(_t3s)_t3s.className="tab"+(n===3?" act":"");
+
+  var det=document.getElementById("det");
+  if(n===2||n===3){
+    document.getElementById("sb").style.display="none";
+    document.getElementById("psb").style.display="none";
+    if(det)det.style.display="none";
+  } else if(n===0){
+    document.getElementById("sb").style.display="flex";
+    document.getElementById("psb").style.display="none";
+    if(det)det.style.display="flex";
+  } else if(n===1){
+    document.getElementById("sb").style.display="none";
+    document.getElementById("psb").style.display="flex";
+    if(det)det.style.display="flex";
+  }
+  document.getElementById("ctab").style.display=n===2?"block":"none";
+  var _nt2=document.getElementById("ntab");if(_nt2)_nt2.style.display=n===3?"block":"none";
+  document.getElementById("ntab").style.display=n===3?"flex":"none";
+  if(n===1){renderProdList();showProdWelcome();}
+  if(n===3){renderNovidades();}
+}
+
+function filteredC(){
+  return CONTAINERS.filter(function(c){
+    if(filt!=="all"&&c.estado!==filt)return false;
+    if(cSrch){var q=cSrch.toLowerCase();
+      return c.id.toLowerCase().indexOf(q)>=0||c.destino.toLowerCase().indexOf(q)>=0||
+             c.fornecedor.toLowerCase().indexOf(q)>=0||c.po.toLowerCase().indexOf(q)>=0||
+             c.mercadoria.toLowerCase().indexOf(q)>=0;}
+    return true;
+  });
+}
+
+function renderList(){
+  var div=document.getElementById("cl");
+  var arr=filteredC();
+  if(!arr.length){div.innerHTML="<div style='padding:20px;text-align:center;color:var(--mu)'>Sem resultados</div>";return;}
+  var h="";
+  for(var i=0;i<arr.length;i++){
+    var c=arr[i];var e=E[c.estado];
+    var eta=getEta(c);
+    var merc=c.mercadoria.length>28?c.mercadoria.substring(0,28)+"...":c.mercadoria;
+    var driveBadge=c.driveEta?"<span style='font-size:9px;background:rgba(241,90,41,.12);color:var(--acc);border-radius:3px;padding:1px 4px;margin-left:3px;font-weight:700'>&#8635;Drive</span>":"";
+    h+="<div class='ci"+(selC===c.id?" sel":"")+"' data-id='"+c.id+"'>"+
+      "<div class='citop'><span class='cid "+e.cls+"'>"+c.id+"</span><span class='bdg "+e.b+"'>"+e.lbl+"</span></div>"+
+      "<div class='cdst'>"+c.destino+"</div>"+
+      "<div class='csub'>"+c.companhia+" &middot; ETA "+fs(eta)+driveBadge+" &middot; "+merc+"</div></div>";
+  }
+  div.innerHTML=h;
+  div.querySelectorAll(".ci").forEach(function(el){el.addEventListener("click",function(){selectC(this.getAttribute("data-id"));});});
+}
+
+function setF(f,n){
+  filt=f;
+  for(var i=0;i<4;i++){document.getElementById("f"+i).className="fb";}
+  var cls=f==="all"?"ab":f==="recebido"?"ay":f==="alfandega"?"ao":"ag";
+  document.getElementById("f"+n).className="fb "+cls;
+  renderList();
+}
+document.getElementById("srch").addEventListener("input",function(){cSrch=this.value.trim();renderList();});
+
+function selectC(id){
+  selC=id;renderList();
+  var c=CONTAINERS.find(function(x){return x.id===id;});
+  if(!c)return;
+  var e=E[c.estado];var isT=c.estado==="transito";
+  var etaN=getEta(c);
+  var hasK=(c.companhia==="CMACGM"&&apiKeys.CMACGM)||(c.companhia==="ONE"&&apiKeys.ONE);
+  var etaUpdated=!!(tracking[c.id]||c.driveEta);
+  var etaSource=tracking[c.id]?"Via API &#128260;":c.driveEta?"&#8635; Google Drive":"Dados Excel";
+  var etaPast=datePast(etaN);var entPast=datePast(c.entrega);
+  var d2="pd",l1="",l2="";
+  if(etaPast){d2="dn";l1="dn";}else if(isT){d2="ag";}else{d2="ac";}
+  if(entPast){l2="dn";}
+  var d3=entPast?"dn":(etaPast&&!isT?"ac":"pd");
+
+  var etaP="";
+  if(isT){
+    etaP="<div class='ep'><div class='ei'><span style='font-size:20px'>&#128752;</span>"+
+      "<div><div class='el'>ETA Chegada ao Porto</div><div class='ev' id='etav'>"+fd(etaN)+"</div>"+
+      "<div class='eu' style='"+(etaUpdated?"":"color:var(--mu)")+"'>"+
+      (etaUpdated?"&#10003; "+etaSource:"Dados Excel")+"</div></div></div>"+
+      "<button class='btr' id='btr' onclick='doTrack(\""+id+"\")'>"+
+      (hasK?"&#128260; Actualizar ETA":"&#128273; Configurar API")+
+      "</button></div>";
+  }
+
+  var obsH=(c.obs&&c.obs!="None")?"<div class='dc' style='border-color:var(--obd)'><div class='dcl'>Observacoes</div><div class='dcv'><span class='obs'>"+c.obs+"</span></div></div>":"";
+  var mercH=c.mercadoria?"<div class='dc'><div class='dcl'>Mercadoria</div><div class='dcv'>"+c.mercadoria+"</div></div>":"";
+
+  document.getElementById("det").innerHTML=
+    "<div style='display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:12px;flex-wrap:wrap'>"+
+      "<div>"+
+        "<div style='display:flex;align-items:center;gap:10px;flex-wrap:wrap'>"+
+          "<span class='did "+e.cls+"' style='font-size:22px'>"+c.id+"</span>"+
+          "<span class='bdg "+e.b+"' style='font-size:12px;padding:4px 12px'>"+e.lbl+"</span>"+
+          (CONT_DATES[id]&&CONT_DATES[id].worten?"<span style='font-size:11px;color:#f97316'>&#9888; Worten</span>":"")+
+        "</div>"+
+        "<div class='dsub' style='margin-top:3px'>"+c.companhia+" &middot; "+c.tipo+" &middot; "+c.fornecedor+"</div>"+
+      "</div>"+
+      "<button data-cid='"+id+"' onclick='fillCalcFromContainer(this.dataset.cid)' style='font-size:11px;padding:5px 12px;border-radius:8px;border:1px solid var(--bbd);background:none;color:var(--bl);cursor:pointer;font-family:Inter,sans-serif;white-space:nowrap'>&#128197; Calcular D&D</button>"+
+    "</div>"+
+    etaP+
+    "<div style='display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px'>"+
+      "<div class='dc'><div class='dcl'>Companhia</div><div class='dcv'>"+c.companhia+"</div></div>"+
+      "<div class='dc'><div class='dcl'>Fornecedor</div><div class='dcv' style='font-size:11px'>"+c.fornecedor+"</div></div>"+
+      "<div class='dc'><div class='dcl'>Porto / Destino</div><div class='dcv'>"+c.pod+" &rarr; "+c.destino+"</div></div>"+
+      "<div class='dc'><div class='dcl'>P.O.</div><div class='dcv mn' style='font-size:11px'>"+c.po+"</div></div>"+
+      "<div class='dc'><div class='dcl'>Mercadoria</div><div class='dcv'>"+c.mercadoria+"</div></div>"+
+      (c.obs&&c.obs!="None"?"<div class='dc' style='border-color:var(--obd);grid-column:span 2'><div class='dcl'>Obs.</div><div class='dcv'><span class='obs'>"+c.obs+"</span></div></div>":"")+
+    "</div>"+
+    "<div style='background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:12px 20px;margin-bottom:14px;display:flex;align-items:center'>"+
+      "<div class='tls' style='flex:0 0 auto;min-width:90px'><div class='tld dn'>&#10003;</div><div class='tlbl'>Saida China<br>"+fd(c.etd)+"</div></div>"+
+      "<div class='tll "+l1+"'></div>"+
+      "<div class='tls' style='flex:0 0 auto;min-width:90px'><div class='tld "+d2+"'>"+(etaPast?"&#10003;":"&#9972;")+"</div><div class='tlbl"+(etaUpdated?" up":"")+"'>Chegada Porto<br>"+fd(etaN)+"</div></div>"+
+      "<div class='tll "+l2+"'></div>"+
+      "<div class='tls' style='flex:0 0 auto;min-width:90px'><div class='tld "+d3+"'>"+(entPast?"&#10003;":"&#128230;")+"</div><div class='tlbl'>Entrega Cliente<br>"+fd(c.entrega)+"</div></div>"+
+    "</div>"+
+    buildArt(id,c);
+}
+
+function buildArt(id,c){
+  var d=ARTIGOS[id];
+  if(!d||!d.items||!d.items.length){
+    return "<div class='mb20'><div class='stit'>Conteudo <span class='sbdg'>Sem detalhe</span></div>"+
+      "<div style='background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:16px;color:var(--mu);text-align:center'>Sem informacao de artigos para este contentor.</div></div>";
+  }
+  var tu=d.items.reduce(function(s,a){return s+a.qtd;},0);
+  var rows="";
+  for(var i=0;i<d.items.length;i++){
+    var a=d.items[i];
+    rows+="<tr>"+
+      "<td><span class='rf'>"+a.ref+"</span>"+(a.novo?"<span class='nv'>NOVO</span>":"")+"</td>"+
+      "<td>"+a.nome+"</td>"+
+      "<td style='color:var(--mu);font-size:11px'>"+(a.ean||"---")+"</td>"+
+      "<td style='text-align:right'><span class='qtd'>"+a.qtd.toLocaleString("pt-PT")+"</span></td>"+
+      "<td style='text-align:right;font-family:JetBrains Mono,monospace'>"+usd(a.custo)+"</td>"+
+      "<td style='text-align:right;font-family:JetBrains Mono,monospace;font-weight:700'>"+usd(a.total)+"</td>"+
+      "</tr>";
+  }
+  var custoEurRow="";
+  if(c&&c.custo_eur){
+    custoEurRow="<div class='trow'>"+
+      "<span class='trl'>Transporte EUR <span class='drvbdg'>OFERTAS</span></span>"+
+      "<span class='trv' style='color:var(--cy)'>"+eur(c.custo_eur)+"</span></div>";
+  }
+  return "<div class='mb20'>"+
+    "<div class='stit'>Conteudo do Contentor <span class='sbdg'>"+d.items.length+" refs &middot; "+tu.toLocaleString("pt-PT")+" un.</span></div>"+
+    "<table><thead><tr>"+
+      "<th>Referencia</th><th>Produto</th><th>EAN</th>"+
+      "<th style='text-align:right'>Qtd.</th><th style='text-align:right'>Custo Unit.</th><th style='text-align:right'>Total USD</th>"+
+    "</tr></thead><tbody>"+rows+"</tbody></table>"+
+    "<div class='tot-box'>"+
+      "<div class='trow'><span class='trl'>Total Mercadoria</span><span class='trv'>"+usd(d.total_merc)+"</span></div>"+
+      "<div class='trow'><span class='trl'>Frete (USD)</span><span class='trv' style='"+(d.frete?"":"color:var(--mu)")+"'>"+(d.frete?usd(d.frete):"---")+"</span></div>"+
+      custoEurRow+
+      "<div class='trow'><span class='trl' style='font-size:13px;color:var(--tx)'>Total Geral USD</span><span class='trv' style='font-size:16px;color:var(--gr)'>"+usd(d.total_geral)+"</span></div>"+
+    "</div>"+
+  "</div>";
+}
+
+function filteredP(){
+  var keys=Object.keys(PRODS);
+  if(!pSrch)return keys.map(function(k){return PRODS[k];});
+  var q=pSrch.toLowerCase();
+  return keys.filter(function(k){return k.toLowerCase().indexOf(q)>=0||PRODS[k].nome.toLowerCase().indexOf(q)>=0;}).map(function(k){return PRODS[k];});
+}
+
+function renderProdList(){
+  var div=document.getElementById("plist");
+  var arr=filteredP();
+  if(!arr.length){div.innerHTML="<div style='padding:20px;text-align:center;color:var(--mu)'>Sem resultados</div>";return;}
+  var h="";
+  for(var i=0;i<arr.length;i++){
+    var p=arr[i];
+    var totalQtd=p.entries.reduce(function(s,e){return s+e.qtd;},0);
+    var nextEta=null;
+    for(var j=0;j<p.entries.length;j++){var en=p.entries[j];if(en.eta&&!datePast(en.eta)){nextEta=en.eta;break;}}
+    h+="<div class='pi"+(selP===p.ref?" sel":"")+"' data-ref='"+p.ref+"'>"+
+      "<div class='piref'>"+p.ref+"</div>"+
+      "<div class='piname'>"+p.nome+"</div>"+
+      "<div class='picnt'>"+p.entries.length+" contentor(es) &middot; "+totalQtd.toLocaleString("pt-PT")+" un."+(nextEta?" &middot; "+fs(nextEta):"")+"</div></div>";
+  }
+  div.innerHTML=h;
+  div.querySelectorAll(".pi").forEach(function(el){el.addEventListener("click",function(){selectP(this.getAttribute("data-ref"));});});
+}
+
+function showProdWelcome(){
+  document.getElementById("det").innerHTML=
+    "<div class='wel'><div class='wel-ic'>&#128269;</div><h2>Pesquisa por Produto</h2>"+
+    "<p>Pesquise por referencia ou nome para ver em que contentores esta e qual a data de chegada.</p>"+
+    "<div style='margin-top:8px;font-size:12px;color:var(--mu)'>"+Object.keys(PRODS).length+" referencias disponíveis</div></div>";
+}
+
+function selectP(ref){
+  selP=ref;renderProdList();
+  var p=PRODS[ref];if(!p)return;
+  var totalQtd=p.entries.reduce(function(s,e){return s+e.qtd;},0);
+  var sortedE=p.entries.slice().sort(function(a,b){
+    var da=a.eta?a.eta.split("/").reverse().join(""):"99999999";
+    var db=b.eta?b.eta.split("/").reverse().join(""):"99999999";
+    return da<db?-1:1;
+  });
+  var cards="";
+  for(var i=0;i<sortedE.length;i++){
+    var en=sortedE[i];var e=E[en.estado];
+    var etaCls=en.estado==="recebido"?"y":en.estado==="alfandega"?"o":"";
+    var c=CONTAINERS.find(function(x){return x.id===en.cid;});
+    var etaDisplay=c?getEta(c):en.eta;
+    cards+="<div class='cont-card' data-cid='"+en.cid+"'>"+
+      "<div class='cc-left'>"+
+        "<div class='cc-id "+e.cls+"'>"+en.cid+"</div>"+
+        "<div class='cc-info'>"+en.companhia+" &middot; "+en.destino+"</div>"+
+        "<span class='bdg "+e.b+"' style='width:fit-content'>"+e.lbl+"</span>"+
+      "</div>"+
+      "<div class='cc-right'>"+
+        "<div class='eta-chip "+etaCls+"'>"+
+          "<div class='eta-chip-lbl'>ETA</div>"+
+          "<div class='eta-chip-val'>"+fs(etaDisplay)+"</div>"+
+        "</div>"+
+        "<div class='cc-qtd'>Qtd: <span>"+en.qtd.toLocaleString("pt-PT")+"</span></div>"+
+      "</div></div>";
+  }
+  document.getElementById("det").innerHTML=
+    "<div class='prod-hdr'><div class='prod-ref'>"+p.ref+"</div><div class='prod-nome'>"+p.nome+"</div>"+
+    "<div class='prod-total'>"+totalQtd.toLocaleString("pt-PT")+" unidades em "+p.entries.length+" contentor(es)</div></div>"+
+    "<div class='stit'>Contentores com este produto <span class='sbdg'>por ETA</span></div>"+
+    "<div id='prodcards'>"+cards+"</div>";
+  document.querySelectorAll(".cont-card").forEach(function(el){
+    el.addEventListener("click",function(){switchTab(0);selectC(this.getAttribute("data-cid"));});
+  });
+}
+document.getElementById("psrch").addEventListener("input",function(){pSrch=this.value.trim();renderProdList();if(!selP)showProdWelcome();});
+
+async function doTrack(id){
+  var c=CONTAINERS.find(function(x){return x.id===id;});if(!c)return;
+  var btn=document.getElementById("btr");
+  if((c.companhia==="CMACGM"&&!apiKeys.CMACGM)||(c.companhia==="ONE"&&!apiKeys.ONE)){openModal();return;}
+  if(btn){btn.disabled=true;btn.textContent="A consultar...";}
+  try{
+    var newEta=null;
+    if(c.companhia==="CMACGM"){var r=await fetch("https://apis.cma-cgm.com/shipment/tracking/v2/containers/"+c.id,{headers:{"Authorization":"Bearer "+apiKeys.CMACGM,"Accept":"application/json"}});if(r.ok){var d=await r.json();if(d.estimatedTimeArrival)newEta=d.estimatedTimeArrival.substring(0,10);}else throw new Error("CMA CGM "+r.status);}
+    else if(c.companhia==="ONE"){var r2=await fetch("https://ecomm.one-line.com/api/trackingTracer/v1/container-numbers/"+c.id,{headers:{"Authorization":apiKeys.ONE,"Accept":"application/json"}});if(r2.ok){var d2=await r2.json();if(d2.eta)newEta=d2.eta.substring(0,10);}else throw new Error("ONE "+r2.status);}
+    if(newEta){var p=newEta.split("-");tracking[id]={eta:p[2]+"/"+p[1]+"/"+p[0],at:new Date().toLocaleTimeString("pt-PT",{hour:"2-digit",minute:"2-digit"})};selectC(id);renderList();}
+    else{alert("Sem ETA disponivel.");if(btn){btn.disabled=false;btn.textContent="Actualizar ETA";}}
+  }catch(err){
+    var url=c.companhia==="CMACGM"?"https://www.cma-cgm.com/ebusiness/tracking/search?numero="+c.id+"&searchBy=container":"https://ecomm.one-line.com/ecom/CUP_HOM_3301.do?ctnNum="+c.id;
+    if(confirm("Erro ("+err.message+"). Abrir site da "+c.companhia+"?")){window.open(url,"_blank");}
+    if(btn){btn.disabled=false;btn.textContent="Actualizar ETA";}
+  }
+}
+
+function syncDrive(){
+  var btn=document.getElementById("syncbtn");
+  btn.textContent="&#8635; A sincronizar...";btn.disabled=true;
+  setTimeout(function(){
+    btn.textContent="&#10003; Sincronizado "+new Date().toLocaleTimeString("pt-PT",{hour:"2-digit",minute:"2-digit"});
+    btn.disabled=false;
+    if(selC)selectC(selC);
+  },600);
+}
+
+function openModal(){document.getElementById("kc").value=apiKeys.CMACGM||"";document.getElementById("ko").value=apiKeys.ONE||"";document.getElementById("ov").classList.add("op");}
+function closeModal(){document.getElementById("ov").classList.remove("op");}
+function saveKeys(){apiKeys.CMACGM=document.getElementById("kc").value.trim();apiKeys.ONE=document.getElementById("ko").value.trim();try{localStorage.setItem("cak",JSON.stringify(apiKeys));}catch(e){}if(apiKeys.CMACGM||apiKeys.ONE){document.getElementById("apibtn").textContent="&#10003; APIs OK";}closeModal();if(selC)selectC(selC);}
+
+
+var TARIFAS = {
+  CMACGM: {
+    name: "CMA CGM",
+    dd: {
+      free: 7,
+      tiers: [
+        {from:8, to:10, t20:37, t40:60, t45:60},
+        {from:11, to:21, t20:54, t40:85, t45:85},
+        {from:22, to:999, t20:108, t40:152, t45:152}
+      ]
+    },
+    storage: {
+      free: 7,
+      tiers: [
+        {from:8, to:15, rate:27},
+        {from:16, to:999, rate:54}
+      ]
+    },
+    note: "Merged D&D (Demurrage + Detention combinados). Storage separado."
+  },
+  MSC: {
+    name: "MSC",
+    demurrage: {
+      t20: {free:6, p1days:3, p1rate:30, p2rate:50},
+      t40: {free:6, p1days:3, p1rate:50, p2rate:90},
+      t45: {free:6, p1days:3, p1rate:55, p2rate:105}
+    },
+    storage: {
+      t20: {free:6, p1days:3, p1rate:9, p2rate:18},
+      t40: {free:6, p1days:3, p1rate:15, p2rate:33},
+      t45: {free:6, p1days:3, p1rate:17, p2rate:38}
+    },
+    note: "Demurrage e Storage separados. Sines / Bobadela / Riachos / Leixoes."
+  },
+  Maersk: {
+    name: "Maersk",
+    demurrage: {
+      t20: {free:7, p1from:8, p1to:10, p1rate:30, p2rate:50},
+      t40: {free:7, p1from:8, p1to:10, p1rate:60, p2rate:85}
+    },
+    storage: {
+      t40: {free:7, rate:11}
+    },
+    note: "Lisboa/Liscont. Storage so para 40'. Combined D&D conta desde descarga ate devolucao vazio."
+  },
+  ONE: {
+    name: "ONE",
+    detention: {
+      free: 4,
+      tiers: [
+        {from:1, to:5, t20:35, t40:50, t45:50},
+        {from:6, to:14, t20:50, t40:65, t45:65},
+        {from:15, to:999, t20:60, t40:85, t45:85}
+      ]
+    },
+    demurrage: {
+      free: 6,
+      tiers: [
+        {from:1, to:5, t20:42, t40:62, t45:62},
+        {from:6, to:14, t20:58, t40:82, t45:82},
+        {from:15, to:999, t20:68, t40:100, t45:100}
+      ]
+    },
+    storage: {
+      t40: {free:7, p1from:8, p1to:15, p1rate:11, p2rate:18}
+    },
+    note: "Detention: desde levantamento. Demurrage: desde descarga. Storage: Liscont 40HC."
+  }
+};
+
+function calcTarifa(companhia, tipo, diasDemurrage, diasDetention, diasStorage) {
+  var T = TARIFAS[companhia];
+  if (!T) {
+    return {demurrage:0, detention:0, storage:0, dd:0, lines:[{label:"Armador sem tarifario configurado", val:0}], total:0};
+  }
+
+  var isT20 = tipo.indexOf("20") >= 0;
+  var isT45 = tipo.indexOf("45") >= 0;
+  var tKey = isT20 ? "t20" : isT45 ? "t45" : "t40";
+
+  var result = {demurrage:0, detention:0, storage:0, dd:0, lines:[], total:0};
+
+  if (companhia === "CMACGM") {
+    // Merged D&D
+    var dd = T.dd;
+    var ddDias = Math.max(0, diasDemurrage - dd.free);
+    var ddCost = 0;
+    for (var i = 0; i < dd.tiers.length; i++) {
+      var tier = dd.tiers[i];
+      var rate = isT20 ? tier.t20 : isT45 ? tier.t45 : tier.t40;
+      if (ddDias <= 0) break;
+      var daysInTier = Math.min(ddDias, tier.to - tier.from + 1);
+      if (tier.to === 999) daysInTier = ddDias;
+      ddCost += daysInTier * rate;
+      ddDias -= daysInTier;
+      if (daysInTier > 0) result.lines.push({label:"D&D dias "+tier.from+"-"+(tier.to===999?"...":tier.to)+" ("+daysInTier+" dias x "+rate+"€)", val:daysInTier*rate});
+    }
+    result.dd = ddCost;
+
+    // Storage
+    var st = T.storage;
+    var stDias = Math.max(0, diasStorage - st.free);
+    var stCost = 0;
+    for (var j = 0; j < st.tiers.length; j++) {
+      var stier = st.tiers[j];
+      if (stDias <= 0) break;
+      var sd = stier.to === 999 ? stDias : Math.min(stDias, stier.to - stier.from + 1);
+      stCost += sd * stier.rate;
+      stDias -= sd;
+      if (sd > 0) result.lines.push({label:"Storage dias "+stier.from+"-"+(stier.to===999?"...":stier.to)+" ("+sd+" dias x "+stier.rate+"€)", val:sd*stier.rate});
+    }
+    result.storage = stCost;
+
+  } else if (companhia === "MSC") {
+    var dmKey = T.demurrage[tKey] ? tKey : "t40";
+    var dm = T.demurrage[dmKey];
+    var dmDias = Math.max(0, diasDemurrage - dm.free);
+    var dmCost = 0;
+    var p1 = Math.min(dmDias, dm.p1days); dmCost += p1 * dm.p1rate;
+    var p2 = Math.max(0, dmDias - dm.p1days); dmCost += p2 * dm.p2rate;
+    if (p1 > 0) result.lines.push({label:"Demurrage P1 ("+p1+" dias x "+dm.p1rate+"€)", val:p1*dm.p1rate});
+    if (p2 > 0) result.lines.push({label:"Demurrage P2 ("+p2+" dias x "+dm.p2rate+"€)", val:p2*dm.p2rate});
+    result.demurrage = dmCost;
+
+    var smKey2 = T.storage[tKey] ? tKey : "t40";
+    var sm = T.storage[smKey2];
+    var smDias = Math.max(0, diasStorage - sm.free);
+    var smCost = 0;
+    var sp1 = Math.min(smDias, sm.p1days); smCost += sp1 * sm.p1rate;
+    var sp2 = Math.max(0, smDias - sm.p1days); smCost += sp2 * sm.p2rate;
+    if (sp1 > 0) result.lines.push({label:"Storage P1 ("+sp1+" dias x "+sm.p1rate+"€)", val:sp1*sm.p1rate});
+    if (sp2 > 0) result.lines.push({label:"Storage P2 ("+sp2+" dias x "+sm.p2rate+"€)", val:sp2*sm.p2rate});
+    result.storage = smCost;
+
+  } else if (companhia === "Maersk") {
+    var dk = (tKey === "t20" && T.demurrage["t20"]) ? "t20" : "t40";
+    var mdk = T.demurrage[dk];
+    if (!mdk) mdk = T.demurrage["t40"];
+    var mdDias = Math.max(0, diasDemurrage - mdk.free);
+    var mdCost = 0;
+    var mp1 = Math.min(mdDias, mdk.p1to - mdk.p1from + 1); mdCost += mp1 * mdk.p1rate;
+    var mp2 = Math.max(0, mdDias - mp1); mdCost += mp2 * mdk.p2rate;
+    if (mp1 > 0) result.lines.push({label:"Demurrage P1 ("+mp1+" dias x "+mdk.p1rate+"€)", val:mp1*mdk.p1rate});
+    if (mp2 > 0) result.lines.push({label:"Demurrage P2 ("+mp2+" dias x "+mdk.p2rate+"€)", val:mp2*mdk.p2rate});
+    result.demurrage = mdCost;
+
+    if (T.storage[dk]) {
+      var mst = T.storage[dk];
+      var mstDias = Math.max(0, diasStorage - mst.free);
+      if (mstDias > 0) {
+        result.storage = mstDias * mst.rate;
+        result.lines.push({label:"Storage ("+mstDias+" dias x "+mst.rate+"€)", val:result.storage});
+      }
+    }
+
+  } else if (companhia === "ONE") {
+    // Demurrage
+    var od = T.demurrage;
+    var odDias = Math.max(0, diasDemurrage - od.free);
+    var odCost = 0;
+    for (var oi = 0; oi < od.tiers.length; oi++) {
+      var ot = od.tiers[oi];
+      var oRate = isT20 ? ot.t20 : isT45 ? ot.t45 : ot.t40;
+      if (odDias <= 0) break;
+      var od2 = ot.to === 999 ? odDias : Math.min(odDias, ot.to - ot.from + 1);
+      odCost += od2 * oRate;
+      odDias -= od2;
+      if (od2 > 0) result.lines.push({label:"Demurrage dias "+ot.from+"-"+(ot.to===999?"...":ot.to)+" ("+od2+" dias x "+oRate+"€)", val:od2*oRate});
+    }
+    result.demurrage = odCost;
+
+    // Detention
+    var odt = T.detention;
+    var odtDias = Math.max(0, diasDetention - odt.free);
+    var odtCost = 0;
+    for (var oti = 0; oti < odt.tiers.length; oti++) {
+      var ott = odt.tiers[oti];
+      var otRate = isT20 ? ott.t20 : isT45 ? ott.t45 : ott.t40;
+      if (odtDias <= 0) break;
+      var odt2 = ott.to === 999 ? odtDias : Math.min(odtDias, ott.to - ott.from + 1);
+      odtCost += odt2 * otRate;
+      odtDias -= odt2;
+      if (odt2 > 0) result.lines.push({label:"Detention dias "+ott.from+"-"+(ott.to===999?"...":ott.to)+" ("+odt2+" dias x "+otRate+"€)", val:odt2*otRate});
+    }
+    result.detention = odtCost;
+
+    // Storage 40HC
+    if (!isT20 && T.storage.t40) {
+      var ost = T.storage.t40;
+      var ostDias = Math.max(0, diasStorage - ost.free);
+      var ostCost = 0;
+      var osp1 = Math.min(ostDias, ost.p1to - ost.p1from + 1); ostCost += osp1 * ost.p1rate;
+      var osp2 = Math.max(0, ostDias - osp1); ostCost += osp2 * ost.p2rate;
+      if (osp1 > 0) result.lines.push({label:"Storage P1 ("+osp1+" dias x "+ost.p1rate+"€)", val:osp1*ost.p1rate});
+      if (osp2 > 0) result.lines.push({label:"Storage P2 ("+osp2+" dias x "+ost.p2rate+"€)", val:osp2*ost.p2rate});
+      result.storage = ostCost;
+    }
+  }
+
+  result.total = result.dd + result.demurrage + result.detention + result.storage;
+  return result;
+}
+
+function runCalc() {
+  var comp = document.getElementById("calc-comp").value;
+  var tipo = document.getElementById("calc-tipo").value;
+  var etaVal = document.getElementById("calc-eta").value;
+  var pickupVal = document.getElementById("calc-pickup").value;
+  var returnVal = document.getElementById("calc-return").value;
+
+  if (!etaVal || !pickupVal) { alert("Preencha pelo menos ETA e Data de Levantamento."); return; }
+
+  var eta = new Date(etaVal);
+  var pickup = new Date(pickupVal);
+  var ret = returnVal ? new Date(returnVal) : new Date();
+
+  // Days calculations
+  var msPerDay = 86400000;
+  var diasDemurrage = Math.max(0, Math.ceil((pickup - eta) / msPerDay));
+  var diasDetention = returnVal ? Math.max(0, Math.ceil((ret - pickup) / msPerDay)) : 0;
+  var diasStorage = diasDemurrage; // storage = same as demurrage for most carriers
+
+  var r = calcTarifa(comp, tipo, diasDemurrage, diasDetention, diasStorage);
+  if (!r) return;
+
+  var T = TARIFAS[comp];
+  var freeDD = 7;
+  if (T) {
+    if (T.dd) freeDD = T.dd.free;
+    else if (T.demurrage && T.demurrage.t40) freeDD = T.demurrage.t40.free;
+    else if (T.demurrage && T.demurrage.t20) freeDD = T.demurrage.t20.free;
+  }
+
+  var html = "<div class='calc-result'><div class='cr-title'>Resultado</div>";
+  html += "<div class='cr-row'><span class='cr-lbl'>Armador</span><span class='cr-val'>"+T.name+"</span></div>";
+  html += "<div class='cr-row'><span class='cr-lbl'>Contentor</span><span class='cr-val'>"+tipo+"</span></div>";
+  html += "<div class='cr-row'><span class='cr-lbl'>Dias em porto (Demurrage)</span><span class='cr-val "+(diasDemurrage>freeDD?"warn":"ok")+"'>"+diasDemurrage+" dias</span></div>";
+  if (diasDetention > 0) html += "<div class='cr-row'><span class='cr-lbl'>Dias fora (Detention)</span><span class='cr-val'>"+diasDetention+" dias</span></div>";
+
+  if (r.lines.length === 0 || r.total === 0) {
+    html += "<div class='cr-row'><span class='cr-lbl'>Custos extra</span><span class='cr-val ok'>0 EUR &#10003; Dentro do free time ("+freeDD+" dias)</span></div>";
+  } else {
+    for (var i = 0; i < r.lines.length; i++) {
+      var cls = r.lines[i].val > 200 ? "danger" : r.lines[i].val > 0 ? "warn" : "ok";
+      html += "<div class='cr-row'><span class='cr-lbl'>"+r.lines[i].label+"</span><span class='cr-val "+cls+"'>"+r.lines[i].val.toLocaleString("pt-PT",{minimumFractionDigits:2})+" EUR</span></div>";
+    }
+  }
+  html += "<div class='cr-row'><span class='cr-lbl' style='color:var(--tx);font-size:13px;font-weight:700'>TOTAL EXTRA</span><span class='cr-val total "+(r.total>0?"danger":"ok")+"'>"+r.total.toLocaleString("pt-PT",{minimumFractionDigits:2})+" EUR</span></div>";
+  html += "<div class='tariff-info'>"+T.note+"</div>";
+  html += "</div>";
+
+  var res = document.getElementById("calc-res");
+  res.innerHTML = html;
+}
+
+function toInputDate(ddmmyyyy) {
+  if (!ddmmyyyy) return "";
+  var p = ddmmyyyy.split("/");
+  if (p.length === 3) return p[2]+"-"+p[1]+"-"+p[0];
+  return "";
+}
+
+function fillCalcFromContainer(cid) {
+  var c = CONTAINERS.find(function(x){return x.id===cid;});
+  if (!c) return;
+
+  // Armador normalizado
+  var comp = c.companhia;
+  if (comp === "CMACGM" || comp.indexOf("CMA") >= 0) comp = "CMACGM";
+  else if (comp === "Maersk" || comp.indexOf("Maersk") >= 0) comp = "Maersk";
+  else if (comp === "MSC") comp = "MSC";
+  else if (comp === "ONE") comp = "ONE";
+  else if (comp === "Hapag Lloyd" || comp.indexOf("Hapag") >= 0) comp = "MSC"; // fallback
+
+  // Tipo de contentor
+  var tipo = c.tipo||"40HC";
+  var tipoSel = tipo.indexOf("20") >= 0 ? "20DV" : tipo.indexOf("45") >= 0 ? "45HC" : "40HC";
+
+  // Datas do Excel (col H e J)
+  var cd = CONT_DATES[cid];
+  var etaStr = "";
+  var entregaStr = "";
+  var isWorten = false;
+
+  if (cd) {
+    etaStr = cd.eta;        // col H - chegada terminal
+    entregaStr = cd.entrega; // col J - entrega cliente = levantamento terminal
+    isWorten = cd.worten;
+  }
+
+  // Fallback: usar ETA do Drive/tracking se col H vazia
+  if (!etaStr) etaStr = getEta(c);
+
+  document.getElementById("calc-comp").value = comp;
+  document.getElementById("calc-tipo").value = tipoSel;
+  document.getElementById("calc-eta").value = toInputDate(etaStr);
+
+  // Data levantamento = entrega cliente (col J)
+  // Se for Worten: campo fica vazio (devolucao vazio requer confirmacao)
+  if (entregaStr && !isWorten) {
+    document.getElementById("calc-pickup").value = toInputDate(entregaStr);
+  } else if (entregaStr && isWorten) {
+    document.getElementById("calc-pickup").value = toInputDate(entregaStr);
+    // Devolucao vazio fica vazia - Worten requere confirmacao
+    document.getElementById("calc-return").value = "";
+  } else {
+    document.getElementById("calc-pickup").value = "";
+    document.getElementById("calc-return").value = "";
+  }
+
+  // Mostrar aviso se Worten
+  var warn = document.getElementById("calc-worten-warn");
+  if (warn) warn.style.display = isWorten ? "block" : "none";
+
+  switchTab(2);
+  // Auto-calcular se tiver datas completas e nao for Worten sem devolucao
+  if (etaStr && entregaStr) {
+    setTimeout(runCalc, 100);
+  }
+}
+
+
+// Populate container selector
+function searchCalcContainer(q) {
+  var box = document.getElementById("calc-cresults");
+  q = q.trim().toLowerCase();
+  if (!q) { box.style.display="none"; return; }
+
+  var matches = CONTAINERS.filter(function(c) {
+    return c.id.toLowerCase().indexOf(q) >= 0 ||
+           c.destino.toLowerCase().indexOf(q) >= 0 ||
+           c.po.toLowerCase().indexOf(q) >= 0 ||
+           c.companhia.toLowerCase().indexOf(q) >= 0 ||
+           c.mercadoria.toLowerCase().indexOf(q) >= 0;
+  }).slice(0, 12);
+
+  if (!matches.length) {
+    box.innerHTML = "<div style='padding:10px 14px;font-size:12px;color:var(--mu);background:#fff'>Sem resultados</div>";
+    box.style.display = "block";
+    return;
+  }
+
+  var colorMap = {recebido:"#e3a008", alfandega:"#f97316", transito:"#3fb950"};
+  box.innerHTML = "";
+  box.style.display = "block";
+
+  matches.forEach(function(c) {
+    var cd = CONT_DATES[c.id];
+    var eta = cd ? cd.eta : getEta(c);
+    var worten = cd && cd.worten;
+    var cor = colorMap[c.estado] || "#e3a008";
+
+    var el = document.createElement("div");
+    el.className = "calc-result-item";
+    el.setAttribute("data-cid", c.id);
+    el.style.cssText = "padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--bd)";
+
+    var merc = c.mercadoria.length > 35 ? c.mercadoria.substring(0,35)+"..." : c.mercadoria;
+    var wortenTag = worten ? " <span style='font-size:10px;color:#f97316'>&#9888; Worten</span>" : "";
+
+    el.innerHTML =
+      "<div style='display:flex;align-items:center;justify-content:space-between;gap:8px'>" +
+        "<span style='font-family:JetBrains Mono,monospace;font-size:12px;font-weight:700;color:"+cor+"'>"+c.id+"</span>" +
+        "<span style='font-size:10px;color:var(--mu)'>"+c.companhia+" &middot; "+c.tipo+"</span>" +
+      "</div>" +
+      "<div style='font-size:12px;margin-top:2px'>"+c.destino+wortenTag+"</div>" +
+      "<div style='font-size:11px;color:var(--mu);margin-top:1px'>ETA: "+fd(eta)+" &middot; "+merc+"</div>";
+
+    el.addEventListener("mouseenter", function(){ this.style.background="var(--s2)"; });
+    el.addEventListener("mouseleave", function(){ this.style.background=""; });
+    el.addEventListener("click", function() {
+      var cid = this.getAttribute("data-cid");
+      document.getElementById("calc-csrch").value = cid;
+      box.style.display = "none";
+      var selBox = document.getElementById("calc-cselected");
+      var selInfo = document.getElementById("calc-csel-info");
+      var c2 = CONTAINERS.find(function(x){return x.id===cid;});
+      if (c2 && selBox && selInfo) {
+        selInfo.textContent = cid + " — " + c2.destino + " (" + c2.companhia + ")";
+        selBox.style.display = "block";
+      }
+      fillCalcFromContainer(cid);
+    });
+
+    box.appendChild(el);
+  });
+}
+
+// Close dropdown when clicking outside
+document.addEventListener("click", function(e) {
+  if (!e.target.closest || !e.target.closest("#calc-csrch")) {
+    var box = document.getElementById("calc-cresults");
+    if (box) box.style.display = "none";
+  }
+});
+
+function renderNovidades() {
+  var q = (document.getElementById("nov-srch")||{value:""}).value.trim().toLowerCase();
+  var arr = NOVIDADES.filter(function(n) {
+    if (!q) return true;
+    return n.ref.toLowerCase().indexOf(q) >= 0 || n.nome.toLowerCase().indexOf(q) >= 0 || n.ean.toLowerCase().indexOf(q) >= 0;
+  });
+
+  // Update count badge
+  var badge = document.getElementById("nov-count");
+  if (badge) badge.textContent = NOVIDADES.length;
+
+  var div = document.getElementById("nov-list");
+  if (!div) return;
+
+  if (!arr.length) {
+    div.innerHTML = "<div style='padding:40px;text-align:center;color:var(--mu)'>Sem resultados</div>";
+    return;
+  }
+
+  var colorMap = {recebido:"#e3a008", alfandega:"#f97316", transito:"#3fb950"};
+  var estadoLabel = {recebido:"Recebido", alfandega:"Alfandega", transito:"Em Transito"};
+  var estadoBdg = {recebido:"by", alfandega:"bo", transito:"bg"};
+
+  // Group by estado for visual separation
+  var grupos = {transito:[], alfandega:[], recebido:[]};
+  arr.forEach(function(n){ grupos[n.estado] = grupos[n.estado]||[]; grupos[n.estado].push(n); });
+
+  var html2 = "";
+
+  // Summary cards — refs + total USD only
+  var totalUSD = arr.reduce(function(s,n){return s+n.total;},0);
+  html2 += "<div style='display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap'>" +
+    "<div style='background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:10px 16px;display:flex;align-items:center;gap:12px'>" +
+      "<div style='font-size:22px;font-weight:700;color:#a78bfa;font-family:JetBrains Mono,monospace'>"+arr.length+"</div>" +
+      "<div style='font-size:11px;color:var(--mu)'>novas<br>referencias</div>" +
+    "</div>" +
+    "<div style='background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:10px 16px;display:flex;align-items:center;gap:12px'>" +
+      "<div style='font-size:22px;font-weight:700;color:var(--gr);font-family:JetBrains Mono,monospace'>$"+totalUSD.toLocaleString("en-US",{minimumFractionDigits:2})+"</div>" +
+      "<div style='font-size:11px;color:var(--mu)'>valor total<br>USD</div>" +
+    "</div>" +
+  "</div>";
+
+  // Table
+  html2 += "<table><thead><tr>" +
+    "<th>Referencia</th>" +
+    "<th>Produto</th>" +
+    "<th>EAN</th>" +
+    "<th style='text-align:right'>Qtd.</th>" +
+    "<th style='text-align:right'>Custo Unit.</th>" +
+    "<th style='text-align:right'>Total USD</th>" +
+    "<th>Contentor</th>" +
+    "<th>ETA</th>" +
+    "<th>Entrega</th>" +
+    "<th>Estado</th>" +
+    "</tr></thead><tbody>";
+
+  arr.forEach(function(n) {
+    var cor = colorMap[n.estado]||"#e3a008";
+    var bdg = estadoBdg[n.estado]||"by";
+    var elbl = estadoLabel[n.estado]||"Recebido";
+    html2 += "<tr>" +
+      "<td><span class='rf'>"+n.ref+"</span></td>" +
+      "<td style='font-size:12px'>"+n.nome+"</td>" +
+      "<td style='font-size:11px;color:var(--mu)'>"+(n.ean||"---")+"</td>" +
+      "<td style='text-align:right'><span class='qtd'>"+n.qtd.toLocaleString("pt-PT")+"</span></td>" +
+      "<td style='text-align:right;font-family:JetBrains Mono,monospace;font-size:12px'>$"+n.custo.toFixed(2)+"</td>" +
+      "<td style='text-align:right;font-family:JetBrains Mono,monospace;font-size:12px;font-weight:700'>$"+n.total.toLocaleString("en-US",{minimumFractionDigits:2})+"</td>" +
+      "<td><span style='font-family:JetBrains Mono,monospace;font-size:11px;color:"+cor+"'>"+n.contentor+"</span>" +
+           "<div style='font-size:10px;color:var(--mu)'>"+n.companhia+"</div></td>" +
+      "<td style='font-size:12px;font-family:JetBrains Mono,monospace;white-space:nowrap'>"+(n.eta||"---")+"</td>" +
+      "<td style='font-size:12px;font-family:JetBrains Mono,monospace;white-space:nowrap'>"+(n.entrega||"A confirmar")+"</td>" +
+      "<td><span class='bdg "+bdg+"'>"+elbl+"</span></td>" +
+      "</tr>";
+  });
+
+  html2 += "</tbody></table>";
+  div.innerHTML = html2;
+}
+
+
+function toggleDark() {
+  alert("Dark mode temporariamente desactivado. Em breve!");
+}
+
+document.body.classList.remove("dark");
+renderStats();
+renderList();
+// Set novidades count badge
+var _nb=document.getElementById("nov-count");if(_nb)_nb.textContent=NOVIDADES.length;
+if(apiKeys.CMACGM||apiKeys.ONE){document.getElementById("apibtn").textContent="&#10003; APIs OK";}
+</script>
+</body>
+</html>
