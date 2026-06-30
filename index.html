@@ -967,6 +967,40 @@ async function doTrack(id){
   }
 }
 
+function processSheetData(d){
+  var eg=loadEstados();
+  CONTAINERS=d.containers.map(function(c){
+    var ec=(c.estado&&c.estado!=="transito"?c.estado:null)||deriveEstado(c.eta,c.entrega);
+    var es=(eg[c.id]==="recebido"&&ec!=="recebido")?"recebido":ec;
+    return{id:c.id,companhia:c.companhia,fornecedor:c.fornecedor,tipo:c.tipo,
+      etd:c.etd,eta:c.eta,entrega:c.entrega,pod:c.pod,destino:c.destino,
+      po:c.po,obs:c.obs,mercadoria:c.mercadoria,frete:c.frete,estado:es,etaExt:!!c.etaExt};
+  });
+  DATA=d.artigos||{};
+  var ns={};(d.novidades||[]).forEach(function(r){ns[r]=true;});
+  Object.keys(DATA).forEach(function(cid){
+    (DATA[cid].items||[]).forEach(function(a){a.novo=!!ns[a.ref];});
+  });
+  var cm={};CONTAINERS.forEach(function(c){cm[c.id]=c;});
+  NOVIDADES=[];var nv={};
+  Object.keys(DATA).forEach(function(cid){
+    var co=cm[cid]||{};
+    (DATA[cid].items||[]).forEach(function(a){
+      if(a.novo&&!nv[a.ref]){
+        NOVIDADES.push(Object.assign({},a,{contentor:cid,estado:co.estado||"transito",eta:co.eta||"",entrega:co.entrega||""}));
+        nv[a.ref]=true;
+      }
+    });
+  });
+  NOVIDADES.sort(function(a,b){return a.ref.localeCompare(b.ref);});
+  CONT_DATES={};
+  CONTAINERS.forEach(function(c){
+    CONT_DATES[c.id]={eta:c.eta,entrega:c.entrega,
+      worten:(c.destino||"").toLowerCase().indexOf("worten")>=0,destino:c.destino};
+  });
+  applyStaticCosts();rebuildPRODS();
+}
+
 // ── Sheet modal helpers ──────────────────────────────────────────────────────
 // ── Fetch data from Google Sheet ───────────────────────────────────────────────────
 function syncDrive(){
@@ -993,60 +1027,8 @@ function syncDrive(){
     cleanup();
     try{
       if(!json.ok)throw new Error(json.error||"Erro desconhecido");
-      var d=json.data;
-      var estadosGuardados=loadEstados();
-
-      // Rebuild CONTAINERS
-      CONTAINERS=d.containers.map(function(c){
-        // localStorage só prevalece para "recebido" (override manual) — nunca para alfandega/transito
-        var estadoCalc=(c.estado&&c.estado!=="transito"?c.estado:null)||deriveEstado(c.eta,c.entrega);
-        var estado=(estadosGuardados[c.id]==="recebido"&&estadoCalc!=="recebido")?"recebido":estadoCalc;
-        return{id:c.id,companhia:c.companhia,fornecedor:c.fornecedor,
-          tipo:c.tipo,etd:c.etd,eta:c.eta,entrega:c.entrega,
-          pod:c.pod,destino:c.destino,po:c.po,obs:c.obs,
-          mercadoria:c.mercadoria,frete:c.frete,estado:estado,etaExt:!!c.etaExt};
-      });
-
-      // Rebuild DATA
-      DATA=d.artigos||{};
-
-      // Marcar novidades a partir da lista devolvida pelo Apps Script
-      var _novSet={};
-      (d.novidades||[]).forEach(function(r){ _novSet[r]=true; });
-      Object.keys(DATA).forEach(function(cid){
-        (DATA[cid].items||[]).forEach(function(art){ art.novo=!!_novSet[art.ref]; });
-      });
-
-      // Popular array NOVIDADES (deduplica por ref, enriquece com dados do contentor)
-      var _cMap={};
-      CONTAINERS.forEach(function(c){ _cMap[c.id]=c; });
-      NOVIDADES=[];
-      var _novSeen={};
-      Object.keys(DATA).forEach(function(cid){
-        var cont=_cMap[cid]||{};
-        (DATA[cid].items||[]).forEach(function(art){
-          if(art.novo && !_novSeen[art.ref]){
-            NOVIDADES.push(Object.assign({},art,{
-              contentor:cid,
-              estado:cont.estado||"transito",
-              eta:cont.eta||"",
-              entrega:cont.entrega||""
-            }));
-            _novSeen[art.ref]=true;
-          }
-        });
-      });
-      NOVIDADES.sort(function(a,b){ return a.ref.localeCompare(b.ref); });
-
-      // Rebuild CONT_DATES
-      CONT_DATES={};
-      CONTAINERS.forEach(function(c){
-        CONT_DATES[c.id]={eta:c.eta,entrega:c.entrega,
-          worten:(c.destino||"").toLowerCase().indexOf("worten")>=0,destino:c.destino};
-      });
-
-      applyStaticCosts();
-      rebuildPRODS();
+      processSheetData(json.data);
+      try{localStorage.setItem("_sheet_cache",JSON.stringify(json.data));}catch(e){}
       btn.textContent="\u2713 Sincronizado "+new Date().toLocaleTimeString("pt-PT",{hour:"2-digit",minute:"2-digit"});
       btn.disabled=false;
       renderStats();renderList();
@@ -1580,11 +1562,19 @@ function toggleDark(){
 (function(){try{if(localStorage.getItem('darkMode')==='1'){document.documentElement.classList.add('dark');setTimeout(function(){var b=document.getElementById('darkbtn');if(b)b.innerHTML='&#9728; Light';},0);}}catch(e){}})();
 
 // ── Initialise ─────────────────────────────────────────────────────────────
+// Carregar cache imediatamente (dados da última sincronização)
+(function(){
+  try{
+    var c=localStorage.getItem("_sheet_cache");
+    if(c){processSheetData(JSON.parse(c));}
+  }catch(e){}
+})();
 renderStats();
 renderList();
 var _nb=document.getElementById("nov-count");if(_nb)_nb.textContent=NOVIDADES.length;
 if(SHEET_URL){
-  syncDrive();
+  // Sync em background — não bloqueia o arranque
+  setTimeout(syncDrive,1000);
 } else {
   document.getElementById("syncbtn").textContent="\u21BB Configurar Sheet";
 }
