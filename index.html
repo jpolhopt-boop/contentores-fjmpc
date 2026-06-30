@@ -618,6 +618,7 @@ function saveEstado(id, estado) {
 }
 
 // Runtime data — populated by fetchFromSheet()
+var __EMBEDDED__=null; /*__DATA__*/
 var CONTAINERS = [];
 var DATA       = {};
 var PRODS      = {};
@@ -1562,12 +1563,14 @@ function toggleDark(){
 (function(){try{if(localStorage.getItem('darkMode')==='1'){document.documentElement.classList.add('dark');setTimeout(function(){var b=document.getElementById('darkbtn');if(b)b.innerHTML='&#9728; Light';},0);}}catch(e){}})();
 
 // ── Initialise ─────────────────────────────────────────────────────────────
-// Carregar cache imediatamente (dados da última sincronização)
+// Carregar dados: 1) embutidos no deploy, 2) cache local, 3) sync
 (function(){
-  try{
-    var c=localStorage.getItem("_sheet_cache");
-    if(c){processSheetData(JSON.parse(c));}
-  }catch(e){}
+  if(typeof __EMBEDDED__!=='undefined'&&__EMBEDDED__){
+    processSheetData(__EMBEDDED__);
+    try{localStorage.setItem("_sheet_cache",JSON.stringify(__EMBEDDED__));}catch(e){}
+  } else {
+    try{var c=localStorage.getItem("_sheet_cache");if(c)processSheetData(JSON.parse(c));}catch(e){}
+  }
 })();
 renderStats();
 renderList();

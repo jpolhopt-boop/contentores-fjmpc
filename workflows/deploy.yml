@@ -1,0 +1,40 @@
+name: Deploy Contentores
+
+on:
+  schedule:
+    - cron: '0 * * * *'   # De hora em hora
+  workflow_dispatch:        # Trigger manual pelo GitHub UI
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Restaurar estado anterior (hash + state)
+        uses: actions/cache@v4
+        with:
+          path: |
+            .last_deploy_hash
+            .last_state.json
+          key: state-${{ github.run_id }}
+          restore-keys: |
+            state-
+
+      - name: Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependências
+        run: pip install requests
+
+      - name: Deploy
+        env:
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_API_TOKEN:  ${{ secrets.CF_API_TOKEN }}
+          GMAIL_FROM:    ${{ secrets.GMAIL_FROM }}
+          GMAIL_APP_PASS: ${{ secrets.GMAIL_APP_PASS }}
+        run: python deploy_contentores.py
