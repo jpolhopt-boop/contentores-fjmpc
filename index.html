@@ -312,10 +312,13 @@ tr:hover td{background:#fef8f5}
   @supports (height:100dvh){ body{height:100dvh} }
 
   /* HEADER */
-  #hdr{height:56px;padding:0 14px}
-  .logo{font-size:13px;gap:7px}
+  #hdr{height:52px;padding:0 10px}
+  .logo{font-size:13px;gap:8px}
   .logo-ic{width:24px;height:24px;font-size:10px}
-  .hbtn{font-size:10px;padding:4px 10px}
+  .hbtn{font-size:10px;padding:4px 8px}
+  /* logo image — reduz para caber no header mobile */
+  .logo > div:first-child{padding:2px 8px !important}
+  .logo > div:first-child img{height:38px !important}
 
   /* STATS — scroll horizontal */
   #stats{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
@@ -365,6 +368,10 @@ tr:hover td{background:#fef8f5}
   .det-back{font-size:11px;padding:7px 14px;margin-bottom:12px}
   .ep{flex-direction:column;gap:8px;align-items:flex-start}
   .iv{max-width:100% !important}
+  /* tabela de artigos — scroll horizontal */
+  .mb20{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .mb20 table{min-width:480px;font-size:12px}
+  .mb20 th,.mb20 td{padding:6px 8px !important}
 
   /* TAB PESQUISA POR PRODUTO */
   #psb{flex-direction:column}
