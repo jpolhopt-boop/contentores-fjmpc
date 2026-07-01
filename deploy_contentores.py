@@ -22,7 +22,7 @@ from email.mime.text import MIMEText
 
 SHEET_URL = (
     "https://script.google.com/macros/s/"
-    "AKfycbxM4ZnD7xZvBRa1jVmmVN8E4Qk-YlsFTnIv7I0LEoHY1-CRo7ax--FrtZzwEISk2up-4A/exec"
+    "AKfycbzHHJI6LzABdUGWT5SeONoGdIAHscvhpHp-9cYBO4pOWOrPwDzK32TRU1qpnmDk6UB1pg/exec"
 )
 
 CF_ACCOUNT_ID  = os.environ.get("CF_ACCOUNT_ID",  "")
