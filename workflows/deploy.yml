@@ -2,7 +2,7 @@ name: Deploy Contentores
 
 on:
   schedule:
-    - cron: '0 * * * *'   # De hora em hora
+    - cron: '*/30 * * * *'   # De 30 em 30 minutos
   workflow_dispatch:        # Trigger manual pelo GitHub UI
 
 jobs:
