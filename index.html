@@ -1599,4 +1599,172 @@ function fwCalc(){
   var arm=0.25*dias*paletes;
   var so=m3*0.70;
   var total=si+arm+so;
-  va
+  var fmt=function(v){return v.toLocaleString("pt-PT",{minimumFractionDigits:2,maximumFractionDigits:2})+" €";};
+  document.getElementById("fw-dias-row").textContent="Nº Dias: "+dias+" · M³ total: "+m3.toFixed(3);
+  document.getElementById("fw-si-calc").textContent=paletes+" paletes × 2,25 €";
+  document.getElementById("fw-arm-calc").textContent="0,25 € × "+dias+" dias × "+paletes+" paletes";
+  document.getElementById("fw-so-calc").textContent=m3.toFixed(3)+" m³ × 0,70 €";
+  document.getElementById("fw-si").textContent=fmt(si);
+  document.getElementById("fw-arm").textContent=fmt(arm);
+  document.getElementById("fw-so").textContent=fmt(so);
+  document.getElementById("fw-total").textContent=fmt(total);
+  var ub=document.getElementById("fw-unit-box");
+  var ul=document.getElementById("fw-unit");
+  if(cadeiras>0){
+    ub.style.display="block";
+    ul.textContent=fmt(total/cadeiras)+" / cadeira";
+  } else {
+    ub.style.display="none";
+  }
+}
+
+function renderNovidades() {
+  var q = (document.getElementById("nov-srch")||{value:""}).value.trim().toLowerCase();
+  var arr = NOVIDADES.filter(function(n) {
+    if (!q) return true;
+    return n.ref.toLowerCase().indexOf(q) >= 0 || n.nome.toLowerCase().indexOf(q) >= 0 || n.ean.toLowerCase().indexOf(q) >= 0;
+  });
+
+  // Update count badge
+  var badge = document.getElementById("nov-count");
+  if (badge) badge.textContent = NOVIDADES.length;
+
+  var div = document.getElementById("nov-list");
+  if (!div) return;
+
+  if (!arr.length) {
+    div.innerHTML = "<div style='padding:40px;text-align:center;color:var(--mu)'>Sem resultados</div>";
+    return;
+  }
+
+  var colorMap = {recebido:"#e3a008", alfandega:"#f97316", transito:"#3fb950"};
+  var estadoLabel = {recebido:"Recebido", alfandega:"Alfandega", transito:"Em Transito"};
+  var estadoBdg = {recebido:"by", alfandega:"bo", transito:"bg"};
+
+  var grupos = {transito:[], alfandega:[], recebido:[]};
+  arr.forEach(function(n){ grupos[n.estado] = grupos[n.estado]||[]; grupos[n.estado].push(n); });
+
+  var html2 = "";
+
+  var totalUSD = arr.reduce(function(s,n){return s+n.total;},0);
+  html2 += "<div style='display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap'>" +
+    "<div style='background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:10px 16px;display:flex;align-items:center;gap:12px'>" +
+      "<div style='font-size:22px;font-weight:700;color:#a78bfa;font-family:JetBrains Mono,monospace'>" + arr.length + "</div>" +
+      "<div style='font-size:11px;color:var(--mu)'>novas<br>referencias</div>" +
+    "</div>" +
+    "<div style='background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:10px 16px;display:flex;align-items:center;gap:12px'>" +
+      "<div style='font-size:22px;font-weight:700;color:var(--gr);font-family:JetBrains Mono,monospace'>$" + totalUSD.toLocaleString("en-US",{minimumFractionDigits:2}) + "</div>" +
+      "<div style='font-size:11px;color:var(--mu)'>valor total<br>USD</div>" +
+    "</div>" +
+  "</div>";
+
+  html2 += "<table><thead><tr>" +
+    "<th>Referencia</th>" +
+    "<th>Produto</th>" +
+    "<th>EAN</th>" +
+    "<th style='text-align:right'>Qtd.</th>" +
+    "<th style='text-align:right'>Custo Unit.</th>" +
+    "<th style='text-align:right'>Total USD</th>" +
+    "<th>Contentor</th>" +
+    "<th>ETA</th>" +
+    "<th>Entrega</th>" +
+    "<th>Estado</th>" +
+    "</tr></thead><tbody>";
+
+  arr.forEach(function(n) {
+    var cor = colorMap[n.estado]||"#e3a008";
+    var bdg = estadoBdg[n.estado]||"by";
+    var elbl = estadoLabel[n.estado]||"Recebido";
+    html2 += "<tr>" +
+      "<td><span class='rf'>" + n.ref + "</span></td>" +
+      "<td style='font-size:12px'>" + n.nome + "</td>" +
+      "<td style='font-size:11px;color:var(--mu)'>" + (n.ean||"---") + "</td>" +
+      "<td style='text-align:right'><span class='qtd'>" + n.qtd.toLocaleString("pt-PT") + "</span></td>" +
+      "<td style='text-align:right;font-family:JetBrains Mono,monospace;font-size:12px'>$" + n.custo.toFixed(2) + "</td>" +
+      "<td style='text-align:right;font-family:JetBrains Mono,monospace;font-size:12px;font-weight:700'>$" + n.total.toLocaleString("en-US",{minimumFractionDigits:2}) + "</td>" +
+      "<td><span style='font-family:JetBrains Mono,monospace;font-size:11px;color:" + cor + "'>" + n.contentor + "</span>" +
+           "<div style='font-size:10px;color:var(--mu)'>" + n.companhia + "</div></td>" +
+      "<td style='font-size:12px;font-family:JetBrains Mono,monospace;white-space:nowrap'>" + (n.eta||"---") +      "<td style='font-size:12px;font-family:JetBrains Mono,monospace;white-space:nowrap'>" + (n.entrega||"A confirmar") + "</td>" +
+      "<td><span class='bdg " + bdg + "'>" + elbl + "</span></td>" +
+      "</tr>";
+  });
+
+  html2 += "</tbody></table>";
+  div.innerHTML = html2;
+}
+
+function toggleDark(){
+  var isDark=document.documentElement.classList.toggle('dark');
+  document.getElementById('darkbtn').innerHTML=isDark?'&#9728; Light':'&#9790; Dark';
+  try{localStorage.setItem('darkMode',isDark?'1':'0');}catch(e){}
+}
+(function(){try{if(localStorage.getItem('darkMode')==='1'){document.documentElement.classList.add('dark');setTimeout(function(){var b=document.getElementById('darkbtn');if(b)b.innerHTML='&#9728; Light';},0);}}catch(e){}})();
+
+// ── Initialise ─────────────────────────────────────────────────────────────
+// Carregar dados: 1) embutidos no deploy, 2) cache local, 3) sync
+(function(){
+  if(typeof __EMBEDDED__!=='undefined'&&__EMBEDDED__){
+    processSheetData(__EMBEDDED__);
+    try{localStorage.setItem("_sheet_cache",JSON.stringify(__EMBEDDED__));}catch(e){}
+  } else {
+    try{var c=localStorage.getItem("_sheet_cache");if(c)processSheetData(JSON.parse(c));}catch(e){}
+  }
+})();
+renderStats();
+renderList();
+var _nb=document.getElementById("nov-count");if(_nb)_nb.textContent=NOVIDADES.length;
+if(SHEET_URL){
+  // Sync em background — não bloqueia o arranque
+  setTimeout(syncDrive,1000);
+} else {
+  document.getElementById("syncbtn").textContent="\u21BB Configurar Sheet";
+}
+</script>
+
+  <!-- ── Auth Overlay ───────────────────────── -->
+  <div id="auth-overlay" style="position:fixed;inset:0;z-index:99999;background:linear-gradient(135deg,#1a3a5c 0%,#0d2035 100%);display:flex;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif">
+    <div style="background:white;border-radius:20px;padding:48px 40px;text-align:center;max-width:360px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.4)">
+      <div style="font-size:40px;margin-bottom:12px">&#128674;</div>
+      <h1 style="font-size:22px;font-weight:800;color:#1a3a5c;margin:0 0 6px">Contentores 2026</h1>
+      <p style="color:#999;font-size:14px;margin:0 0 28px">FJMPC &mdash; Acesso restrito</p>
+      <input id="auth-pin" type="password" placeholder="Codigo de acesso"
+        style="width:100%;box-sizing:border-box;padding:13px 16px;border:2px solid #e2e8f0;border-radius:10px;font-size:16px;outline:none;margin-bottom:12px;transition:border 0.2s"
+        onfocus="this.style.borderColor='#1a3a5c'" onblur="this.style.borderColor='#e2e8f0'"
+        onkeydown="if(event.key==='Enter')authSubmit()">
+      <button onclick="authSubmit()"
+        style="width:100%;padding:13px;background:#1a3a5c;color:white;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;transition:background 0.2s"
+        onmouseover="this.style.background='#243f5e'" onmouseout="this.style.background='#1a3a5c'">
+        Entrar
+      </button>
+      <p id="auth-err" style="color:#e53e3e;font-size:13px;margin-top:12px;display:none">
+        &#10007; Codigo incorrecto
+      </p>
+    </div>
+  </div>
+  <script>
+  var __AUTH_HASH__ = "4eec920cd652bfd8f3e042a8497f941315ecbb4e76a516eaff66be8943b4f349";
+
+  async function authSubmit() {
+    var pin = document.getElementById("auth-pin").value;
+    var buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(pin));
+    var hash = Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
+    if (hash === __AUTH_HASH__) {
+      try { localStorage.setItem("_auth_ok", "1"); } catch(e) {}
+      document.getElementById("auth-overlay").style.display = "none";
+    } else {
+      var err = document.getElementById("auth-err");
+      err.style.display = "block";
+      document.getElementById("auth-pin").value = "";
+      document.getElementById("auth-pin").focus();
+    }
+  }
+
+  (function(){
+    try {
+      if (localStorage.getItem("_auth_ok") === "1")
+        document.getElementById("auth-overlay").style.display = "none";
+    } catch(e) {}
+  })();
+  </script>
+
+</html>
