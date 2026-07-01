@@ -39,7 +39,7 @@ SCRIPT_DIR  = os.path.dirname(os.path.abspath(__file__))
 HTML_FILE   = os.path.join(SCRIPT_DIR, "index.html")
 HASH_FILE   = os.path.join(SCRIPT_DIR, ".last_deploy_hash")
 STATE_FILE  = os.path.join(SCRIPT_DIR, ".last_state.json")
-PLACEHOLDER = "/*__DATA__*/"
+PLACEHOLDER = "null; /*__DATA__*/"
 
 ESTADO_PT = {
     "transito":  "Em Transito",
