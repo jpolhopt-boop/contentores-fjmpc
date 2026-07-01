@@ -508,4 +508,28 @@ def main():
         return
 
     if old_state is None:
-        log("Primeiro run - a guardar estado inicial sem enviar email"
+        log("Primeiro run - a guardar estado inicial sem enviar email")
+        save_state(new_state)
+        save_hash(new_hash)
+        deploy_to_cloudflare(data)
+        log("Tudo concluido")
+        return
+
+    changes = detect_changes(old_state, new_state, data.get("artigos", {}))
+    total   = sum(len(v) for v in changes.values())
+
+    if total > 0:
+        log("Mudancas detectadas: " + str(total) + " - a enviar email")
+        send_email(changes)
+    else:
+        log("Dados alterados mas sem mudancas relevantes - sem email")
+
+    save_state(new_state)
+    save_hash(new_hash)
+    log("A fazer deploy para Cloudflare...")
+    deploy_to_cloudflare(data)
+    log("Tudo concluido")
+
+
+if __name__ == "__main__":
+    main()
