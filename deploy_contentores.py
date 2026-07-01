@@ -454,10 +454,24 @@ def deploy_to_cloudflare(data):
     if not CF_ACCOUNT_ID or not CF_API_TOKEN:
         log("AVISO: Credenciais Cloudflare nao configuradas")
         return
+    import base64
     with open(HTML_FILE, encoding="utf-8") as f:
         html = f.read()
     payload = json.dumps(data, ensure_ascii=False)
-    worker  = html.replace(PLACEHOLDER, payload)
+    html_with_data = html.replace(PLACEHOLDER, payload)
+    # Encode HTML as base64 to embed safely in a JS Worker script
+    b64 = base64.b64encode(html_with_data.encode("utf-8")).decode("ascii")
+    worker = (
+        "addEventListener('fetch', function(event) {\n"
+        "  event.respondWith(handleRequest());\n"
+        "});\n"
+        "function handleRequest() {\n"
+        "  var b64 = '" + b64 + "';\n"
+        "  var bytes = Uint8Array.from(atob(b64), function(c) { return c.charCodeAt(0); });\n"
+        "  var html = new TextDecoder('utf-8').decode(bytes);\n"
+        "  return new Response(html, { headers: { 'content-type': 'text/html;charset=UTF-8' } });\n"
+        "}\n"
+    )
     log("Worker: " + str(len(worker)//1024) + " KB")
     url  = "https://api.cloudflare.com/client/v4/accounts/" + CF_ACCOUNT_ID + "/workers/scripts/" + CF_SCRIPT_NAME
     hdrs = {
@@ -494,28 +508,4 @@ def main():
         return
 
     if old_state is None:
-        log("Primeiro run - a guardar estado inicial sem enviar email")
-        save_state(new_state)
-        save_hash(new_hash)
-        deploy_to_cloudflare(data)
-        log("Tudo concluido")
-        return
-
-    changes = detect_changes(old_state, new_state, data.get("artigos", {}))
-    total   = sum(len(v) for v in changes.values())
-
-    if total > 0:
-        log("Mudancas detectadas: " + str(total) + " - a enviar email")
-        send_email(changes)
-    else:
-        log("Dados alterados mas sem mudancas relevantes - sem email")
-
-    save_state(new_state)
-    save_hash(new_hash)
-    log("A fazer deploy para Cloudflare...")
-    deploy_to_cloudflare(data)
-    log("Tudo concluido")
-
-
-if __name__ == "__main__":
-    main()
+        log("Primeiro run - a guardar estado inicial sem enviar email"
