@@ -33,7 +33,7 @@ GMAIL_FROM     = os.environ.get("GMAIL_FROM",     "")
 GMAIL_APP_PASS = os.environ.get("GMAIL_APP_PASS", "")
 ALERT_TO       = "jpolho@fjmpc.pt"
 
-APP_URL = "https://contentores-fjmpc.contentores-fjmpc.workers.dev"
+APP_URL = "https://contentores-fjmpc.fjmpc.workers.dev/"
 
 # ══════════════════════════════════════════════════════
 
@@ -52,10 +52,15 @@ ESTADO_PT = {
     "pendente":  "Pendente",
 }
 
+ORANGE  = "#f15a29"
+ORANGE2 = "#d44d1f"
+DARK    = "#2d2d3f"
+GRAY    = "#5a5a6a"
+
 CARD_COLORS = {
-    "new":    ("#22c55e", "#f0fdf4", "Novo Contentor"),
+    "new":    (ORANGE,   "#fff8f5", "Novo Contentor em Transito"),
     "eta":    ("#f59e0b", "#fffbeb", "Alteracao de ETA"),
-    "estado": ("#3b82f6", "#eff6ff", "Alteracao de Estado"),
+    "estado": (ORANGE,   "#fff8f5", "Alteracao de Estado"),
 }
 
 # ── Helpers ───────────────────────────────────────────
@@ -166,32 +171,80 @@ def detect_changes(old_state, new_state, artigos):
 
 # ── Email builder ─────────────────────────────────────
 
-def items_table_html(items):
+def _get_logo_b64():
+    try:
+        logo_path = os.path.join(SCRIPT_DIR, "fjmpc_2020 orange.png")
+        if os.path.exists(logo_path):
+            import base64
+            with open(logo_path, "rb") as f:
+                return base64.b64encode(f.read()).decode()
+    except Exception:
+        pass
+    return None
+
+def items_table_html(items, frete=None):
     if not items:
         return "<p style='color:#aaa;font-size:13px;margin:10px 0 0'>Sem artigos registados.</p>"
     visible = items[:60]
+
+    total_merc = sum((i.get("qtd") or 0) * (i.get("custo") or 0) for i in items)
+    total_geral = total_merc + (frete or 0)
+
+    def fmt_usd(v):
+        return f"${v:,.2f}" if v else "-"
+
     rows = "".join(
-        f"<tr>"
-        f"<td style='padding:7px 10px;border-top:1px solid #eee;font-size:13px;color:#444;font-family:monospace'>{i.get('ref','')}</td>"
-        f"<td style='padding:7px 10px;border-top:1px solid #eee;font-size:13px;color:#444'>{i.get('nome','')}</td>"
-        f"<td style='padding:7px 10px;border-top:1px solid #eee;font-size:13px;color:#555;text-align:right'>{i.get('qtd','')}</td>"
-        f"<td style='padding:7px 10px;border-top:1px solid #eee;font-size:13px;color:#555;text-align:right'>{i.get('custo','') or '-'}</td>"
+        f"<tr style='background:{'#fff' if idx % 2 == 0 else '#fdf5f2'}'>"
+        f"<td style='padding:9px 12px;border-top:1px solid #f0e8e4;font-size:12px;"
+        f"color:{ORANGE};font-family:monospace;font-weight:600'>{i.get('ref','')}</td>"
+        f"<td style='padding:9px 12px;border-top:1px solid #f0e8e4;font-size:13px;color:#333'>{i.get('nome','')}</td>"
+        f"<td style='padding:9px 12px;border-top:1px solid #f0e8e4;font-size:13px;color:#555;text-align:right'>{i.get('qtd','') or '-'}</td>"
+        f"<td style='padding:9px 12px;border-top:1px solid #f0e8e4;font-size:13px;color:#555;text-align:right'>{fmt_usd(i.get('custo'))}</td>"
+        f"<td style='padding:9px 12px;border-top:1px solid #f0e8e4;font-size:13px;color:#333;text-align:right;font-weight:600'>"
+        f"{fmt_usd((i.get('qtd') or 0) * (i.get('custo') or 0))}</td>"
         f"</tr>"
-        for i in visible
+        for idx, i in enumerate(visible)
     )
     extra = (
-        f"<tr><td colspan='4' style='padding:8px 10px;font-size:12px;color:#aaa;border-top:1px solid #eee'>"
+        f"<tr><td colspan='5' style='padding:8px 12px;font-size:12px;color:#aaa;border-top:1px solid #eee'>"
         f"... e mais {len(items)-60} artigos</td></tr>"
     ) if len(items) > 60 else ""
+
+    total_row = (
+        f"<tr style='background:#f8f8f8'>"
+        f"<td colspan='4' style='padding:10px 12px;font-size:11px;font-weight:700;color:#888;"
+        f"text-transform:uppercase;letter-spacing:0.5px;border-top:2px solid #eee'>Total Mercadoria</td>"
+        f"<td style='padding:10px 12px;font-size:13px;font-weight:700;color:#333;"
+        f"text-align:right;border-top:2px solid #eee'>{fmt_usd(total_merc)}</td></tr>"
+    )
+    frete_row = (
+        f"<tr style='background:#f8f8f8'>"
+        f"<td colspan='4' style='padding:8px 12px;font-size:11px;font-weight:700;color:#888;"
+        f"text-transform:uppercase;letter-spacing:0.5px'>Frete (USD)</td>"
+        f"<td style='padding:8px 12px;font-size:13px;color:#555;text-align:right'>{fmt_usd(frete)}</td></tr>"
+    ) if frete else ""
+    geral_row = (
+        f"<tr style='background:{ORANGE}'>"
+        f"<td colspan='4' style='padding:11px 12px;font-size:12px;font-weight:800;color:#fff;"
+        f"text-transform:uppercase;letter-spacing:0.8px'>Total Geral USD</td>"
+        f"<td style='padding:11px 12px;font-size:15px;font-weight:800;color:#fff;text-align:right'>{fmt_usd(total_geral)}</td></tr>"
+    )
+
     return (
-        f"<table style='width:100%;border-collapse:collapse;margin-top:14px'>"
-        f"<thead><tr style='background:#f5f5f5'>"
-        f"<th style='padding:8px 10px;text-align:left;font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:0.5px'>Ref.</th>"
-        f"<th style='padding:8px 10px;text-align:left;font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:0.5px'>Nome</th>"
-        f"<th style='padding:8px 10px;text-align:right;font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:0.5px'>Qtd</th>"
-        f"<th style='padding:8px 10px;text-align:right;font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:0.5px'>Custo</th>"
+        f"<table style='width:100%;border-collapse:collapse;margin-top:16px;border-radius:8px;overflow:hidden'>"
+        f"<thead><tr style='background:{ORANGE}'>"
+        f"<th style='padding:10px 12px;text-align:left;font-size:11px;font-weight:700;color:#fff;"
+        f"text-transform:uppercase;letter-spacing:0.8px'>Referencia</th>"
+        f"<th style='padding:10px 12px;text-align:left;font-size:11px;font-weight:700;color:#fff;"
+        f"text-transform:uppercase;letter-spacing:0.8px'>Produto</th>"
+        f"<th style='padding:10px 12px;text-align:right;font-size:11px;font-weight:700;color:#fff;"
+        f"text-transform:uppercase;letter-spacing:0.8px'>Qtd.</th>"
+        f"<th style='padding:10px 12px;text-align:right;font-size:11px;font-weight:700;color:#fff;"
+        f"text-transform:uppercase;letter-spacing:0.8px'>Custo Unit.</th>"
+        f"<th style='padding:10px 12px;text-align:right;font-size:11px;font-weight:700;color:#fff;"
+        f"text-transform:uppercase;letter-spacing:0.8px'>Total USD</th>"
         f"</tr></thead>"
-        f"<tbody>{rows}{extra}</tbody>"
+        f"<tbody>{rows}{extra}{total_row}{frete_row}{geral_row}</tbody>"
         f"</table>"
     )
 
@@ -208,66 +261,77 @@ def cont_meta(c):
 def build_card(ctype, c):
     accent, bg, _ = CARD_COLORS[ctype]
 
-    # Cabecalho contentor
     tipo_str = f" &middot; {c.get('tipo','')}" if c.get("tipo") else ""
     comp_str = (c.get("companhia") or "").upper()
+
+    # Cabecalho: ID + companhia
     header = (
-        f"<div style='margin-bottom:8px'>"
-        f"<span style='font-size:19px;font-weight:700;color:#1a3a5c;font-family:monospace;letter-spacing:1px'>{c['id']}</span>"
-        f"<span style='font-size:13px;color:#aaa;margin-left:10px'>{comp_str}{tipo_str}</span>"
+        f"<div style='display:flex;align-items:baseline;gap:10px;margin-bottom:10px'>"
+        f"<span style='font-size:20px;font-weight:800;color:{DARK};font-family:monospace;"
+        f"letter-spacing:1.5px'>{c['id']}</span>"
+        f"<span style='font-size:12px;color:#aaa;font-weight:600'>{comp_str}{tipo_str}</span>"
         f"</div>"
-        f"<div style='font-size:13px;color:#666;line-height:1.8'>{cont_meta(c)}</div>"
+        f"<div style='font-size:13px;color:#666;line-height:1.9'>{cont_meta(c)}</div>"
     )
 
-    # Conteudo especifico por tipo
+    # Detalhe por tipo
     detail = ""
     if ctype == "eta":
         lines = []
         if c.get("eta_old") != c.get("eta"):
             lines.append(
-                f"<b>ETA:</b> "
-                f"<span style='color:#bbb;text-decoration:line-through'>{fmt_date(c.get('eta_old'))}</span>"
-                f" &rarr; <span style='color:{accent};font-weight:700'>{fmt_date(c.get('eta'))}</span>"
+                f"<b style='color:#555'>ETA:</b> "
+                f"<span style='color:#ccc;text-decoration:line-through'>{fmt_date(c.get('eta_old'))}</span>"
+                f" &#8594; <span style='color:{accent};font-weight:700'>{fmt_date(c.get('eta'))}</span>"
             )
         if c.get("entrega_old") != c.get("entrega"):
             lines.append(
-                f"<b>Entrega:</b> "
-                f"<span style='color:#bbb;text-decoration:line-through'>{fmt_date(c.get('entrega_old'))}</span>"
-                f" &rarr; <span style='color:{accent};font-weight:700'>{fmt_date(c.get('entrega'))}</span>"
+                f"<b style='color:#555'>Entrega:</b> "
+                f"<span style='color:#ccc;text-decoration:line-through'>{fmt_date(c.get('entrega_old'))}</span>"
+                f" &#8594; <span style='color:{accent};font-weight:700'>{fmt_date(c.get('entrega'))}</span>"
             )
-        detail = f"<div style='margin-top:12px;font-size:14px;line-height:2'>{'<br>'.join(lines)}</div>"
+        detail = (
+            f"<div style='margin-top:14px;padding:12px 16px;background:#fff3e0;"
+            f"border-radius:6px;border-left:4px solid {accent};font-size:14px;line-height:2.2'>"
+            f"{'<br>'.join(lines)}</div>"
+        )
 
     elif ctype == "estado":
         old_lbl = ESTADO_PT.get(c.get("estado_old",""), c.get("estado_old","?"))
         new_lbl = ESTADO_PT.get(c.get("estado",""), c.get("estado","?"))
         detail = (
-            f"<div style='margin-top:12px;font-size:14px'>"
-            f"<b>Estado:</b> "
-            f"<span style='color:#bbb'>{old_lbl}</span>"
-            f" &rarr; <span style='color:{accent};font-weight:700'>{new_lbl}</span>"
+            f"<div style='margin-top:14px;padding:12px 16px;background:#fff3e0;"
+            f"border-radius:6px;border-left:4px solid {accent};font-size:14px'>"
+            f"<b style='color:#555'>Estado:</b> "
+            f"<span style='color:#ccc'>{old_lbl}</span>"
+            f" &#8594; <span style='color:{accent};font-weight:700'>{new_lbl}</span>"
             f"</div>"
         )
 
     elif ctype == "new":
-        etd_str = fmt_date(c.get("etd"))
-        eta_str = fmt_date(c.get("eta"))
-        ent_str = fmt_date(c.get("entrega"))
+        chips = []
+        if c.get("etd"):    chips.append(f"<b>ETD:</b> {fmt_date(c.get('etd'))}")
+        if c.get("eta"):    chips.append(f"<b>ETA:</b> {fmt_date(c.get('eta'))}")
+        if c.get("entrega"):chips.append(f"<b>Entrega:</b> {fmt_date(c.get('entrega'))}")
         est_str = ESTADO_PT.get(c.get("estado",""), c.get("estado","?"))
+        chips.append(f"<b>Estado:</b> <span style='color:{accent};font-weight:700'>{est_str}</span>")
         detail = (
-            f"<div style='margin-top:12px;font-size:13px;color:#555;line-height:2'>"
-            f"<b>ETD:</b> {etd_str} &nbsp;|&nbsp; "
-            f"<b>ETA:</b> {eta_str} &nbsp;|&nbsp; "
-            f"<b>Entrega:</b> {ent_str} &nbsp;|&nbsp; "
-            f"<b>Estado:</b> <span style='color:{accent};font-weight:700'>{est_str}</span>"
+            f"<div style='margin-top:12px;font-size:13px;color:#555;line-height:2;"
+            f"padding:10px 14px;background:#fff3e0;border-radius:6px;border-left:4px solid {accent}'>"
+            f"{'  &nbsp;&middot;&nbsp;  '.join(chips)}"
             f"</div>"
         )
 
-    items_html = items_table_html(c.get("items", []))
+    frete = c.get("frete") or 0
+    items_html = items_table_html(c.get("items", []), frete=frete if frete else None)
 
     return (
-        f"<div style='border-radius:8px;padding:20px 22px;margin-bottom:14px;"
-        f"background:{bg};border-left:5px solid {accent}'>"
-        f"{header}{detail}{items_html}"
+        f"<div style='background:#fff;border-radius:10px;margin-bottom:16px;"
+        f"box-shadow:0 2px 10px rgba(0,0,0,0.07);overflow:hidden'>"
+        f"<div style='padding:18px 20px 4px;border-left:5px solid {accent}'>"
+        f"{header}{detail}"
+        f"</div>"
+        f"<div style='padding:0 20px 20px'>{items_html}</div>"
         f"</div>"
     )
 
@@ -283,47 +347,63 @@ def build_email_html(changes, ts):
         emoji = {"new": "&#128994;", "eta": "&#128197;", "estado": "&#128260;"}.get(ctype, "")
         cards = "".join(build_card(ctype, c) for c in items_list)
         sections_html += (
-            f"<div style='padding:24px 28px;border-bottom:1px solid #eee'>"
-            f"<div style='font-size:11px;font-weight:700;text-transform:uppercase;"
-            f"letter-spacing:0.8px;color:{accent};margin-bottom:16px'>"
-            f"{emoji} {label} ({len(items_list)})</div>"
+            f"<div style='padding:20px 24px;border-bottom:1px solid #eee'>"
+            f"<div style='font-size:11px;font-weight:800;text-transform:uppercase;"
+            f"letter-spacing:1px;color:{accent};margin-bottom:14px;"
+            f"padding-bottom:8px;border-bottom:2px solid {accent}'>"
+            f"{emoji}&nbsp; {label} <span style='background:{accent};color:#fff;"
+            f"padding:2px 8px;border-radius:20px;font-size:10px;margin-left:6px'>{len(items_list)}</span>"
+            f"</div>"
             f"{cards}</div>"
         )
 
     alt_word = "alteracao" if total == 1 else "alteracoes"
+    logo_b64 = _get_logo_b64()
+    logo_tag = (
+        f'<img src="data:image/png;base64,{logo_b64}" alt="FJMPC" '
+        f'style="height:48px;display:block;margin-bottom:10px" />'
+        if logo_b64 else
+        '<span style="color:#f15a29;font-size:26px;font-weight:900;letter-spacing:-1px">FJMPC</span>'
+    )
     return f"""<!DOCTYPE html>
 <html lang="pt">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Contentores 2026 - Alertas</title>
+  <title>Contentores FJMPC - Alertas</title>
 </head>
-<body style="margin:0;padding:24px 16px;background:#eef0f3;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif">
-  <div style="max-width:680px;margin:0 auto">
+<body style="margin:0;padding:24px 16px;background:#1e1e2e;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif">
+  <div style="max-width:660px;margin:0 auto">
 
     <!-- Header -->
-    <div style="background:linear-gradient(135deg,#1a3a5c 0%,#0d2035 100%);border-radius:12px 12px 0 0;padding:28px 32px">
-      <div style="font-size:24px;font-weight:800;color:white;margin-bottom:4px">
-        &#128674; Contentores 2026
-      </div>
-      <div style="font-size:14px;color:rgba(255,255,255,0.55)">
-        FJMPC &nbsp;&middot;&nbsp; {total} {alt_word} detectada{'s' if total > 1 else ''}
-      </div>
+    <div style="background:#2d2d3f;border-radius:12px 12px 0 0;padding:24px 28px;border-bottom:3px solid #f15a29">
+      <table width="100%" cellpadding="0" cellspacing="0"><tr>
+        <td style="vertical-align:middle">
+          {logo_tag}
+          <div style="font-size:13px;color:#888;margin-top:2px;letter-spacing:0.3px">
+            Gestão de Contentores 2026 &nbsp;&middot;&nbsp;
+            <span style="color:#f15a29;font-weight:600">{total} {alt_word}</span>
+          </div>
+        </td>
+        <td style="vertical-align:middle;text-align:right">
+          <div style="font-size:11px;color:#555;line-height:1.6">{ts}</div>
+        </td>
+      </tr></table>
     </div>
 
     <!-- Body -->
-    <div style="background:white;border-radius:0 0 12px 12px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,0.08)">
+    <div style="background:#f8f8fa;border-radius:0 0 12px 12px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.25)">
       {sections_html}
 
       <!-- CTA Footer -->
-      <div style="padding:24px 28px;background:#fafafa;text-align:center">
+      <div style="padding:22px 28px;background:#2d2d3f;text-align:center;border-top:1px solid #3a3a4f">
         <a href="{APP_URL}"
-           style="display:inline-block;background:#1a3a5c;color:white;text-decoration:none;
-                  padding:12px 28px;border-radius:8px;font-size:14px;font-weight:700;
-                  letter-spacing:0.3px">
-          Abrir App &rarr;
+           style="display:inline-block;background:#f15a29;color:#3a3a4f;text-decoration:none;
+                  padding:12px 32px;border-radius:8px;font-size:14px;font-weight:800;
+                  letter-spacing:0.5px">
+          Abrir App &#8594;
         </a>
-        <div style="margin-top:14px;font-size:11px;color:#ccc">
+        <div style="margin-top:12px;font-size:11px;color:#555">
           Gerado automaticamente em {ts}
         </div>
       </div>
