@@ -1199,7 +1199,7 @@ function calcTarifa(companhia, tipo, diasDemurrage, diasDetention, diasStorage, 
   } else if (companhia === "MSC") {
     var dmKey = T.demurrage[tKey] ? tKey : "t40";
     var dm = T.demurrage[dmKey];
-    var dmDias = Math.max(0, diasDemurrage - dm.free);
+    var dmDias = Math.max(0, diasDemurrage + 1 - dm.free);
     var dmCost = 0;
     var p1 = Math.min(dmDias, dm.p1days); dmCost += p1 * dm.p1rate;
     var p2 = Math.max(0, dmDias - dm.p1days); dmCost += p2 * dm.p2rate;
@@ -1209,7 +1209,7 @@ function calcTarifa(companhia, tipo, diasDemurrage, diasDetention, diasStorage, 
 
     var smKey2 = T.storage[tKey] ? tKey : "t40";
     var sm = T.storage[smKey2];
-    var smDias = Math.max(0, diasStorage - sm.free);
+    var smDias = Math.max(0, diasStorage + 1 - sm.free);
     var smCost = 0;
     var sp1 = Math.min(smDias, sm.p1days); smCost += sp1 * sm.p1rate;
     var sp2 = Math.max(0, smDias - sm.p1days); smCost += sp2 * sm.p2rate;
@@ -1244,7 +1244,7 @@ function calcTarifa(companhia, tipo, diasDemurrage, diasDetention, diasStorage, 
   } else if (companhia === "ONE") {
     // Demurrage
     var od = T.demurrage;
-    var odDias = Math.max(0, diasDemurrage - od.free);
+    var odDias = Math.max(0, diasDemurrage + 1 - od.free);
     var odCost = 0;
     for (var oi = 0; oi < od.tiers.length; oi++) {
       var ot = od.tiers[oi];
@@ -1259,7 +1259,7 @@ function calcTarifa(companhia, tipo, diasDemurrage, diasDetention, diasStorage, 
 
     // Detention
     var odt = T.detention;
-    var odtDias = Math.max(0, diasDetention - odt.free);
+    var odtDias = Math.max(0, diasDetention + 1 - odt.free);
     var odtCost = 0;
     for (var oti = 0; oti < odt.tiers.length; oti++) {
       var ott = odt.tiers[oti];
@@ -1275,7 +1275,7 @@ function calcTarifa(companhia, tipo, diasDemurrage, diasDetention, diasStorage, 
     // Storage 40HC
     if (!isT20 && T.storage.t40) {
       var ost = T.storage.t40;
-      var ostDias = Math.max(0, diasStorage - ost.free);
+      var ostDias = Math.max(0, diasStorage + 1 - ost.free);
       var ostCost = 0;
       var osp1 = Math.min(ostDias, ost.p1to - ost.p1from + 1); ostCost += osp1 * ost.p1rate;
       var osp2 = Math.max(0, ostDias - osp1); ostCost += osp2 * ost.p2rate;
