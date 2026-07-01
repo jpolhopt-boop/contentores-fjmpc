@@ -460,10 +460,11 @@ def deploy_to_cloudflare(data):
     worker  = html.replace(PLACEHOLDER, payload)
     log("Worker: " + str(len(worker)//1024) + " KB")
     url  = "https://api.cloudflare.com/client/v4/accounts/" + CF_ACCOUNT_ID + "/workers/scripts/" + CF_SCRIPT_NAME
-    hdrs = {"Authorization": "Bearer " + CF_API_TOKEN}
-    resp = requests.put(url, headers=hdrs,
-                        files={"index.js": ("index.js", worker.encode(), "application/javascript")},
-                        timeout=60)
+    hdrs = {
+        "Authorization": "Bearer " + CF_API_TOKEN,
+        "Content-Type": "application/javascript",
+    }
+    resp = requests.put(url, headers=hdrs, data=worker.encode(), timeout=60)
     if resp.ok:
         log("Deploy concluido com sucesso")
     else:
