@@ -59,7 +59,7 @@ CARD_COLORS = {
     "eta":      ("#f59e0b", "#fffbeb", "Alteracao de ETA"),
     "companhia":(ORANGE,    "#fff8f5", "Alteracao de Companhia"),
     "outros":   ("#8b5cf6", "#f5f3ff", "Outros Dados Alterados"),
-    "ext":      ("#0ea5e9", "#f0f9ff", "Alteracao Sheet Tracking (Col B/D/H)"),
+    "ext":      (ORANGE,    "#fff8f5", "Alteracao Sheet Tracking (Col B/D/H)"),
 }
 
 # -- Helpers --
