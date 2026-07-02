@@ -16,6 +16,7 @@ Dependências:
 
 import os
 import time
+import urllib.request
 import openpyxl
 from datetime import datetime, date
 from google.oauth2 import service_account
@@ -40,6 +41,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 EXCEL_FILE = os.path.join(SCRIPT_DIR, "CONTENTORES-MATERIAL Final-2026.xlsx")
 CREDS_FILE = os.path.join(SCRIPT_DIR, "google_credentials.json")
 SHEET_ID   = "1cfqw7GGGzk5GQOUcVluIrQOUySlPDoAwch4MrwkSkBA"
+APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzmZHxWcD5eULGdl1N2_s-KiYELaQB3UjfjkHztiQwKGEKb-l1JllhS_mcgVeVjH58OUQ/exec"
 
 SCOPES = [
     "https://www.googleapis.com/auth/drive",
@@ -249,6 +251,17 @@ def main():
     cleanup_old_prefix(sheets_svc)
 
     sync(drive_svc, sheets_svc)
+    check_pronto()
+
+def check_pronto():
+    """Chama o Apps Script para verificar contentores prontos e enviar emails."""
+    try:
+        url = APPS_SCRIPT_URL + "?action=checkPronto"
+        req = urllib.request.Request(url, headers={"User-Agent": "sync_contentores"})
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            log("checkPronto: " + resp.read().decode()[:80])
+    except Exception as e:
+        log("Aviso checkPronto: " + str(e))
 
 if __name__ == "__main__":
     main()
