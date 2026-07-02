@@ -1,0 +1,29 @@
+name: Sync Excel → Google Sheets
+
+on:
+  push:
+    paths:
+      - 'CONTENTORES-MATERIAL Final-2026.xlsx'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependências
+        run: pip install openpyxl google-api-python-client google-auth
+
+      - name: Configurar credenciais Google
+        run: echo '${{ secrets.GOOGLE_CREDENTIALS_JSON }}' > google_credentials.json
+
+      - name: Sync Excel → Sheets
+        run: python sync_contentores.py
